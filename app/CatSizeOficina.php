@@ -10,5 +10,9 @@ class CatSizeOficina extends Model
 
     public function oficinas(){
         return $this->hasMany(\App\Oficina::class, 'size_id');
-    }
+	}
+
+	public function precio(){
+		return $this->hasOne(\App\CatPrecio::class, 'size_id');
+	}
 }
