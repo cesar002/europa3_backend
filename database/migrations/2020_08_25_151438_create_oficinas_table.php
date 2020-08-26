@@ -17,7 +17,7 @@ class CreateOficinasTable extends Migration
             $table->id();
             $table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
             $table->foreignId('tipo_oficina_id')->references('id')->on('cat_tipos_oficina');
-            $table->foreignId('tipo_oficina_virtual')->references('id')->on('cat_tipo_oficina_virtual')->nullable();
+            $table->foreignId('tipo_oficina_virtual_id')->nullable()->references('id')->on('cat_tipo_oficina_virtual');
             $table->foreignId('size_id')->references('id')->on('cat_size_oficinas');
             $table->string('nombre');
             $table->longText('descripcion');

@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class EdificioIdiomasAtencion extends Model
 {
-    protected $table = 'edificio_idiomas_atencion';
+	protected $table = 'edificio_idiomas_atencion';
+
 }

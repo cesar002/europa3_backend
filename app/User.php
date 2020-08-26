@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'email', 'password',
     ];
 
     /**
@@ -25,15 +25,43 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // protected $casts = [
+    //     'email_verified_at' => 'datetime',
+    // ];
+
+    public function infoPersonal(){
+        return $this->hasOne(\App\UserDatoPersonal::class);
+    }
+
+    public function datosMorales(){
+        return $this->hasMany(\App\UserDatosMorales::class);
+    }
+
+    public function datosFiscales(){
+        return $this->hasMany(\App\UserDatosFiscales::class);
+    }
+
+    public function solicitudesReservacion(){
+        return $this->hasMany(\App\SolicitudReservacion::class);
+    }
+
+    public function pagos(){
+        return $this->hasMany(\App\RegistroPago::class);
+    }
+
+    public function insumosComprados(){
+        return $this->hasMany(\App\InsumoComprado::class);
+	}
+
+	public function chatRecepcion(){
+		return $this->hasMany(\App\ChatRecepcion::class);
+	}
+
+	public function chatSoporte(){
+		return $this->morphToMany(\App\ChatSoporte::class, 'usertable');
+	}
+
 }

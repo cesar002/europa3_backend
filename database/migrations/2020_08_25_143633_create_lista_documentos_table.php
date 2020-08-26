@@ -14,7 +14,7 @@ class CreateListaDocumentosTable extends Migration
     public function up()
     {
         Schema::create('lista_documentos', function (Blueprint $table) {
-            $table->id();
+			$table->id();
             $table->string('documento');
             $table->boolean('obligatorio')->default(true);
             $table->timestamps();

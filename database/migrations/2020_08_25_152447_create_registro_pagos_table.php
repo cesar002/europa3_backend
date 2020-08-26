@@ -16,7 +16,7 @@ class CreateRegistroPagosTable extends Migration
         Schema::create('registro_pagos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('fecha_id')->references('id')->on('fechas_pagos');
+            $table->foreignId('fecha_id')->unique()->references('id')->on('fechas_pagos');
             $table->string('folio');
             $table->dateTime('fecha_pago');
             $table->timestamps();
