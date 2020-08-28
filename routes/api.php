@@ -25,4 +25,16 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::post('user', 'AuthUserController@register');
 	});
 
+	Route::group(['prefix' => 'auth'], function () {
+		Route::post('user', 'AuthUserController@login');
+
+		Route::group(['prefix' => 'me', 'middleware' => 'auth:api'], function () {
+			Route::get('/', 'UserController@getCurrentAuthUser');
+		});
+	});
+
+	Route::group(['prefix' => 'users'], function () {
+
+	});
+
 });

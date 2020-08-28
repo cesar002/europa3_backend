@@ -2,13 +2,14 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -28,9 +29,13 @@ class User extends Authenticatable
         'password',
     ];
 
-    // protected $casts = [
-    //     'email_verified_at' => 'datetime',
-    // ];
+    protected $casts = [
+		'email_verified' => 'boolean'
+	];
+
+	public function getNotificationToken(){
+		return is_null($this->push_notification_token) ? '' : $this->push_notification_token;
+	}
 
     public function infoPersonal(){
         return $this->hasOne(\App\UserDatoPersonal::class);

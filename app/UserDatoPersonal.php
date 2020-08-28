@@ -8,6 +8,8 @@ class UserDatoPersonal extends Model
 {
     protected $table = 'user_datos_personales';
 
+	protected $casts = [
+	];
 
     public function user(){
         return $this->belongsTo(\App\User::class);

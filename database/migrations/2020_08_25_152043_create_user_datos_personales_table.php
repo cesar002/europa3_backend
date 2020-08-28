@@ -13,7 +13,7 @@ class CreateUserDatosPersonalesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_datos_personales_table', function (Blueprint $table) {
+        Schema::create('user_datos_personales', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->references('id')->on('users');
             $table->foreignId('nacionalidad_id')->references('id')->on('cat_nacionalidades');
