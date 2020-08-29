@@ -15,7 +15,7 @@ class CreateChatSoporteTable extends Migration
     {
         Schema::create('chat_soporte', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('edificio_id')->references('id')->on('edificios');
+            $table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
 			$table->integer('usertable_id')->unsigned();
 			$table->string('usertable_type');
             $table->text('mensaje')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');

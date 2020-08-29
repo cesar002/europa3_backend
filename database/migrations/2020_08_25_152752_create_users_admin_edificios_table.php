@@ -16,7 +16,7 @@ class CreateUsersAdminEdificiosTable extends Migration
         Schema::create('create_users_admin_edificios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_admin_id')->references('id')->on('users_admin');
-            $table->foreignId('edificio_id')->references('id')->on('edificios');
+            $table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
             $table->timestamps();
         });
     }

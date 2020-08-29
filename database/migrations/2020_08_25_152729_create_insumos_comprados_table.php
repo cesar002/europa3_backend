@@ -17,8 +17,8 @@ class CreateInsumosCompradosTable extends Migration
             $table->id();
             $table->longText('folio')->unique();
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('oficina_id')->references('id')->on('oficinas');
-            $table->foreignId('insumo_id')->references('id')->on('insumos');
+            $table->foreignId('oficina_id')->references('id')->on('oficinas')->onDelete('cascade');
+            $table->foreignId('insumo_id')->references('id')->on('insumos')->onDelete('cascade');
             $table->integer('cantidad');
             $table->double('importe', 10, 4);
             $table->timestamps();

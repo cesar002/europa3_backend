@@ -35,8 +35,18 @@ Route::group(['prefix' => 'v1'], function () {
 		});
 	});
 
-	Route::group(['prefix' => 'users'], function () {
+	//** EDIFICIOS */
+	Route::post('/edificio', 'EdificioController@store');
 
-	});
+	Route::put('/edificio/{id}', 'EdificioController@update');
+
+	Route::delete('/edificio/{id}', 'EdificioController@destroy');
+
+	Route::get('/edificios', 'EdificioController@index');
+	Route::get('/edificio/{id}', 'EdificioController@show');
+	Route::get('/edificios/municipio/{municipioId}', 'EdificioController@getByMunicipioId');
+	Route::get('/edificios/estado/{estadoId}', 'EdificioController@getByEstadoId');
+	Route::get('/edificios/estado/{estadoId}/municipio/{municipioId}', 'EdificioController@getByEstadoIdAndMunicipioId');
+	//**************/
 
 });

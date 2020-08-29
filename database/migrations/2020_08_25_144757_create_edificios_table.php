@@ -15,7 +15,7 @@ class CreateEdificiosTable extends Migration
     {
         Schema::create('edificios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('localidad')->references('id')->on('localidades');
+            $table->foreignId('municipio_id')->references('id')->on('municipios')->onDelete('cascade');
             $table->string('nombre');
             $table->string('direccion');
             $table->string('telefono_1');

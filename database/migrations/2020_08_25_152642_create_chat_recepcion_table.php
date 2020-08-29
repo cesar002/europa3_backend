@@ -16,7 +16,7 @@ class CreateChatRecepcionTable extends Migration
         Schema::create('chat_recepcion', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('edificio_id')->references('id')->on('edificios');
+            $table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
             $table->text('mensaje')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->timestamps();
         });

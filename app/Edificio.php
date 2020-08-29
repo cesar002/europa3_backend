@@ -6,10 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Edificio extends Model
 {
-    protected $table = 'edificios';
+	protected $table = 'edificios';
 
-    public function localidad(){
-        return $this->belongsTo(\App\Localidad::class, 'localidad_id');
+	protected $fillable = [
+		'municipio_id', 'nombre', 'direccion', 'telefono_1', 'telefono_2', 'telefono_recepcion',
+		'lat', 'lon', 'hora_apertura', 'hora_cierre',
+	];
+
+    public function municipio(){
+        return $this->belongsTo(\App\Municipio::class, 'municipio_id');
     }
 
     public function oficinas(){

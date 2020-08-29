@@ -28,7 +28,7 @@ class CreateLocalidadesTable extends Migration
             $table->integer('femenino');
             $table->integer('viviendas');
             $table->decimal('lat',10, 7);
-            $table->decimal('lang', 10, 7);
+            $table->decimal('lng', 10, 7);
             $table->boolean('activo');
         });
     }

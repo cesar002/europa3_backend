@@ -15,7 +15,7 @@ class CreateInsumosTable extends Migration
     {
         Schema::create('insumos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('edificio_id')->references('id')->on('edificios');
+            $table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
             $table->string('nombre');
             $table->string('unidad');
             $table->double('precio_unidad', 10, 4);

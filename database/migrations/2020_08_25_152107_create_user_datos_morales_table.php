@@ -15,7 +15,7 @@ class CreateUserDatosMoralesTable extends Migration
     {
         Schema::create('user_datos_morales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('nombre_empresa');
             $table->string('nombre');
             $table->string('ape_p');
