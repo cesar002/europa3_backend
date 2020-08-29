@@ -12,9 +12,15 @@ class UserAdmin extends Authenticatable
 
 	protected $table = 'users_admin';
 
+	protected $guard = 'api-admin';
+
 	protected $fillable = [
 		'username', 'password'
 	];
+
+	public function findForPassport($username) {
+        return $this->where('username', $username)->first();
+    }
 
 
 	public function permisos(){

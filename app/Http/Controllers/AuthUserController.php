@@ -39,9 +39,9 @@ class AuthUserController extends Controller
 			if(!Auth::attempt(['email' => $request->email, 'password' => $request->password]))
 				return response(['error' => 'Datos de sesión incorrectos'], 401);
 
-			$SECRET_KEY = DB::select('SELECT id, secret FROM oauth_clients WHERE password_client = 1 AND revoked = 0 LIMIT 1');
+			$SECRET_KEY = DB::select('SELECT id, secret FROM oauth_clients WHERE id = 2 LIMIT 1');
 
-			$url = env('APP_URL');
+			$url = env('APP_URL', 'http://europa3_backend.oo');
 			$http = new \GuzzleHttp\Client();
 			$response = $http->post("$url/oauth/token", [
 				'form_params' => [
