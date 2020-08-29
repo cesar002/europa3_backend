@@ -45,7 +45,12 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
             'hash' => false,
-        ],
+		],
+		'api-admin' => [
+			'driver' => 'passport',
+			'provider' => 'usersAdmin',
+			'hash' => false,
+		],
     ],
 
     /*
@@ -69,7 +74,12 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
-        ],
+		],
+
+		'usersAdmin' => [
+			'driver' => 'eloquent',
+			'model' => App\UserAdmin::class,
+		],
 
         // 'users' => [
         //     'driver' => 'database',

@@ -23,6 +23,7 @@ Route::group(['prefix' => 'v1'], function () {
 
 	Route::group(['prefix' => 'register'], function () {
 		Route::post('user', 'AuthUserController@register');
+		Route::post('admin', 'AuthUserAdminController@register');
 	});
 
 	Route::group(['prefix' => 'auth'], function () {
