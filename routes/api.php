@@ -26,18 +26,26 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::post('admin', 'AuthUserAdminController@register');
 	});
 
+	//** USUARIO AUTENTICADO */
 	Route::group(['prefix' => 'auth'], function () {
 		Route::post('user', 'AuthUserController@login');
 		Route::post('admin', 'AuthUserAdminController@login');
 
 		Route::group(['prefix' => 'me', 'middleware' => 'auth:api'], function () {
 			Route::get('/', 'UserController@getCurrentAuthUser');
+
 			Route::group(['prefix' => 'datos-personales'], function () {
 				Route::post('/', 'DatosPersonalesController@store');
 				Route::put('/', 'DatosPersonalesController@update');
 			});
+
+			Route::group(['prefix' => 'datos-morales'], function () {
+				Route::post('/', 'DatosMoralesController@store');
+				Route::put('/', 'DatosMoralesController@update');
+			});
 		});
 	});
+	//********************/
 
 	//** USUARIOS */
 

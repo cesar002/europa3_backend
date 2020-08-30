@@ -16,16 +16,16 @@ class CreateUserDatosMoralesTable extends Migration
         Schema::create('user_datos_morales', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('nombre_empresa');
-            $table->string('nombre');
-            $table->string('ape_p');
-            $table->string('ape_m');
-            $table->string('escritura_publica');
-            $table->string('numero_notario');
-            $table->date('fecha_constitucion');
-            $table->string('giro_comercial');
-            $table->string('telefono');
-            $table->string('email');
+            $table->string('nombre_empresa')->nullable();
+            $table->string('nombre')->nullable();
+            $table->string('ape_p')->nullable();
+            $table->string('ape_m')->nullable();
+            $table->string('escritura_publica')->nullable();
+            $table->string('numero_notario')->nullable();
+            $table->date('fecha_constitucion')->nullable();
+            $table->string('giro_comercial')->nullable();
+            $table->string('telefono')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }
