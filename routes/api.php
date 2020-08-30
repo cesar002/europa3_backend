@@ -32,8 +32,16 @@ Route::group(['prefix' => 'v1'], function () {
 
 		Route::group(['prefix' => 'me', 'middleware' => 'auth:api'], function () {
 			Route::get('/', 'UserController@getCurrentAuthUser');
+			Route::group(['prefix' => 'datos-personales'], function () {
+				Route::post('/', 'DatosPersonalesController@store');
+				Route::put('/', 'DatosPersonalesController@update');
+			});
 		});
 	});
+
+	//** USUARIOS */
+
+	//**************/
 
 	//** EDIFICIOS */
 	Route::post('/edificio', 'EdificioController@store');

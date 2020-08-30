@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserDatoPersonal extends Model
 {
-    protected $table = 'user_datos_personales';
+	protected $table = 'user_datos_personales';
+
+	protected $fillable = [
+		'user_id', 'nacionalidad_id', 'nombre', 'ape_p', 'ape_m', 'RFC', 'CURP',
+		'fecha_nacimiento', 'celular', 'domicilio', 'telefono',
+	];
 
 	protected $casts = [
 	];

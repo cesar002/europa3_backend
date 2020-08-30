@@ -25,7 +25,10 @@ class UserRepository implements IUserDao{
 					'nombre' => $personalData->nombre,
 					'apellido_paterno' => $personalData->ape_p,
 					'apellido_materno' => $personalData->ape_m,
-					'nacionalidad' => $personalData->nacionalidad->gentilico,
+					'nacionalidad' => [
+						'id' => $personalData->nacionalidad->id,
+						'nombre' => $personalData->nacionalidad->gentilicio
+					],
 					'RFC' => $personalData->RFC,
 					'CURP' => $personalData->CURP,
 					'fecha_nacimiento' => $personalData->fecha_nacimiento,
@@ -53,7 +56,10 @@ class UserRepository implements IUserDao{
 					'nombre' => $user->infoPersonal->nombre,
 					'apellido_paterno' => $user->infoPersonal->ape_p,
 					'apellido_materno' => $user->infoPersonal->ape_m,
-					'nacionalidad' => $user->infoPersonal->nacionalidad->gentilico,
+					'nacionalidad'  => [
+						'id' => $user->infoPersonal->nacionalidad->id,
+						'nombre' => $user->infoPersonal->nacionalidad->gentilicio
+					],
 					'RFC' => $user->infoPersonal->RFC,
 					'CURP' => $user->infoPersonal->CURP,
 					'fecha_nacimiento' => $user->infoPersonal->fecha_nacimiento,
