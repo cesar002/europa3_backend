@@ -43,6 +43,11 @@ Route::group(['prefix' => 'v1'], function () {
 				Route::post('/', 'DatosMoralesController@store');
 				Route::put('/', 'DatosMoralesController@update');
 			});
+
+			Route::group(['prefix' => 'datos-fiscales'], function () {
+				Route::post('/', 'DatosFiscalesController@store');
+				Route::put('/', 'DatosFiscalesController@update');
+			});
 		});
 	});
 	//********************/

@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserDatosFiscales extends Model
 {
-    protected $table = 'user_datos_fiscales';
+	protected $table = 'user_datos_fiscales';
+
+	protected $fillable = [
+		'user_id', 'estado_id', 'municipio_id', 'email', 'razon_social',
+		'RFC', 'telefono', 'calle', 'numero_exterior', 'numero_interior',
+		'codigo_postal', 'colonia'
+	];
 
     public function user(){
         return $this->belongsTo(\App\User::class);

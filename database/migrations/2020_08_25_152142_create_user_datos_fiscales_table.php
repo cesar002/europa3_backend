@@ -15,7 +15,7 @@ class CreateUserDatosFiscalesTable extends Migration
     {
         Schema::create('user_datos_fiscales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('user_id')->unique()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('estado_id')->references('id')->on('estados')->onDelete('cascade');
             $table->foreignId('municipio_id')->references('id')->on('municipios')->onDelete('cascade');
             $table->string('email');
@@ -25,7 +25,7 @@ class CreateUserDatosFiscalesTable extends Migration
             $table->string('calle');
             $table->string('numero_exterior')->nullable();
             $table->string('numero_interior')->nullable();
-            $table->smallInteger('codigo_postal');
+            $table->mediumInteger('codigo_postal');
             $table->string('colonia');
             $table->timestamps();
         });
