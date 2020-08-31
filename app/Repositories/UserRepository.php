@@ -14,7 +14,7 @@ class UserRepository implements IUserDao{
 	public function getUserData(User $user){
 		try {
 
-			$personalData = $user->infoPersonal()->with('nacionalidad')->first();
+			$personalData = $user->infoPersonal()->with('nacionalidad', 'tipoIdentificacion')->first();
 
 			return [
 				'id' => $user->id,
@@ -28,6 +28,11 @@ class UserRepository implements IUserDao{
 					'nacionalidad' => [
 						'id' => $personalData->nacionalidad->id,
 						'nombre' => $personalData->nacionalidad->gentilicio
+					],
+					'identificacion' => [
+						'id' => $personalData->tipoIdentificacion->id,
+						'tipo' => $personalData->tipo_identificacion_otro ?? $personalData->tipoIdentificacion->nombre,
+						'numero' => $personalData->numero_identificacion
 					],
 					'RFC' => $personalData->RFC,
 					'CURP' => $personalData->CURP,
@@ -45,7 +50,7 @@ class UserRepository implements IUserDao{
 	public function getUserDataById(int $userId){
 		try {
 
-			$user = User::find($userId)->with('infoPersonal', 'infoPersonal.nacionalidad')->firstOrFail();
+			$user = User::find($userId)->with('infoPersonal', 'infoPersonal.nacionalidad', 'infoPersonal.tipoIdentificacion')->firstOrFail();
 
 			return [
 				'id' => $user->id,
@@ -59,6 +64,11 @@ class UserRepository implements IUserDao{
 					'nacionalidad'  => [
 						'id' => $user->infoPersonal->nacionalidad->id,
 						'nombre' => $user->infoPersonal->nacionalidad->gentilicio
+					],
+					'identificacion' => [
+						'id' => $user->infoPersonal->tipoIdentificacion->id,
+						'tipo' => $user->infoPersonal->tipo_identificacion_otro ?? $user->infoPersonal->tipoIdentificacion->nombre,
+						'numero' => $user->infoPersonal->numero_identificacion
 					],
 					'RFC' => $user->infoPersonal->RFC,
 					'CURP' => $user->infoPersonal->CURP,

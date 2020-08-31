@@ -10,7 +10,8 @@ class UserDatoPersonal extends Model
 
 	protected $fillable = [
 		'user_id', 'nacionalidad_id', 'nombre', 'ape_p', 'ape_m', 'RFC', 'CURP',
-		'fecha_nacimiento', 'celular', 'domicilio', 'telefono',
+		'fecha_nacimiento', 'celular', 'domicilio', 'telefono', 'tipo_identificacion_id',
+		'tipo_identificacion_otro', 'numero_identificacion',
 	];
 
 	protected $casts = [
@@ -22,6 +23,10 @@ class UserDatoPersonal extends Model
 
     public function nacionalidad(){
         return $this->belongsTo(\App\Nacionalidad::class, 'nacionalidad_id');
-    }
+	}
+
+	public function tipoIdentificacion(){
+		return $this->belongsTo(\App\TipoIdentificacion::class, 'tipo_identificacion_id');
+	}
 
 }

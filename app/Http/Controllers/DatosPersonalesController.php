@@ -22,9 +22,12 @@ class DatosPersonalesController extends Controller
 			$datosPersonales = new UserDatoPersonal([
 				'user_id' => $user->id,
 				'nacionalidad_id' => $request->nacionalidad_id,
+				'tipo_identificacion_id' => $request->identificacion_id,
 				'nombre' => $request->nombre,
 				'ape_p' => $request->apellido_p,
 				'ape_m' => $request->apellido_m,
+				'tipo_identificacion_otro' => $request->identificacion_otro,
+				'numero_identificacion' => $request->numero_identificacion,
 				'RFC' => strtoupper($request->rfc),
 				'CURP' => strtoupper($request->curp),
 				'fecha_nacimiento' => $request->fecha_nacimiento,
@@ -59,9 +62,12 @@ class DatosPersonalesController extends Controller
 			$infoPersonal = UserDatoPersonal::where('user_id', $request->user()->id)->firstOrFail();
 
 			$infoPersonal->nacionalidad_id = $request->nacionalidad_id;
+			$infoPersonal->tipo_identificacion_id = $request->identificacion_id;
 			$infoPersonal->nombre = $request->nombre;
 			$infoPersonal->ape_p = $request->apellido_p;
 			$infoPersonal->ape_m = $request->apellido_m;
+			$infoPersonal->tipo_identificacion_otro = $request->identificacion_otro;
+			$infoPersonal->numero_identificacion = $request->numero_identificacion;
 			$infoPersonal->RFC = strtoupper($request->rfc);
 			$infoPersonal->CURP = strtoupper($request->curp);
 			$infoPersonal->fecha_nacimiento = $request->fecha_nacimiento;
