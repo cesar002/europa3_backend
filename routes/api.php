@@ -56,6 +56,21 @@ Route::group(['prefix' => 'v1'], function () {
 
 	//**************/
 
+	//** CONFIG DE DATOS */
+	Route::group(['prefix' => 'config'], function () {
+		Route::put('/renovacion', 'ConfigDataController@updateRenovacionConfig');
+		Route::put('/renta', 'ConfigDataController@updateRentaConfig');
+	});
+	//*******************/
+
+	//** TAMAÑOS OFICINA */
+
+	Route::get('/oficina-size', 'OficinaSizeController@index');
+	Route::post('/oficina-size', 'OficinaSizeController@store');
+	Route::put('/oficina-size', 'OficinaSizeController@update');
+
+	//*************************/
+
 	//** EDIFICIOS */
 	Route::post('/edificio', 'EdificioController@store');
 

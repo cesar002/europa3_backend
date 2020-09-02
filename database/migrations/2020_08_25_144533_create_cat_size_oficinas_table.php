@@ -15,7 +15,8 @@ class CreateCatSizeOficinasTable extends Migration
     {
         Schema::create('cat_size_oficinas', function (Blueprint $table) {
             $table->id();
-            $table->string('size_name');
+			$table->string('size_name');
+			$table->double('precio', 10, 4);
             $table->timestamps();
         });
     }
