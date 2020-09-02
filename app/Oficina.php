@@ -6,7 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Oficina extends Model
 {
-    protected $table = 'oficinas';
+	protected $table = 'oficinas';
+
+	protected $casts = [
+		'en_uso' => 'boolean'
+	];
+
+	protected $fillable = [
+		'edificio_id', 'tipo_oficina_id', 'size_id', 'nombre', 'descripcion', 'size_dimension',
+		'capacidad_recomendada', 'capacidad_maxima', 'en_uso', 'precio'
+	];
+
 
     public function edificio(){
         return $this->belongsTo(\App\Edificio::class, 'edificio_id');

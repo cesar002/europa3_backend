@@ -63,19 +63,42 @@ Route::group(['prefix' => 'v1'], function () {
 	});
 	//*******************/
 
-	//** TAMAÑOS OFICINA */
+	//** OFICINA Y CATALOGOS */
 
 	Route::get('/oficina-size', 'OficinaSizeController@index');
 	Route::post('/oficina-size', 'OficinaSizeController@store');
-	Route::put('/oficina-size', 'OficinaSizeController@update');
+	Route::put('/oficina-size/{id}', 'OficinaSizeController@update');
+
+	Route::get('/tipos-oficina', 'TiposOficinaController@index');
+	Route::post('/tipos-oficina', 'TiposOficinaController@store');
+	Route::put('/tipos-oficina/{id}', 'TiposOficinaController@update');
+
+	Route::get('/tipos-oficina-virtual', 'TiposOficinaVirtualController@index');
+	Route::post('/tipos-oficina-virtual', 'TiposOficinaVirtualController@store');
+	Route::put('/tipos-oficina-virtual/{id}', 'TiposOficinaVirtualController@update');
+
+	Route::get('/servicios', 'OficinaSizeController@index');
+	Route::post('/servicios', 'OficinaSizeController@store');
+	Route::put('/servicios/{id}', 'OficinaSizeController@update');
+
+	Route::get('/oficinas', 'OficinasController@getOficinas');
+	Route::get('/oficina/{id}', 'OficinasController@show');
+	Route::get('/oficinas/municipio/{id}', 'OficinasController@getOficinasByMunicipio');
+	Route::get('/oficinas/estado/{id}', 'OficinasController@getOficinasByEstado');
+
+	Route::post('/oficina', 'OficinasController@store');
+	Route::put('/oficina/{id}', 'OficinasController@update');
+	Route::delete('/oficina/{id}', 'OficinasController@destroy');
 
 	//*************************/
 
-	//** EDIFICIOS */
+	//** EDIFICIOS Y CATALOGOS */
+	Route::get('/idiomas-atencion', 'IdiomasAtencionController@index');
+	Route::post('/idiomas-atencion', 'IdiomasAtencionController@store');
+	Route::put('/idiomas-atencion/{id}', 'IdiomasAtencionController@update');
+
 	Route::post('/edificio', 'EdificioController@store');
-
 	Route::put('/edificio/{id}', 'EdificioController@update');
-
 	Route::delete('/edificio/{id}', 'EdificioController@destroy');
 
 	Route::get('/edificios', 'EdificioController@index');
