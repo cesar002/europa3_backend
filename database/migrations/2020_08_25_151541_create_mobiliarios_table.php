@@ -18,10 +18,11 @@ class CreateMobiliariosTable extends Migration
             $table->foreignId('tipo_id')->references('id')->on('tipos_mobiliario');
             $table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
             $table->string('marca');
-            $table->string('modelo');
+            $table->string('modelo')->nullable();
             $table->string('color');
-            $table->longText('descripcion_bien');
-            $table->longText('observaciones');
+            $table->longText('descripcion_bien')->nullable();
+			$table->longText('observaciones')->nullable();
+			$table->mediumInteger('cantidad');
             $table->boolean('activo')->default(true);
             $table->timestamps();
         });

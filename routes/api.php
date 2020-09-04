@@ -63,6 +63,22 @@ Route::group(['prefix' => 'v1'], function () {
 	});
 	//*******************/
 
+	//** MOBILIARIO */
+
+	Route::get('/tipo-mobiliario',  'TiposMobiliarioController@index');
+	Route::post('/tipo-mobiliario', 'TiposMobiliarioController@store');
+	Route::put('/tipo-mobiliario/{id}',  'TiposMobiliarioController@update');
+
+	Route::get('/mobiliario', 'MobiliarioController@index');
+	Route::get('/mobiliario/edificio/{id}', 'MobiliarioController@getByEdificio');
+	Route::get('/mobiliario/{id}', 'MobiliarioController@show');
+
+	Route::post('/mobiliario', 'MobiliarioController@store');
+	Route::put('/mobiliario/{id}', 'MobiliarioController@update');
+	Route::delete('/mobiliario/{id}', 'MobiliarioController@destroy');
+
+	//*****************/
+
 	//** OFICINA Y CATALOGOS */
 
 	Route::get('/oficina-size', 'OficinaSizeController@index');

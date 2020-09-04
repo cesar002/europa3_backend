@@ -34,10 +34,6 @@ class Oficina extends Model
         return $this->belongsTo(\App\CatTipoOficina::class, 'tipo_oficina_id');
     }
 
-    public function tipoOficinaVirtual(){
-        return $this->belongsTo(\App\CatTipoOficinaVirtual::class, 'tipo_oficina_virtual');
-    }
-
     public function size(){
         return $this->belongsTo(\App\CatSizeOficina::class, 'size_id');
     }

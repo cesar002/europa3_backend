@@ -11,8 +11,4 @@ class CatTipoOficinaVirtual extends Model
 	protected $hidden = [
 		'created_at', 'updated_at',
 	];
-
-    public function oficinas(){
-        return $this->hasMany(\App\Oficina::class, 'tipo_oficina_virtual_id');
-    }
 }
