@@ -63,11 +63,28 @@ Route::group(['prefix' => 'v1'], function () {
 	});
 	//*******************/
 
+	//** TIPO DE PAGO */
+
+	Route::get('/metodos-pago', 'MetodoPagoController@index');
+	Route::get('/metodo-pago/{id}', 'MetodoPagoController@show');
+	Route::post('/metodo-pago', 'MetodoPagoController@store');
+	Route::put('/metodo-pago/{id}', 'MetodoPagoController@update');
+
+	Route::get('/referencia-pago/{id}', 'ReferenciaPagoController@show');
+	Route::post('/referencia-pago', 'ReferenciaPagoController@store');
+	Route::put('/referencia-pago/{id}', 'ReferenciaPagoController@update');
+	Route::delete('/referencia-pago/{id}', 'ReferenciaPagoController@destroy');
+
+	//****************/
+
 	//** MOBILIARIO */
 
 	Route::get('/tipo-mobiliario',  'TiposMobiliarioController@index');
 	Route::post('/tipo-mobiliario', 'TiposMobiliarioController@store');
 	Route::put('/tipo-mobiliario/{id}',  'TiposMobiliarioController@update');
+
+	Route::post('/mobiliario-oficina', 'MobiliarioOficinaController@store');
+	Route::delete('/mobiliario-oficina/oficina/{id}/mobiliario/{id}', 'MobiliarioOficinaController@destroy');
 
 	Route::get('/mobiliario', 'MobiliarioController@index');
 	Route::get('/mobiliario/edificio/{id}', 'MobiliarioController@getByEdificio');
