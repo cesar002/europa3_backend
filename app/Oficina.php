@@ -17,6 +17,9 @@ class Oficina extends Model
 		'capacidad_recomendada', 'capacidad_maxima', 'en_uso', 'precio'
 	];
 
+	protected $hidden = [
+		'created_at', 'updated_at',
+	];
 
     public function edificio(){
         return $this->belongsTo(\App\Edificio::class, 'edificio_id');

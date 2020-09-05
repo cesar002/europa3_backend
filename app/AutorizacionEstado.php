@@ -11,6 +11,10 @@ class AutorizacionEstado extends Model{
 		'autorizado' => 'boolean',
 	];
 
+	protected $hidden = [
+		'created_at', 'updated_at',
+	];
+
 	public function solicitud(){
 		return $this->belongsTo(\App\SolicitudReservacion::class, 'solicitud_id');
 	}

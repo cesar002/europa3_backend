@@ -14,6 +14,14 @@ class SolicitudReservacion extends Model
 		'terminos_condiciones' => 'boolean',
 	];
 
+	protected $fillable = [
+		'folio', 'user_id', 'oficina_id', 'plazo', 'numero_ocupantes', 'terminos_condiciones', 'metodo_pago_id',
+	];
+
+	protected $hidden = [
+		'created_at', 'updated_at',
+	];
+
     public function user(){
         return $this->belongsTo(\App\User::class);
     }
