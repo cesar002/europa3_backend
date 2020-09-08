@@ -41,4 +41,8 @@ class Edificio extends Model
 		return $this->belongsToMany(\App\CatIdiomasAtencion::class, 'edificio_id', 'idioma_id');
 	}
 
+	public function salasJuntas(){
+		return $this->hasMany(\App\SalaJuntas::class, 'edificio_id');
+	}
+
 }

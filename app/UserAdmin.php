@@ -15,13 +15,16 @@ class UserAdmin extends Authenticatable
 	protected $guard = 'api-admin';
 
 	protected $fillable = [
-		'username', 'password'
+		'username', 'password',
+	];
+
+	protected $hidden = [
+		'password', 'created_at', 'updated_at',
 	];
 
 	public function findForPassport($username) {
         return $this->where('username', $username)->first();
-    }
-
+	}
 
 	public function permisos(){
 		return $this->hasMany(\App\UserAdminPermiso::class, 'user_admin_id');
@@ -33,6 +36,10 @@ class UserAdmin extends Authenticatable
 
 	public function insumos(){
 		return $this->hasMany(\App\InsumoComprado::class, 'user_admin_id');
+	}
+
+	public function infoPersonal(){
+		return $this->hasOne(\App\UserAdminPersonalData::class, 'user_admin_id');
 	}
 
 }

@@ -14,7 +14,7 @@ class InsertTiposPagosInCatTiposPagos extends Migration
      */
 	public function up(){
 		DB::unprepared("
-			INSERT INTO cat_tipos_pago(nombre, presencial, virtual, created_at, updated_at) VALUES
+			INSERT INTO cat_metodos_pago(nombre, presencial, virtual, created_at, updated_at) VALUES
 			('Pago en la aplicación', 0, 1, NOW(), NOW()),
 			('Transferencia bancaria', 1, 0, NOW(), NOW()),
 			('Pago presencial', 1, 0, NOW(), NOW());

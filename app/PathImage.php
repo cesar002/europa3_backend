@@ -20,4 +20,8 @@ class PathImage extends Model
 	public function imagenesMobiliario(){
 		return $this->hasMany(\App\MobiliarioImage::class, 'path_images_id');
 	}
+
+	public function imagenesAvatarUserAdmin(){
+		return $this->hasMany(\App\UserAdminPersonalData::class, 'path_id');
+	}
 }

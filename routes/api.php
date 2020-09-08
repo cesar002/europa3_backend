@@ -31,6 +31,10 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::post('user', 'AuthUserController@login');
 		Route::post('admin', 'AuthUserAdminController@login');
 
+		Route::group(['prefix' => 'admin/me'], function () {
+			Route::get('/', 'UserAdminController@getDataCurrenUser');
+		});
+
 		Route::group(['prefix' => 'me', 'middleware' => 'auth:api'], function () {
 			Route::get('/', 'UserController@getCurrentAuthUser');
 
@@ -83,6 +87,15 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/solicitud-renta/{id}', 'SolicitudesRentaController@show');
 	Route::post('/solicitud-renta', 'SolicitudesRentaController@store');
 
+	// Route::get('/wea', function () {
+
+	// 	// echo $currentDate->addMonthsNoOverflow(1)->toDateString();
+	// 	for ($i=1; $i <= 6; $i++) {
+	// 		$currentDate = Carbon::createFromDate(2020, 10, 31, 'Europe/Madrid');
+	// 		echo "<p>".$currentDate->addMonthsNoOverflow($i)->toDateString()."</p>";
+	// 	}
+	// });
+
 	//****************/
 
 	//** MOBILIARIO */
@@ -92,7 +105,7 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::put('/tipo-mobiliario/{id}',  'TiposMobiliarioController@update');
 
 	Route::post('/mobiliario-oficina', 'MobiliarioOficinaController@store');
-	Route::delete('/mobiliario-oficina/oficina/{id}/mobiliario/{id}', 'MobiliarioOficinaController@destroy');
+	Route::delete('/mobiliario-oficina/oficina/{idOficina}/mobiliario/{idMobiliario}', 'MobiliarioOficinaController@destroy');
 
 	Route::get('/mobiliario', 'MobiliarioController@index');
 	Route::get('/mobiliario/edificio/{id}', 'MobiliarioController@getByEdificio');

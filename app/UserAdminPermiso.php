@@ -11,4 +11,8 @@ class UserAdminPermiso extends Model
 	public function userAdmin(){
 		return $this->belongsTo(\App\UserAdmin::class, 'user_admin_id');
 	}
+
+	public function permiso(){
+		return $this->belongsTo(\App\PermisosModulos::class, 'permiso_id');
+	}
 }

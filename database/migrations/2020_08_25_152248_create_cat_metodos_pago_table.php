@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersAdminPermisosTable extends Migration
+class CreateCatMetodosPagoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateUsersAdminPermisosTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_admin_permisos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_admin_id')->references('id')->on('users_admin')->onDelete('cascade');
+        Schema::create('cat_metodos_pago', function (Blueprint $table) {
+			$table->id();
+			$table->string('nombre');
+			$table->boolean('presencial');
+			$table->boolean('virtual');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ class CreateUsersAdminPermisosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users_admin_permisos');
+        Schema::dropIfExists('cat_metodos_pago');
     }
 }

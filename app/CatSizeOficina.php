@@ -19,4 +19,8 @@ class CatSizeOficina extends Model
     public function oficinas(){
         return $this->hasMany(\App\Oficina::class, 'size_id');
 	}
+
+	public function salasJuntas(){
+		return $this->hasMany(\App\SalaJuntas::class, 'size_id');
+	}
 }

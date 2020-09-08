@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCatReferenciasPagosTable extends Migration
+class CreateCatPermisosModulosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateCatReferenciasPagosTable extends Migration
      */
     public function up()
     {
-        Schema::create('cat_referencias_pagos', function (Blueprint $table) {
+        Schema::create('cat_permisos_modulos', function (Blueprint $table) {
 			$table->id();
-			$table->foreignId('metodo_pago_id')->references('id')->on('cat_metodos_pago');
-			$table->string('referencia');
-			$table->string('entidad_bancaria');
+			$table->string('nombre');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateCatReferenciasPagosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cat_referencias_pagos');
+        Schema::dropIfExists('cat_permisos_modulos');
     }
 }

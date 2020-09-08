@@ -50,9 +50,9 @@ class MobiliarioOficinaController extends Controller{
 	}
 
 
-	public function destroy(\App\Http\Requests\MobiliarioOficinaRequest $request, $oficinaId, $mobiliarioId){
+	public function destroy(\App\Http\Requests\MobiliarioOficinaRequest $request, $idOficina, $idMobiliario){
 		try {
-			$mobiliario = MobiliarioOficina::whereRaw(' oficina_id = ? and mobiliario_id = ? ', [ $oficinaId, $mobiliarioId ])->firstOrFail();
+			$mobiliario = MobiliarioOficina::whereRaw(' oficina_id = ? and mobiliario_id = ? ', [ $idOficina, $idMobiliario ])->firstOrFail();
 
 			$mobiliario->delete();
 
