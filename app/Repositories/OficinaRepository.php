@@ -5,15 +5,17 @@ namespace App\Repositories;
 use App\Interfaces\IOficinaDao;
 use App\Oficina;
 use Illuminate\Support\Facades\DB;
-use phpDocumentor\Reflection\Types\Boolean;
+use Illuminate\Support\Facades\Storage;
 
 class OficinaRepository implements IOficinaDao{
 
 	public function getAllOficinas(){
 		try {
-			$oficinasM = Oficina::with('edificio', 'edificio.municipio', 'edificio.municipio.estado','imagenes', 'tipoOficina', 'size')->get();
+			$oficinasM = Oficina::with('pathImages', 'pathImages.pathMaster', 'edificio', 'edificio.municipio', 'edificio.municipio.estado','imagenes', 'tipoOficina', 'size')->get();
 
 			$oficinas = $oficinasM->map(function($oficina){
+				$pathImage = "{$oficina->pathImages->pathMaster->path}/{$oficina->pathImages->path}";
+
 				return [
 					'id' => $oficina->id,
 					'nombre' => $oficina->nombre,
@@ -54,7 +56,12 @@ class OficinaRepository implements IOficinaDao{
 						'id' => $oficina->tipoOficina->id,
 						'tipo' => $oficina->tipoOficina->tipo,
 					],
-					'images' => [],
+					'images' => $oficina->imagenes->map(function($image) use ($pathImage) {
+						return[
+							'id' => $image->id,
+							'uri' => Storage::url("{$pathImage}/{$image->image}")
+						];
+					}),
 					'status_uso' => $oficina->en_uso
 				];
 			});
@@ -67,7 +74,8 @@ class OficinaRepository implements IOficinaDao{
 
 	public function getOficinaById($id){
 		try {
-			$oficina = Oficina::with('edificio', 'edificio.municipio', 'edificio.municipio.estado','imagenes', 'tipoOficina', 'size')->findOrFail($id);
+			$oficina = Oficina::with('pathImages', 'pathImages.pathMaster', 'edificio', 'edificio.municipio', 'edificio.municipio.estado','imagenes', 'tipoOficina', 'size')->findOrFail($id);
+			$pathImage = "{$oficina->pathImages->pathMaster->path}/{$oficina->pathImages->path}";
 
 			return [
 				'id' => $oficina->id,
@@ -109,7 +117,12 @@ class OficinaRepository implements IOficinaDao{
 					'id' => $oficina->tipoOficina->id,
 					'tipo' => $oficina->tipoOficina->tipo,
 				],
-				'images' => [],
+				'images' => $oficina->imagenes->map(function($image) use ($pathImage) {
+					return[
+						'id' => $image->id,
+						'uri' => asset(Storage::url("{$pathImage}/{$image->image}")),
+					];
+				}),
 				'status_uso' => $oficina->en_uso
 			];
 		} catch (\Throwable $th) {

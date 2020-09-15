@@ -14,7 +14,8 @@ class Oficina extends Model
 
 	protected $fillable = [
 		'edificio_id', 'tipo_oficina_id', 'size_id', 'nombre', 'descripcion', 'size_dimension',
-		'capacidad_recomendada', 'capacidad_maxima', 'en_uso', 'precio'
+		'capacidad_recomendada', 'capacidad_maxima', 'en_uso', 'precio',
+		'path_image_id',
 	];
 
 	protected $hidden = [
@@ -51,6 +52,10 @@ class Oficina extends Model
 
 	public function mobiliario(){
 		return $this->belongsToMany(\App\Mobiliario::class, 'mobiliario_oficina', 'oficina_id', 'mobiliario_id');
+	}
+
+	public function pathImages(){
+		return $this->belongsTo(\App\PathImage::class, 'path_image_id');
 	}
 
 

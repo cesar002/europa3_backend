@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CatSizeOficina extends Model
 {
-	protected $table = 'cat_size_oficina';
+	protected $table = 'cat_size_oficinas';
 
 	protected $fillable = [
 		'size', 'precio'

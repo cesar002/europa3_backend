@@ -15,7 +15,6 @@ class CreateOficinaImagenesTable extends Migration
     {
         Schema::create('oficina_imagenes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('path_image_id')->references('id')->on('path_images');
             $table->foreignId('oficina_id')->references('id')->on('oficinas')->onDelete('cascade');
             $table->string('image');
             $table->timestamps();

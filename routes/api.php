@@ -123,6 +123,8 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::post('/oficina-size', 'OficinaSizeController@store');
 	Route::put('/oficina-size/{id}', 'OficinaSizeController@update');
 
+	Route::put('/oficina-images', 'OficinaImageController@update');
+
 	Route::get('/tipos-oficina', 'TiposOficinaController@index');
 	Route::post('/tipos-oficina', 'TiposOficinaController@store');
 	Route::put('/tipos-oficina/{id}', 'TiposOficinaController@update');
@@ -139,6 +141,7 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/oficina/{id}', 'OficinasController@show');
 	Route::get('/oficinas/municipio/{id}', 'OficinasController@getOficinasByMunicipio');
 	Route::get('/oficinas/estado/{id}', 'OficinasController@getOficinasByEstado');
+	Route::get('/oficinas/edificio/{id}', 'OficinasController@getOficinasByEdificioId');
 
 	Route::post('/oficina', 'OficinasController@store');
 	Route::put('/oficina/{id}', 'OficinasController@update');
@@ -161,5 +164,13 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/edificios/estado/{estadoId}', 'EdificioController@getByEstadoId');
 	Route::get('/edificios/estado/{estadoId}/municipio/{municipioId}', 'EdificioController@getByEstadoIdAndMunicipioId');
 	//**************/
+
+	//** ESTADOS Y MUNICIPIOS */
+	Route::get('/estados', 'EstadosController@index');
+	Route::get('/estado/{id}', 'EstadosController@show');
+	Route::get('/municipios', 'MunicipiosController@index');
+	Route::get('/municipio/{id}', 'MunicipiosController@show');
+	Route::get('/municipios/estado/{id}', 'MunicipiosController@getByEstadoId');
+	//************************/
 
 });

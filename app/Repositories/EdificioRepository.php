@@ -33,7 +33,7 @@ class EdificioRepository implements IEdificioDao{
 					'lat' => $edificio->lat,
 					'lon' => $edificio->lon,
 				],
-				'horas_revicio' => [
+				'horas_servicio' => [
 					'apertura' => $edificio->hora_apertura,
 					'cierre' => $edificio->hora_cierre,
 				]
@@ -69,7 +69,7 @@ class EdificioRepository implements IEdificioDao{
 					'lat' => $edificio->lat,
 					'lon' => $edificio->lon,
 				],
-				'horas_revicio' => [
+				'horas_servicio' => [
 					'apertura' => $edificio->hora_apertura,
 					'cierre' => $edificio->hora_cierre,
 				]
@@ -109,7 +109,7 @@ class EdificioRepository implements IEdificioDao{
 						'lat' => $edificio->lat,
 						'lon' => $edificio->lon,
 					],
-					'horas_revicio' => [
+					'horas_servicio' => [
 						'apertura' => $edificio->hora_apertura,
 						'cierre' => $edificio->hora_cierre,
 					]
@@ -152,7 +152,7 @@ class EdificioRepository implements IEdificioDao{
 						'lat' => $edificio->lat,
 						'lon' => $edificio->lon,
 					],
-					'horas_revicio' => [
+					'horas_servicio' => [
 						'apertura' => $edificio->hora_apertura,
 						'cierre' => $edificio->hora_cierre,
 					]
@@ -195,7 +195,7 @@ class EdificioRepository implements IEdificioDao{
 						'lat' => $edificio->lat,
 						'lon' => $edificio->lon,
 					],
-					'horas_revicio' => [
+					'horas_servicio' => [
 						'apertura' => $edificio->hora_apertura,
 						'cierre' => $edificio->hora_cierre,
 					]
