@@ -26,9 +26,9 @@ class MobiliarioStoreRequest extends FormRequest
         return [
 			'tipo_id' => 'required|exists:tipos_mobiliario,id',
 			'edificio_id' => 'required|exists:edificios,id',
-			'marca' => 'required',
-			'color' => 'required',
-			'cantidad' => 'required|integer|min:1'
+			'nombre' => 'required|string',
+			'cantidad' => 'required|integer|min:1',
+			'image' => 'required',
         ];
     }
 }

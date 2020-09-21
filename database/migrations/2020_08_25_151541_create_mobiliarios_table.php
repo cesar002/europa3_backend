@@ -16,14 +16,17 @@ class CreateMobiliariosTable extends Migration
         Schema::create('mobiliarios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tipo_id')->references('id')->on('tipos_mobiliario');
-            $table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
+			$table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
+			$table->foreignId('path_id')->references('id')->on('path_images');
+			$table->string('nombre');
             $table->string('marca');
             $table->string('modelo')->nullable();
             $table->string('color');
             $table->longText('descripcion_bien')->nullable();
 			$table->longText('observaciones')->nullable();
 			$table->mediumInteger('cantidad');
-            $table->boolean('activo')->default(true);
+			$table->boolean('activo')->default(true);
+			$table->string('image');
             $table->timestamps();
         });
     }

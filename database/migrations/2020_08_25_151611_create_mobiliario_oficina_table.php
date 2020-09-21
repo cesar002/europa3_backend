@@ -13,7 +13,7 @@ class CreateMobiliarioOficinaTable extends Migration
      */
     public function up()
     {
-        Schema::create('mobiliario_oficina_table', function (Blueprint $table) {
+        Schema::create('mobiliario_oficina', function (Blueprint $table) {
             $table->id();
             $table->foreignId('oficina_id')->references('id')->on('oficinas')->onDelete('cascade');
             $table->foreignId('mobiliario_id')->references('id')->on('mobiliarios')->onDelete('cascade');
@@ -28,6 +28,6 @@ class CreateMobiliarioOficinaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mobiliario_oficina_table');
+        Schema::dropIfExists('mobiliario_oficina');
     }
 }

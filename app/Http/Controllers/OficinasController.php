@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\MobiliarioOficina;
 use App\Oficina;
 use App\OficinaImage;
 use App\PathImage;
@@ -96,6 +97,15 @@ class OficinasController extends Controller
 
 					$imageOficina->save();
 				}
+			}
+
+			foreach($request->mobiliario as $mobiliarioId){
+				$mob = new MobiliarioOficina([
+					'oficina_id' => $oficina->id,
+					'mobiliario_id' => $mobiliarioId,
+				]);
+
+				$mob->save();
 			}
 
 			DB::commit();

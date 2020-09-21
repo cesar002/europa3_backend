@@ -11,10 +11,14 @@ class OficinaRepository implements IOficinaDao{
 
 	public function getAllOficinas(){
 		try {
-			$oficinasM = Oficina::with('pathImages', 'pathImages.pathMaster', 'edificio', 'edificio.municipio', 'edificio.municipio.estado','imagenes', 'tipoOficina', 'size')->get();
+			$oficinasM = Oficina::with('mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster'
+										,'pathImages', 'pathImages.pathMaster', 'edificio',
+										'edificio.municipio', 'edificio.municipio.estado','imagenes',
+										'tipoOficina', 'size')->get();
 
 			$oficinas = $oficinasM->map(function($oficina){
 				$pathImage = "{$oficina->pathImages->pathMaster->path}/{$oficina->pathImages->path}";
+				$mobiliario = $oficina->mobiliario;
 
 				return [
 					'id' => $oficina->id,
@@ -48,6 +52,23 @@ class OficinaRepository implements IOficinaDao{
 							'lon' => $oficina->edificio->lon,
 						],
 					],
+					'mobiliario' => $mobiliario->map(function($mob) use($mobiliario){
+						$pathImage = "{$mob->pathImages->pathMaster->path}/{$mob->pathImages->path}/{$mob->image}";
+						return[
+							'id' => $mob->id,
+							'nombre' => $mob->nombre,
+							'marca' => $mob->marca,
+							'modelo' => $mob->modelo,
+							'color' => $mob->color,
+							'image' => asset(Storage::url($pathImage)),
+							'tipo' => [
+								'id' => $mob->tipo->id,
+								'nombre' => $mob->tipo->tipo,
+							],
+							'cantidad' => collect($mobiliario->filter(function($value, $key) use($mob){ return $value->id == $mob->id;})->all())
+											->countBy(function($m) use($mob){ return $m->id == $mob->id; })->values()->all()[0],
+						];
+					})->unique('id')->values()->all(),
 					'capacidad' => [
 						'recomendada' => $oficina->capacidad_recomendada,
 						'maxima' => $oficina->capacidad_maxima
@@ -59,7 +80,7 @@ class OficinaRepository implements IOficinaDao{
 					'images' => $oficina->imagenes->map(function($image) use ($pathImage) {
 						return[
 							'id' => $image->id,
-							'uri' => Storage::url("{$pathImage}/{$image->image}")
+							'uri' => asset(Storage::url("{$pathImage}/{$image->image}")),
 						];
 					}),
 					'status_uso' => $oficina->en_uso
@@ -74,8 +95,12 @@ class OficinaRepository implements IOficinaDao{
 
 	public function getOficinaById($id){
 		try {
-			$oficina = Oficina::with('pathImages', 'pathImages.pathMaster', 'edificio', 'edificio.municipio', 'edificio.municipio.estado','imagenes', 'tipoOficina', 'size')->findOrFail($id);
+			$oficina = Oficina::with('mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster',
+										'pathImages', 'pathImages.pathMaster', 'edificio', 'edificio.municipio',
+										'edificio.municipio.estado','imagenes', 'tipoOficina', 'size')->findOrFail($id);
+
 			$pathImage = "{$oficina->pathImages->pathMaster->path}/{$oficina->pathImages->path}";
+			$mobiliario = $oficina->mobiliario;
 
 			return [
 				'id' => $oficina->id,
@@ -109,6 +134,23 @@ class OficinaRepository implements IOficinaDao{
 						'lon' => $oficina->edificio->lon,
 					],
 				],
+				'mobiliario' => $mobiliario->map(function($mob) use($mobiliario){
+					$pathImage = "{$mob->pathImages->pathMaster->path}/{$mob->pathImages->path}/{$mob->image}";
+					return[
+						'id' => $mob->id,
+						'nombre' => $mob->nombre,
+						'marca' => $mob->marca,
+						'modelo' => $mob->modelo,
+						'color' => $mob->color,
+						'image' => asset(Storage::url($pathImage)),
+						'tipo' => [
+							'id' => $mob->tipo->id,
+							'nombre' => $mob->tipo->tipo,
+						],
+						'cantidad' => collect($mobiliario->filter(function($value, $key) use($mob){ return $value->id == $mob->id;})->all())
+										->countBy(function($m) use($mob){ return $m->id == $mob->id; })->values()->all()[0],
+					];
+				})->unique('id')->values()->all(),
 				'capacidad' => [
 					'recomendada' => $oficina->capacidad_recomendada,
 					'maxima' => $oficina->capacidad_maxima

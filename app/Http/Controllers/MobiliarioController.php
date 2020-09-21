@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Mobiliario;
+use App\PathImage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class MobiliarioController extends Controller
 {
@@ -29,15 +31,22 @@ class MobiliarioController extends Controller
 	public function store(\App\Http\Requests\MobiliarioStoreRequest $request){
 		try {
 
+			$pathMobiliario = PathImage::with('pathMaster')->findOrFail(2);
+
+			$image_inserted = Storage::disk('public')->put("{$pathMobiliario->pathMaster->path}/{$pathMobiliario->path}", $request->image);
+
 			$mobiliario = new Mobiliario([
 				'tipo_id' => $request->tipo_id,
 				'edificio_id' => $request->edificio_id,
-				'marca' => $request->marca,
-				'modelo' => $request->modelo,
-				'color' => $request->color,
+				'path_id' => 2,
+				'nombre' => $request->nombre,
+				'marca' => $request->marca ?? 'S/N',
+				'modelo' => $request->modelo ?? 'S/N',
+				'color' => $request->color ?? 'S/N',
 				'descripcion_bien' => $request->descripcion_bien,
 				'observaciones' => $request->observaciones,
 				'cantidad' => $request->cantidad,
+				'image' => basename($image_inserted),
 			]);
 
 			$mobiliario->save();
@@ -49,7 +58,7 @@ class MobiliarioController extends Controller
 			Log::error($th->getMessage());
 
 			return response([
-
+				'error' => 'Ocurrió un error al registrar el mobiliario'
 			], 500);
 		}
 	}
@@ -66,6 +75,7 @@ class MobiliarioController extends Controller
 
 			$mobiliario->tipo_id = $request->tipo_id;
 			$mobiliario->edificio_id = $request->edificio_id;
+			$mobiliario->nombre = $request->nombre;
 			$mobiliario->marca = $request->marca;
 			$mobiliario->modelo = $request->modelo;
 			$mobiliario->color = $request->color;

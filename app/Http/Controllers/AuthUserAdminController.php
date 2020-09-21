@@ -39,7 +39,7 @@ class AuthUserAdminController extends Controller
 			$paths = $userData->pathImage()->with('pathMaster')->first();
 
 			if(!is_null($request->file('avatar_image'))){
-				$image_saved = $request->file('avatar_image')->store("{$paths->pathMaster->path}/{$paths->path}");
+				$image_saved = Storage::disk('public')->put("{$paths->pathMaster->path}/{$paths->path}", $request->file('avatar_image'));  //$request->file('avatar_image')->store("{$paths->pathMaster->path}/{$paths->path}");
 				$userData->avatar_image = basename($image_saved);
 				$userData->save();
 			}

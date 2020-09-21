@@ -26,6 +26,7 @@ class MobiliarioUpdateRequest extends FormRequest
         return [
 			'tipo_id' => 'required|exists:tipos_mobiliario,id',
 			'edificio_id' => 'required|exists:edificios,id',
+			'nombre' => 'required',
 			'marca' => 'required',
 			'color' => 'required',
 			'cantidad' => 'required|integer|min:1'

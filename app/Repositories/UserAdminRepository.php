@@ -27,7 +27,7 @@ class UserAdminRepository implements IUserAdminDao{
 					'nombre' => $userData->nombre,
 					'ape_pat' => $userData->ap_p,
 					'ape_mat' => $userData->ap_m,
-					'avatar' => Storage::url("{$userData->pathImage->pathMaster->path}/{$userData->pathImage->path}/{$userData->avatar_image}")
+					'avatar' => asset(Storage::url("{$userData->pathImage->pathMaster->path}/{$userData->pathImage->path}/{$userData->avatar_image}"))
 				],
 				'permisos' => $permisos,
 			];
