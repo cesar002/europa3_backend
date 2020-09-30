@@ -32,6 +32,10 @@ class OficinaUpdateRequest extends FormRequest
 			'precio' => 'required|numeric',
 			'capacidad_recomendada' => 'required|numeric|min:1',
 			'capacidad_maxima' => 'required|numeric|min:1|gte:capacidad_recomendada',
+			'mobiliario' => 'required|array',
+			'mobiliario.*' => 'required|exists:mobiliarios,id',
+			'servicios' => 'required|array',
+			'servicios.*' => 'required|exists:cat_servicios_oficina,id',
         ];
     }
 }

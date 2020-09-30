@@ -11,7 +11,7 @@ class OficinaRepository implements IOficinaDao{
 
 	public function getAllOficinas(){
 		try {
-			$oficinasM = Oficina::with('mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster'
+			$oficinasM = Oficina::with('servicios', 'mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster'
 										,'pathImages', 'pathImages.pathMaster', 'edificio',
 										'edificio.municipio', 'edificio.municipio.estado','imagenes',
 										'tipoOficina', 'size')->get();
@@ -52,6 +52,12 @@ class OficinaRepository implements IOficinaDao{
 							'lon' => $oficina->edificio->lon,
 						],
 					],
+					'servicios' => $oficina->servicios->map(function($servicio){
+						return[
+							'id' => $servicio->id,
+							'servicio' => $servicio->servicio,
+						];
+					}),
 					'mobiliario' => $mobiliario->map(function($mob) use($mobiliario){
 						$pathImage = "{$mob->pathImages->pathMaster->path}/{$mob->pathImages->path}/{$mob->image}";
 						return[
@@ -80,7 +86,7 @@ class OficinaRepository implements IOficinaDao{
 					'images' => $oficina->imagenes->map(function($image) use ($pathImage) {
 						return[
 							'id' => $image->id,
-							'uri' => asset(Storage::url("{$pathImage}/{$image->image}")),
+							'url' => asset(Storage::url("{$pathImage}/{$image->image}")),
 						];
 					}),
 					'status_uso' => $oficina->en_uso
@@ -95,7 +101,7 @@ class OficinaRepository implements IOficinaDao{
 
 	public function getOficinaById($id){
 		try {
-			$oficina = Oficina::with('mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster',
+			$oficina = Oficina::with( 'servicios', 'mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster',
 										'pathImages', 'pathImages.pathMaster', 'edificio', 'edificio.municipio',
 										'edificio.municipio.estado','imagenes', 'tipoOficina', 'size')->findOrFail($id);
 
@@ -134,6 +140,12 @@ class OficinaRepository implements IOficinaDao{
 						'lon' => $oficina->edificio->lon,
 					],
 				],
+				'servicios' => $oficina->servicios->map(function($servicio){
+					return[
+						'id' => $servicio->id,
+						'servicio' => $servicio->servicio,
+					];
+				}),
 				'mobiliario' => $mobiliario->map(function($mob) use($mobiliario){
 					$pathImage = "{$mob->pathImages->pathMaster->path}/{$mob->pathImages->path}/{$mob->image}";
 					return[
@@ -162,7 +174,7 @@ class OficinaRepository implements IOficinaDao{
 				'images' => $oficina->imagenes->map(function($image) use ($pathImage) {
 					return[
 						'id' => $image->id,
-						'uri' => asset(Storage::url("{$pathImage}/{$image->image}")),
+						'url' => asset(Storage::url("{$pathImage}/{$image->image}")),
 					];
 				}),
 				'status_uso' => $oficina->en_uso

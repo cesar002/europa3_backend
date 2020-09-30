@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\MobiliarioOficina;
 use App\Oficina;
 use App\OficinaImage;
+use App\OficinaServicio;
 use App\PathImage;
 use App\PathMaster;
 use App\Repositories\OficinaRepository;
@@ -88,7 +89,7 @@ class OficinasController extends Controller
 
 			if(!is_null($images)){
 				foreach($images as $image){
-					$nameImage = Storage::put("$pathMaster->path/$pathImage->path", $image);
+					$nameImage = Storage::disk('public')->put("$pathMaster->path/$pathImage->path", $image);
 
 					$imageOficina = new OficinaImage([
 						'oficina_id' => $oficina->id,
@@ -106,6 +107,15 @@ class OficinasController extends Controller
 				]);
 
 				$mob->save();
+			}
+
+			foreach($request->servicios as $servicioId){
+				$serv = new OficinaServicio([
+					'oficina_id' => $oficina->id,
+					'servicio_id' => $servicioId,
+				]);
+
+				$serv->save();
 			}
 
 			DB::commit();
@@ -149,7 +159,30 @@ class OficinasController extends Controller
     public function update(\App\Http\Requests\OficinaUpdateRequest $request, $id)
     {
         try {
+			DB::beginTransaction();
+
 			$oficina = Oficina::findOrFail($id);
+
+			DB::delete('DELETE FROM oficina_servicios WHERE oficina_id = ?', [$id]);
+			DB::delete('DELETE FROM mobiliario_oficina WHERE oficina_id = ?', [$id]);
+
+			foreach($request->servicios as $servicio){
+				$serv = new OficinaServicio([
+					'oficina_id' => $oficina->id,
+					'servicio_id' => $servicio,
+				]);
+
+				$serv->save();
+			}
+
+			foreach($request->mobiliario as $mobiliario){
+				$mob = new MobiliarioOficina([
+					'oficina_id' => $oficina->id,
+					'mobiliario_id' => $mobiliario,
+				]);
+
+				$mob->save();
+			}
 
 			$oficina->edificio_id = $request->edificio_id;
 			$oficina->tipo_oficina_id = $request->tipo_oficina_id;
@@ -163,10 +196,15 @@ class OficinasController extends Controller
 
 			$oficina->save();
 
+
+			DB::commit();
+
 			return response([
 				'message' => 'Oficina actualizada con éxito'
 			]);
 		} catch (\Throwable $th) {
+			DB::rollBack();
+
 			Log::error($th->getMessage());
 
 			return response([

@@ -119,11 +119,15 @@ Route::group(['prefix' => 'v1'], function () {
 
 	//** OFICINA Y CATALOGOS */
 
+	Route::get('/demo', function () {
+		echo phpinfo();
+	});
+
 	Route::get('/oficina-size', 'OficinaSizeController@index');
 	Route::post('/oficina-size', 'OficinaSizeController@store');
 	Route::put('/oficina-size/{id}', 'OficinaSizeController@update');
 
-	Route::put('/oficina-images', 'OficinaImageController@update');
+	Route::post('/oficina-images/{id}', 'OficinaImageController@update');
 
 	Route::get('/tipos-oficina', 'TiposOficinaController@index');
 	Route::post('/tipos-oficina', 'TiposOficinaController@store');
@@ -133,12 +137,13 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::post('/tipos-oficina-virtual', 'TiposOficinaVirtualController@store');
 	Route::put('/tipos-oficina-virtual/{id}', 'TiposOficinaVirtualController@update');
 
-	Route::get('/servicios', 'OficinaSizeController@index');
-	Route::post('/servicios', 'OficinaSizeController@store');
-	Route::put('/servicios/{id}', 'OficinaSizeController@update');
+	Route::get('/servicios', 'ServiciosController@index');
+	Route::post('/servicio', 'ServiciosController@store');
+	Route::patch('/servicio/{id}', 'ServiciosController@update');
 
 	Route::get('/oficinas', 'OficinasController@getOficinas');
 	Route::get('/oficina/{id}', 'OficinasController@show');
+	Route::get('/oficina/{id}/images', 'OficinaImageController@show');
 	Route::get('/oficinas/municipio/{id}', 'OficinasController@getOficinasByMunicipio');
 	Route::get('/oficinas/estado/{id}', 'OficinasController@getOficinasByEstado');
 	Route::get('/oficinas/edificio/{id}', 'OficinasController@getOficinasByEdificioId');
@@ -151,8 +156,8 @@ Route::group(['prefix' => 'v1'], function () {
 
 	//** EDIFICIOS Y CATALOGOS */
 	Route::get('/idiomas-atencion', 'IdiomasAtencionController@index');
-	Route::post('/idiomas-atencion', 'IdiomasAtencionController@store');
-	Route::put('/idiomas-atencion/{id}', 'IdiomasAtencionController@update');
+	Route::post('/idioma-atencion', 'IdiomasAtencionController@store');
+	Route::put('/idioma-atencion/{id}', 'IdiomasAtencionController@update');
 
 	Route::post('/edificio', 'EdificioController@store');
 	Route::put('/edificio/{id}', 'EdificioController@update');

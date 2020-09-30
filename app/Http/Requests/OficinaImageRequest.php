@@ -24,7 +24,8 @@ class OficinaImageRequest extends FormRequest
     public function rules()
     {
         return [
-			'images_delete' => 'required|array',
+			'images_delete' => 'array',
+			'new_images' => 'array',
         ];
     }
 }
