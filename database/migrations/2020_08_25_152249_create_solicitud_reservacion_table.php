@@ -20,7 +20,7 @@ class CreateSolicitudReservacionTable extends Migration
 			$table->foreignId('oficina_id')->references('id')->on('oficinas');
 			$table->foreignId('metodo_pago_id')->references('id')->on('cat_metodos_pago');
 			$table->foreignId('solicitud_id')->nullable()->references('id')->on('solicitud_reservacion');
-            $table->smallInteger('plazo');
+            $table->smallInteger('meses_renta');
             $table->smallInteger('numero_ocupantes');
 			$table->boolean('finalizado')->default(false);
 			$table->boolean('revalidado')->default(false);

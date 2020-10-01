@@ -58,5 +58,8 @@ class Oficina extends Model
 		return $this->belongsTo(\App\PathImage::class, 'path_image_id');
 	}
 
+	public function tipoTiempoRenta(){
+		return $this->belongsTo(\App\CatTiempoRenta::class, 'tipo_tiempo_id');
+	}
 
 }

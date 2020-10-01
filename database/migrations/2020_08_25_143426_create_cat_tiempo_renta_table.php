@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCatServiciosOficinaTable extends Migration
+class CreateCatTiempoRentaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateCatServiciosOficinaTable extends Migration
      */
     public function up()
     {
-        Schema::create('cat_servicios', function (Blueprint $table) {
-            $table->id();
-            $table->string('servicio');
+        Schema::create('cat_tiempo_renta', function (Blueprint $table) {
+			$table->id();
+			$table->string('tiempo');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateCatServiciosOficinaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cat_servicios');
+        Schema::dropIfExists('cat_tiempo_renta');
     }
 }

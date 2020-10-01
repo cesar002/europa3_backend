@@ -16,7 +16,7 @@ class CreateOficinaServiciosTable extends Migration
         Schema::create('oficina_servicios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('oficina_id')->references('id')->on('oficinas')->onDelete('cascade');
-            $table->foreignId('servicio_id')->references('id')->on('cat_servicios_oficina')->onDelete('cascade');
+            $table->foreignId('servicio_id')->references('id')->on('cat_servicios')->onDelete('cascade');
             $table->timestamps();
         });
     }

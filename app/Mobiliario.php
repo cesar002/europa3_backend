@@ -46,4 +46,8 @@ class Mobiliario extends Model
 		return $this->belongsToMany(\App\Oficina::class, 'mobiliario_oficina', 'mobiliario_id', 'oficina_id');
 	}
 
+	public function salasJuntas(){
+		return $this->belongsToMany(\App\SalaJuntas::class, 'mobiliario_sala_juntas', 'mobiliario_id', 'sala_juntas_id');
+	}
+
 }

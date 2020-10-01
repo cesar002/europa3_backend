@@ -28,4 +28,24 @@ class SalaJuntas extends Model{
 		return $this->belongsTo(\App\CatSizeOficina::class, 'size_id');
 	}
 
+	public function pathImages(){
+		return $this->belongsTo(\App\PathImage::class, 'path_image_id');
+	}
+
+	public function servicios(){
+		return $this->belongsToMany(\App\CatServiciosOficina::class, 'sala_juntas_servicios', 'sala_juntas_id', 'servicio_id');
+	}
+
+	public function imagenes(){
+		return $this->hasMany(\App\SalaJuntasImagenes::class, 'sala_juntas_id');
+	}
+
+	public function mobiliario(){
+		return $this->belongsToMany(\App\Mobiliario::class, 'mobiliario_sala_juntas', 'sala_juntas_id', 'mobiliario_id');
+	}
+
+	public function tipoTiempoRenta(){
+		return $this->belongsTo(\App\CatTiempoRenta::class, 'tipo_tiempo_id');
+	}
+
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCatServiciosOficinaTable extends Migration
+class CreateMobiliarioSalaJuntasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateCatServiciosOficinaTable extends Migration
      */
     public function up()
     {
-        Schema::create('cat_servicios', function (Blueprint $table) {
-            $table->id();
-            $table->string('servicio');
+        Schema::create('mobiliario_sala_juntas', function (Blueprint $table) {
+			$table->id();
+			$table->foreignId('sala_juntas_id')->references('id')->on('sala_juntas')->onDelete('cascade');
+			$table->foreignId('mobiliario_id')->references('id')->on('mobiliarios');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateCatServiciosOficinaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cat_servicios');
+        Schema::dropIfExists('mobiliario_sala_juntas');
     }
 }
