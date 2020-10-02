@@ -29,6 +29,7 @@ class CreateInsumosUsadosTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('insumos_usados');
     }
 }

@@ -28,6 +28,7 @@ class CreateEdificioIdiomasAtencionTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('edificio_idiomas_atencion');
     }
 }

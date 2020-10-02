@@ -29,6 +29,7 @@ class CreateCatReferenciasPagosTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('cat_referencias_pagos');
     }
 }

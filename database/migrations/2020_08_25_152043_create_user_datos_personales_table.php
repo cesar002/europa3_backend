@@ -40,6 +40,7 @@ class CreateUserDatosPersonalesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_datos_personales_table');
+		Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('user_datos_personales');
     }
 }

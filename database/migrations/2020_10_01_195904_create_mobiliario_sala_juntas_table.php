@@ -28,6 +28,7 @@ class CreateMobiliarioSalaJuntasTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('mobiliario_sala_juntas');
     }
 }

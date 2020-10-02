@@ -37,6 +37,7 @@ class CreateUserDatosMoralesTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('user_datos_morales');
     }
 }

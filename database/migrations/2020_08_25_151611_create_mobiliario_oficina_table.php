@@ -28,6 +28,7 @@ class CreateMobiliarioOficinaTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('mobiliario_oficina');
     }
 }

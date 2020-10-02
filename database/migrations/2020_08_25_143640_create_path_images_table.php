@@ -29,6 +29,7 @@ class CreatePathImagesTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('path_images');
     }
 }

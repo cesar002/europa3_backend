@@ -28,6 +28,7 @@ class CreateUsersAdminEdificiosTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('create_users_admin_edificios');
     }
 }

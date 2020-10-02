@@ -29,6 +29,7 @@ class CratePathFilesTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('path_files');
     }
 }

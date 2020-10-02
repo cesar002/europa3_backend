@@ -15,7 +15,8 @@ class CreateAutorizacionesReservacionSalaJuntasTable extends Migration
     {
         Schema::create('autorizaciones_reservaciones_sala_juntas', function (Blueprint $table) {
 			$table->id();
-			$table->foreignId('reservacion_id')->references('id')->on('solicitud_reservacion_sala_juntas');
+			$table->unsignedBigInteger('reservacion_id');
+			$table->foreign('reservacion_id', 'autorizacion_solicitud_FK')->references('id')->on('solicitud_reservacion_sala_juntas');
 			$table->boolean('autorizado');
             $table->timestamps();
         });
@@ -28,6 +29,7 @@ class CreateAutorizacionesReservacionSalaJuntasTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('autorizaciones_reservaciones_sala_juntas');
     }
 }

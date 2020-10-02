@@ -36,6 +36,7 @@ class CreateSolicitudReservacionSalaJuntasTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('solicitud_reservacion_sala_juntas');
     }
 }

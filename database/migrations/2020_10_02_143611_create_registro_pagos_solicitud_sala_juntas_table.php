@@ -13,9 +13,10 @@ class CreateRegistroPagosSolicitudSalaJuntasTable extends Migration
      */
     public function up()
     {
-        Schema::create('registro_pagos_solicitud_sala_juntas', function (Blueprint $table) {
+        Schema::create('registro_pago_solicitud_sala_juntas', function (Blueprint $table) {
 			$table->id();
-			$table->foreignId('solicitud_sala_juntas_id')->references('id')->on('solicitud_reservacion_sala_juntas');
+			$table->unsignedBigInteger('solicitud_sala_juntas_id');
+			$table->foreign('solicitud_sala_juntas_id', 'pago_solicitud_FK')->references('id')->on('solicitud_reservacion_sala_juntas');
 			$table->foreignId('user_id')->references('id')->on('users');
 			$table->string('folio');
 			$table->dateTime('fecha_pago');
@@ -32,6 +33,7 @@ class CreateRegistroPagosSolicitudSalaJuntasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('registro_pagos_solicitud_sala_juntas');
+		Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('registro_pago_solicitud_sala_juntas');
     }
 }

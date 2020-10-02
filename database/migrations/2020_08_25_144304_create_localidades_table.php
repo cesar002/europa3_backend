@@ -40,6 +40,7 @@ class CreateLocalidadesTable extends Migration
      */
     public function down()
     {
+		Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('localidades');
     }
 }
