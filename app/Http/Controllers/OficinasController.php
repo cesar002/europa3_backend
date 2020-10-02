@@ -9,7 +9,6 @@ use App\OficinaServicio;
 use App\PathImage;
 use App\PathMaster;
 use App\Repositories\OficinaRepository;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -83,7 +82,7 @@ class OficinasController extends Controller
 				'path_image_id' => $pathImage->id
 			]);
 
-			Storage::makeDirectory("{$pathMaster->path}/{$pathImage->path}");
+			Storage::disk('public')->makeDirectory("{$pathMaster->path}/{$pathImage->path}");
 
 			$oficina->save();
 

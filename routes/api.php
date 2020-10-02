@@ -81,20 +81,15 @@ Route::group(['prefix' => 'v1'], function () {
 
 	//****************/
 
+	//** TIPO DE TIEMPOS DE RENTA  */
+	Route::get('/tiempos-renta', 'TipoTiempoController@index');
+	//*****************/
+
 	//** SOLICITUDES */
 
 	Route::get('/solicitudes-renta', 'SolicitudesRentaController@index');
 	Route::get('/solicitud-renta/{id}', 'SolicitudesRentaController@show');
 	Route::post('/solicitud-renta', 'SolicitudesRentaController@store');
-
-	// Route::get('/wea', function () {
-
-	// 	// echo $currentDate->addMonthsNoOverflow(1)->toDateString();
-	// 	for ($i=1; $i <= 6; $i++) {
-	// 		$currentDate = Carbon::createFromDate(2020, 10, 31, 'Europe/Madrid');
-	// 		echo "<p>".$currentDate->addMonthsNoOverflow($i)->toDateString()."</p>";
-	// 	}
-	// });
 
 	//****************/
 
@@ -117,12 +112,16 @@ Route::group(['prefix' => 'v1'], function () {
 
 	//*****************/
 
+	//** SALA DE JUNTAS */
+	Route::get('/sala-juntas', 'SalaJuntaController@index');
+	Route::get('/sala-junta/{id}', 'SalaJuntaController@show');
+
+	Route::post('/sala-junta', 'SalaJuntaController@store');
+
+	Route::put('/sala-junta/{id}', 'SalaJuntaController@update');
+	//*******************/
+
 	//** OFICINA Y CATALOGOS */
-
-	Route::get('/demo', function () {
-		echo phpinfo();
-	});
-
 	Route::get('/oficina-size', 'OficinaSizeController@index');
 	Route::post('/oficina-size', 'OficinaSizeController@store');
 	Route::put('/oficina-size/{id}', 'OficinaSizeController@update');
