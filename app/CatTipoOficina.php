@@ -17,6 +17,6 @@ class CatTipoOficina extends Model
 	}
 
 	public function salasJuntas(){
-		return $this->hasMany(\App\SalaJuntas::class, 'tipo_id');
+		return $this->hasMany(\App\SalaJuntas::class, 'tipo_oficina_id');
 	}
 }

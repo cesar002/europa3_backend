@@ -25,7 +25,7 @@ class OficinaStoreRequest extends FormRequest
     {
         return [
 			'edificio_id' => 'required|exists:edificios,id',
-			'tipo_oficina_id' => 'required|exists:cat_tipos_oficina,id',
+			'tipo_tiempo_id' => 'required|exists:cat_tiempo_renta,id',
 			'size_id' => 'required|exists:cat_size_oficinas,id',
 			'nombre' => 'required',
 			'descripcion' => 'required',
@@ -35,7 +35,7 @@ class OficinaStoreRequest extends FormRequest
 			'mobiliario' => 'required|array',
 			'mobiliario.*' => 'required|exists:mobiliarios,id',
 			'servicios' => 'required|array',
-			'servicios.*' => 'required|exists:cat_servicios_oficina,id',
+			'servicios.*' => 'required|exists:cat_servicios,id',
         ];
     }
 }

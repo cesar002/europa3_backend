@@ -44,11 +44,13 @@ Route::group(['prefix' => 'v1'], function () {
 			});
 
 			Route::group(['prefix' => 'datos-morales'], function () {
+				Route::get('/', 'DatosMoralesController@getFromCurrentUser');
 				Route::post('/', 'DatosMoralesController@store');
 				Route::put('/', 'DatosMoralesController@update');
 			});
 
 			Route::group(['prefix' => 'datos-fiscales'], function () {
+				Route::get('/', 'DatosFiscalesController@getFromCurrentUser');
 				Route::post('/', 'DatosFiscalesController@store');
 				Route::put('/', 'DatosFiscalesController@update');
 			});
@@ -113,12 +115,14 @@ Route::group(['prefix' => 'v1'], function () {
 	//*****************/
 
 	//** SALA DE JUNTAS */
-	Route::get('/sala-juntas', 'SalaJuntaController@index');
-	Route::get('/sala-junta/{id}', 'SalaJuntaController@show');
+	Route::get('/salas-juntas', 'SalaJuntaController@index');
+	Route::get('/sala-juntas/{id}', 'SalaJuntaController@show');
+	Route::get('/sala-juntas/{id}/images', 'SalaJuntasImagesController@show');
 
-	Route::post('/sala-junta', 'SalaJuntaController@store');
+	Route::post('/sala-juntas', 'SalaJuntaController@store');
+	Route::post('/sala-juntas-images/{id}', 'SalaJuntasImagesController@update');
 
-	Route::put('/sala-junta/{id}', 'SalaJuntaController@update');
+	Route::put('/sala-juntas/{id}', 'SalaJuntaController@update');
 	//*******************/
 
 	//** OFICINA Y CATALOGOS */
@@ -176,5 +180,11 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/municipio/{id}', 'MunicipiosController@show');
 	Route::get('/municipios/estado/{id}', 'MunicipiosController@getByEstadoId');
 	//************************/
+
+	//** CATALOGOS GENERALES */
+	Route::group(['prefix' => 'cat'], function () {
+		Route::get('/tipos-identificacion', 'TipoIdentificacionController@index');
+		Route::get('/nacionalidades', 'NacionalidadesController@index');
+	});
 
 });

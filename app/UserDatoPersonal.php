@@ -15,6 +15,7 @@ class UserDatoPersonal extends Model
 	];
 
 	protected $casts = [
+		// 'fecha_nacimiento' => 'date:Y-m-d',
 	];
 
     public function user(){

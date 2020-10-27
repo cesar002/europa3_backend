@@ -11,7 +11,7 @@ class OficinaRepository implements IOficinaDao{
 
 	public function getAllOficinas(){
 		try {
-			$oficinasM = Oficina::with('servicios', 'mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster'
+			$oficinasM = Oficina::with('tipoTiempoRenta', 'servicios', 'mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster'
 										,'pathImages', 'pathImages.pathMaster', 'edificio',
 										'edificio.municipio', 'edificio.municipio.estado','imagenes',
 										'tipoOficina', 'size')->get();
@@ -26,6 +26,10 @@ class OficinaRepository implements IOficinaDao{
 					'descripcion' => $oficina->descripcion,
 					'size' => $oficina->size_dimension,
 					'precio' => $oficina->precio,
+					'tipo_renta' => [
+						'id' => $oficina->tipoTiempoRenta->id,
+						'tipo' => $oficina->tipoTiempoRenta->tiempo,
+					],
 					'size_tipo' => [
 						'id' => $oficina->size->id,
 						'tipo' => $oficina->size->size_name,
@@ -101,7 +105,7 @@ class OficinaRepository implements IOficinaDao{
 
 	public function getOficinaById($id){
 		try {
-			$oficina = Oficina::with( 'servicios', 'mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster',
+			$oficina = Oficina::with('tipoTiempoRenta', 'servicios', 'mobiliario', 'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster',
 										'pathImages', 'pathImages.pathMaster', 'edificio', 'edificio.municipio',
 										'edificio.municipio.estado','imagenes', 'tipoOficina', 'size')->findOrFail($id);
 
@@ -113,6 +117,10 @@ class OficinaRepository implements IOficinaDao{
 				'nombre' => $oficina->nombre,
 				'descripcion' => $oficina->descripcion,
 				'size' => $oficina->size_dimension,
+				'tipo_renta' => [
+					'id' => $oficina->tipoTiempoRenta->id,
+					'tipo' => $oficina->tipoTiempoRenta->tiempo,
+				],
 				'precio' => $oficina->precio,
 				'size_tipo' => [
 					'id' => $oficina->size->id,

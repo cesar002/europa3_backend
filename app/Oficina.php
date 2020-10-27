@@ -15,7 +15,7 @@ class Oficina extends Model
 	protected $fillable = [
 		'edificio_id', 'tipo_oficina_id', 'size_id', 'nombre', 'descripcion', 'size_dimension',
 		'capacidad_recomendada', 'capacidad_maxima', 'en_uso', 'precio',
-		'path_image_id',
+		'path_image_id', 'tipo_tiempo_id',
 	];
 
 	protected $hidden = [

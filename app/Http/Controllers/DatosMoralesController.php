@@ -8,7 +8,21 @@ use Illuminate\Support\Facades\Log;
 
 class DatosMoralesController extends Controller
 {
+	private $datosMoralesRepository;
 
+	public function __construct(\App\Repositories\DatosMoralesRepository $datosMoralesRepository){
+		$this->datosMoralesRepository = $datosMoralesRepository;
+	}
+
+	public function getFromCurrentUser(Request $request){
+		$data = $this->datosMoralesRepository->getDatosMoralesByUserId($request->user()->id);
+
+		return response(json_encode($data, JSON_FORCE_OBJECT));
+	}
+
+	public function show(){
+
+	}
 
     /**
      * Store a newly created resource in storage.

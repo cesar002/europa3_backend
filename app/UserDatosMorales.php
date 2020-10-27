@@ -13,6 +13,10 @@ class UserDatosMorales extends Model
 		'numero_notario', 'fecha_constitucion', 'giro_comercial', 'telefono', 'email',
 	];
 
+	protected $hidden = [
+		'created_at', 'updated_at', 'user_id',
+	];
+
     public function user(){
         return $this->belongsTo(\App\User::class);
     }

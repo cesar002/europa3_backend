@@ -20,18 +20,8 @@ class UserController extends Controller
 	public function getCurrentAuthUser(Request $request){
 		$userData = $this->userRepository->getUserData($request->user());
 
-		return response($userData);
+		return response(json_encode($userData, JSON_FORCE_OBJECT));
 	}
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-
-    }
 
     /**
      * Store a newly created resource in storage.

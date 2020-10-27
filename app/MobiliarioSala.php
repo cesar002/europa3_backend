@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MobiliarioSala extends Model{
 
-	protected $tabla = 'mobiliario_sala_juntas';
+	protected $table = 'mobiliario_sala_juntas';
 
 	protected $fillable = [
 		'sala_juntas_id', 'mobiliario_id',

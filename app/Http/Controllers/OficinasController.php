@@ -71,7 +71,8 @@ class OficinasController extends Controller
 
 			$oficina = new Oficina([
 				'edificio_id' => $request->edificio_id,
-				'tipo_oficina_id' => $request->tipo_oficina_id,
+				'tipo_oficina_id' => 1,
+				'tipo_tiempo_id' => $request->tipo_tiempo_id,
 				'size_id' => $request->size_id,
 				'nombre' => $request->nombre,
 				'descripcion' => $request->descripcion,
@@ -184,7 +185,7 @@ class OficinasController extends Controller
 			}
 
 			$oficina->edificio_id = $request->edificio_id;
-			$oficina->tipo_oficina_id = $request->tipo_oficina_id;
+			$oficina->tipo_tiempo_id = $request->tipo_tiempo_id;
 			$oficina->size_id = $request->size_id;
 			$oficina->nombre = $request->nombre;
 			$oficina->descripcion = $request->descripcion;

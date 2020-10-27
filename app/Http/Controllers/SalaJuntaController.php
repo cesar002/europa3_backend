@@ -51,14 +51,16 @@ class SalaJuntaController extends Controller{
 
 			$salaJuntas = new SalaJuntas([
 				'edificio_id' => $request->edificio_id,
-				'tipo_oficina_id' => $request->tipo_oficina_id,
+				'tipo_oficina_id' => 2,
 				'size_id' => $request->size_id,
 				'nombre' => $request->nombre,
 				'descripcion' => $request->descripcion,
-				'size_dimension' => $request->dimension,
+				'size_dimension' => $request->size_dimension,
 				'capacidad_recomendada' => $request->capacidad_recomendada,
 				'capacidad_maxima' => $request->capacidad_maxima,
 				'precio' => $request->precio,
+				'path_image_id' => $pathImage->id,
+				'tipo_tiempo_id' => $request->tipo_tiempo_id,
 			]);
 			$salaJuntas->save();
 
@@ -140,12 +142,11 @@ class SalaJuntaController extends Controller{
 			}
 
 			$salaJuntas->edificio_id = $request->edificio_id;
-			$salaJuntas->tipo_oficina_id = $request->tipo_oficina_id;
 			$salaJuntas->size_id = $request->size_id;
 			$salaJuntas->tipo_tiempo_id = $request->tipo_tiempo_id;
 			$salaJuntas->nombre = $request->nombre;
 			$salaJuntas->descripcion = $request->descripcion;
-			$salaJuntas->size_dimension = $request->dimension;
+			$salaJuntas->size_dimension = $request->size_dimension;
 			$salaJuntas->capacidad_recomendada = $request->capacidad_recomendada;
 			$salaJuntas->capacidad_maxima = $request->capacidad_maxima;
 			$salaJuntas->precio = $request->precio;

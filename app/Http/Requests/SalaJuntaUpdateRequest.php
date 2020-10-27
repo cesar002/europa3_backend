@@ -25,7 +25,6 @@ class SalaJuntaUpdateRequest extends FormRequest
     {
         return [
             'edificio_id' => 'required|exists:edificios,id',
-			'tipo_oficina_id' => 'required|exists:cat_tipos_oficina,id',
 			'size_id' => 'required|exists:cat_size_oficinas,id',
 			'tipo_tiempo_id' => 'required|exists:cat_tiempo_renta,id',
 			'nombre' => 'required|string',
@@ -37,7 +36,7 @@ class SalaJuntaUpdateRequest extends FormRequest
 			'mobiliario' => 'required|array',
 			'mobiliario.*' => 'required|exists:mobiliarios,id',
 			'servicios' => 'required|array',
-			'servicios.*' => 'required|exists:cat_servicios_oficina,id',
+			'servicios.*' => 'required|exists:cat_servicios,id',
         ];
     }
 }

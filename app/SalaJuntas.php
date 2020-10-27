@@ -7,6 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class SalaJuntas extends Model{
 	protected $table = 'sala_juntas';
 
+	protected $fillable = [
+		'edificio_id',
+		'tipo_oficina_id',
+		'size_id',
+		'nombre',
+		'descripcion',
+		'size_dimension',
+		'capacidad_recomendada',
+		'capacidad_maxima',
+		'precio',
+		'path_image_id',
+		'tipo_tiempo_id',
+	];
+
 	protected $hidden = [
 		'created_at', 'updated_at',
 	];
@@ -21,7 +35,7 @@ class SalaJuntas extends Model{
 	}
 
 	public function tipoOficina(){
-		return $this->belongsTo(\App\CatTipoOficina::class, 'tipo_id');
+		return $this->belongsTo(\App\CatTipoOficina::class, 'tipo_oficina_id');
 	}
 
 	public function size(){

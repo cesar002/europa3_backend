@@ -9,6 +9,23 @@ use Illuminate\Support\Facades\Log;
 class DatosFiscalesController extends Controller
 {
 
+	private $datosFiscalesRepository;
+
+	public function __construct(\App\Repositories\DatosFiscalesRepository $datosFiscalesRepository){
+		$this->datosFiscalesRepository = $datosFiscalesRepository;
+	}
+
+	public function getFromCurrentUser(Request $request){
+		$data = $this->datosFiscalesRepository->getDatosFiscalesByUserId($request->user()->id);
+
+		return response(json_encode($data, JSON_FORCE_OBJECT));
+	}
+
+
+	public function show($userId){
+
+	}
+
     /**
      * Store a newly created resource in storage.
      *
