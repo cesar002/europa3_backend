@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class MunicipiosController extends Controller{
 	public function index(){
-		$municipios = Municipio::all();
+		$municipios = Municipio::orderBy('nombre')->get();
 
 		return response($municipios);
 	}

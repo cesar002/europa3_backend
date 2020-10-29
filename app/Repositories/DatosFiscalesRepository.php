@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\IDatosFiscalesDao;
 use App\UserDatosFiscales;
+use Illuminate\Support\Facades\Log;
 
 class DatosFiscalesRepository implements IDatosFiscalesDao{
 
@@ -11,28 +12,26 @@ class DatosFiscalesRepository implements IDatosFiscalesDao{
 		try {
 			$data = UserDatosFiscales::with('estado', 'municipio')->where('user_id', $userId)->firstOrFail();
 
-			return $data->map(function($dato){
-				return [
-					'id' => $dato->id,
-					'estado' => [
-						'id' => $dato->estado->id,
-						'nombre' => $dato->estado->nombre,
-					],
-					'municipio' => [
-						'id' => $dato->municipio->id,
-						'nombre' => $dato->municipio->nombre,
-					],
-					'email' => $dato->email,
-					'razon_social' => $dato->razon_social,
-					'RFC' => $dato->RFC,
-					'telefono' => $dato->telefono,
-					'calle' => $dato->calle,
-					'numero_exterior' => $dato->numero_exterior,
-					'numero_interior' => $dato->numero_interior,
-					'codigo_postal' => $dato->codigo_postal,
-					'colonia' => $dato->colonia,
-				];
-			});
+			return [
+				'id' => $data->id,
+				'estado' => [
+					'id' => $data->estado->id,
+					'nombre' => $data->estado->nombre,
+				],
+				'municipio' => [
+					'id' => $data->municipio->id,
+					'nombre' => $data->municipio->nombre,
+				],
+				'email' => $data->email,
+				'razon_social' => $data->razon_social,
+				'RFC' => $data->RFC,
+				'telefono' => $data->telefono,
+				'calle' => $data->calle,
+				'numero_exterior' => $data->numero_exterior,
+				'numero_interior' => $data->numero_interior,
+				'codigo_postal' => $data->codigo_postal,
+				'colonia' => $data->colonia,
+			];
 		} catch (\Throwable $th) {
 			return [];
 		}

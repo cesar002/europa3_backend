@@ -32,20 +32,19 @@ class DatosMoralesController extends Controller
      */
     public function store(\App\Http\Requests\DatosMoralesStoreRequest $request){
         try {
-			$user = $request->user();
 
 			$datosMorales = new UserDatosMorales([
-				'user_id' => $user->id,
-				'nombre_empresa' => $request->nombre_empresa,
-				'nombre' => $request->nombre,
-				'ape_p' => $request->apellido_p,
-				'ape_m' => $request->apellido_m,
-				'escritura_publica' => $request->escritura,
-				'numero_notario' => $request->notario,
+				'user_id' => $request->user()->id,
+				'nombre_empresa' => trim($request->nombre_empresa),
+				'nombre' => trim($request->nombre),
+				'ape_p' => trim($request->apellido_p),
+				'ape_m' => trim($request->apellido_m),
+				'escritura_publica' => trim($request->escritura),
+				'numero_notario' => trim($request->notario),
 				'fecha_constitucion' => $request->fecha_constitucion,
-				'giro_comercial' => $request->giro_comercial,
-				'telefono' => $request->telefono,
-				'email' => $request->email
+				'giro_comercial' => trim($request->giro_comercial),
+				'telefono' => trim($request->telefono),
+				'email' => trim($request->email)
 			]);
 
 			$datosMorales->save();
@@ -74,16 +73,16 @@ class DatosMoralesController extends Controller
 
 			$datosMorales = UserDatosMorales::where('user_id', $request->user()->id)->firstOrFail();
 
-			$datosMorales->nombre_empresa = $request->nombre_empresa;
-			$datosMorales->nombre = $request->nombre;
-			$datosMorales->ape_p = $request->apellido_p;
-			$datosMorales->ape_m = $request->apellido_m;
-			$datosMorales->escritura_publica = $request->escritura;
-			$datosMorales->numero_notario = $request->notario;
+			$datosMorales->nombre_empresa = trim($request->nombre_empresa);
+			$datosMorales->nombre = trim($request->nombre);
+			$datosMorales->ape_p = trim($request->apellido_p);
+			$datosMorales->ape_m = trim($request->apellido_m);
+			$datosMorales->escritura_publica = trim($request->escritura);
+			$datosMorales->numero_notario = trim($request->notario);
 			$datosMorales->fecha_constitucion = $request->fecha_constitucion;
-			$datosMorales->giro_comercial = $request->giro_comercial;
-			$datosMorales->telefono = $request->telefono;
-			$datosMorales->email = $request->email;
+			$datosMorales->giro_comercial = trim($request->giro_comercial);
+			$datosMorales->telefono = trim($request->telefono);
+			$datosMorales->email = trim($request->email);
 
 			$datosMorales->save();
 

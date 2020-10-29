@@ -40,14 +40,14 @@ class DatosFiscalesController extends Controller
 				'estado_id' => $request->estado_id,
 				'municipio_id' => $request->municipio_id,
 				'email' => $request->email,
-				'RFC' => $request->rfc,
-				'razon_social' => $request->razon_social,
-				'telefono' => $request->telefono,
-				'calle' => $request->calle,
-				'numero_exterior' => $request->numero_exterior,
-				'numero_interior' => $request->numero_interior,
-				'codigo_postal' => $request->cp,
-				'colonia' => $request->colonia
+				'RFC' => strtoupper(trim($request->rfc)),
+				'razon_social' => trim($request->razon_social),
+				'telefono' => trim($request->telefono),
+				'calle' => trim($request->calle),
+				'numero_exterior' => trim($request->numero_exterior),
+				'numero_interior' => trim($request->numero_interior),
+				'codigo_postal' => trim($request->cp),
+				'colonia' => trim($request->colonia),
 			]);
 
 			$informacionFiscal->save();
@@ -78,15 +78,15 @@ class DatosFiscalesController extends Controller
 
 			$informacionFiscal->estado_id = $request->estado_id;
 			$informacionFiscal->municipio_id = $request->municipio_id;
-			$informacionFiscal->email = $request->email;
-			$informacionFiscal->razon_social = $request->razon_social;
-			$informacionFiscal->RFC = $request->rfc;
-			$informacionFiscal->telefono = $request->telefono;
-			$informacionFiscal->calle = $request->calle;
-			$informacionFiscal->numero_exterior = $request->numero_exterior;
-			$informacionFiscal->numero_interior = $request->numero_interior;
-			$informacionFiscal->codigo_postal = $request->cp;
-			$informacionFiscal->colonia = $request->colonia;
+			$informacionFiscal->email = trim($request->email);
+			$informacionFiscal->razon_social = trim($request->razon_social);
+			$informacionFiscal->RFC = strtoupper(trim($request->rfc));
+			$informacionFiscal->telefono = trim($request->telefono);
+			$informacionFiscal->calle = trim($request->calle);
+			$informacionFiscal->numero_exterior = trim($request->numero_exterior);
+			$informacionFiscal->numero_interior = trim($request->numero_interior);
+			$informacionFiscal->codigo_postal = trim($request->cp);
+			$informacionFiscal->colonia = trim($request->colonia);
 
 			$informacionFiscal->save();
 
