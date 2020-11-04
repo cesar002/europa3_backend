@@ -17,14 +17,15 @@ class CreateSolicitudReservacionTable extends Migration
             $table->id();
             $table->longText('folio')->unique();
             $table->foreignId('user_id')->references('id')->on('users');
-			$table->foreignId('oficina_id')->references('id')->on('oficinas');
-			$table->foreignId('metodo_pago_id')->references('id')->on('cat_metodos_pago');
 			$table->foreignId('solicitud_id')->nullable()->references('id')->on('solicitud_reservacion');
-            $table->smallInteger('meses_renta');
-            $table->smallInteger('numero_ocupantes');
+			$table->boolean('iniciado')->default(true);
+			$table->boolean('subida_documentos')->default(false);
+			$table->boolean('en_revision')->default(false);
+			$table->boolean('autorizado')->default(false);
 			$table->boolean('finalizado')->default(false);
 			$table->boolean('revalidado')->default(false);
-            $table->boolean('terminos_condiciones');
+			$table->boolean('terminos_condiciones')->default(true);
+			$table->softDeletes();
             $table->timestamps();
         });
     }

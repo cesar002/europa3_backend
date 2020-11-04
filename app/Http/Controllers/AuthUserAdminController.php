@@ -100,4 +100,20 @@ class AuthUserAdminController extends Controller
 		}
 	}
 
+	public function logout(Request $request){
+		try {
+			$request->user()->token()->revoke();
+
+			return response([
+				'message' => 'Se cerró sesión con éxito',
+			]);
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+
+			return response([
+				'error' => 'Ocurrió un error al cerrar la sesión'
+			], 500);
+		}
+	}
+
 }

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +29,9 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::group(['prefix' => 'auth'], function () {
 		Route::post('user', 'AuthUserController@login');
 		Route::post('admin', 'AuthUserAdminController@login');
+
+		Route::post('user/logout', 'AuthUserController@logout')->middleware('auth:api');
+		Route::post('admin/logout', 'AuthUserAdminController@logout')->middleware('auth:api-admin');
 
 		Route::group(['prefix' => 'admin/me'], function () {
 			Route::get('/', 'UserAdminController@getDataCurrenUser');

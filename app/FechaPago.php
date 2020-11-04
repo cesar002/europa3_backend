@@ -8,7 +8,7 @@ class FechaPago extends Model
 {
     protected $table = 'fechas_pago';
 
-    public function solicitud(){
+    public function solicitudReservacion(){
         return $this->belongsTo(\App\SolicitudReservacion::class, 'solicitud_id');
     }
 
