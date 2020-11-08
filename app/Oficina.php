@@ -26,8 +26,8 @@ class Oficina extends Model
         return $this->belongsTo(\App\Edificio::class, 'edificio_id');
     }
 
-    public function solicitudesReservacion(){
-        return $this->hasMany(\App\SolicitudReservacion::class, 'oficina_id');
+    public function solicitudesOficina(){
+        return $this->hasMany(\App\SolicitudOficina::class, 'oficina_id');
 	}
 
 	public function imagenes(){

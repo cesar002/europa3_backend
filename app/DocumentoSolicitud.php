@@ -6,7 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class DocumentoSolicitud extends Model
 {
-    protected $table = 'documentos_solicitud';
+	protected $table = 'documentacion_solicitud';
+
+	protected $fillable = [
+		'solicitud_id', 'tipo_documento_id', 'path_id',
+		'nombre_archivo','tipo_archivo'
+	];
+
+	protected $casts = [
+		'validado' => 'boolean',
+	];
+
+	protected $hidden = [
+		'created_at', 'updated_at',
+	];
 
     public function solicitud(){
         return $this->belongsTo(\App\SolicitudReservacion::class, 'solicitud_id');

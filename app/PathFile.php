@@ -8,6 +8,10 @@ class PathFile extends Model
 {
 	protected $table = 'path_files';
 
+	protected $fillable = [
+		'path_master_id', 'nombre', 'path'
+	];
+
 	public function pathMaster(){
 		return $this->belongsTo(\App\PathMaster::class, 'path_master_id');
 	}

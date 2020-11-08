@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SolicitudReservacion extends Model
 {
+	use SoftDeletes;
+
 	protected $table = 'solicitud_reservacion';
 
 	protected $casts = [

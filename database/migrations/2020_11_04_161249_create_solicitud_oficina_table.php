@@ -17,7 +17,7 @@ class CreateSolicitudOficinaTable extends Migration
 			$table->id();
 			$table->foreignId('solicitud_id')->references('id')->on('solicitud_reservacion');
 			$table->foreignId('oficina_id')->references('id')->on('oficinas');
-			$table->foreignId('metodo_pago_id')->references('id')->on('cat_metodos_pago');
+			$table->foreignId('metodo_pago_id')->references('id')->on('cat_metodos_pago')->nullable();
 			$table->date('fecha_reservacion');
 			$table->smallInteger('meses_renta');
 			$table->smallInteger('numero_integrantes');

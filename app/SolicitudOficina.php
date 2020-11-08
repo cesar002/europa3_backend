@@ -22,4 +22,12 @@ class SolicitudOficina extends Model
 		return $this->belongsTo(\App\SolicitudReservacion::class, 'solicitud_id');
 	}
 
+	public function oficina(){
+		return $this->belongsTo(\App\Oficina::class, 'oficina_id');
+	}
+
+	public function metodoPago(){
+		return $this->belongsTo(\App\MetodoPago::class, 'metodo_pago_id');
+	}
+
 }

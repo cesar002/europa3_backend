@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Log;
 
 class FoliosRepository{
 
+	/**
+	  * obtiene el folio actual registrado en la base de datos
+	  */
 	public static function getCurrentFolio(string $typeFolio){
 		try {
 			if(empty($typeFolio))
@@ -23,6 +26,9 @@ class FoliosRepository{
 		}
 	}
 
+	/**
+	 * obtiene el siguiente folio posible que se encuentra registrado en la base de datos
+	 */
 	public static function getNextTempFolio(string $typeFolio){
 		try {
 			if(empty($typeFolio))
@@ -39,6 +45,9 @@ class FoliosRepository{
 		}
 	}
 
+	/**
+	 * Actualiza el folio registrado en la base de datos
+	 */
 	public static function generateNextFolio(string $typeFolio): void{
 		$folio = CatFolio::where('folio', $typeFolio)->firstOrFail();
 		$numberFolio = $folio->consecutivo + 1;
@@ -56,7 +65,7 @@ class FoliosRepository{
 		$ceros = "";
 
 		for ($i=0; $i < $diff; $i++) {
-			$ceros += "0";
+			$ceros = $ceros."0";
 		}
 
 		return $typeFolio.$ceros;

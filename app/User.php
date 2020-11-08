@@ -42,11 +42,11 @@ class User extends Authenticatable
     }
 
     public function datosMorales(){
-        return $this->hasMany(\App\UserDatosMorales::class);
+        return $this->hasOne(\App\UserDatosMorales::class);
     }
 
     public function datosFiscales(){
-        return $this->hasMany(\App\UserDatosFiscales::class);
+        return $this->hasOne(\App\UserDatosFiscales::class);
     }
 
     public function solicitudesReservacion(){

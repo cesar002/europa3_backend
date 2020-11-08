@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MetodoPago extends Model{
 
-	protected $table = 'cat_metodos_pagos';
+	protected $table = 'cat_metodos_pago';
 
 	protected $casts = [
 		'presencial' => 'boolean',
@@ -21,8 +21,8 @@ class MetodoPago extends Model{
 		'nombre', 'presencial', 'virtual'
 	];
 
-	public function solicitudes(){
-		return $this->hasMany(\App\SolicitudReservacion::class, 'metodo_pago_id');
+	public function solicitudesOficina(){
+		return $this->hasMany(\App\SolicitudOficina::class, 'metodo_pago_id');
 	}
 
 	public function referenciasPago(){

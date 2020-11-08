@@ -60,9 +60,20 @@ Route::group(['prefix' => 'v1'], function () {
 	});
 	//********************/
 
-	//** USUARIOS */
+	Route::get('/users', 'UserController@getAllUsuarios')->middleware('auth:api-admin');
 
-	//**************/
+	//** SOLICITUDES*/
+	Route::group(['prefix' => 'solicitud'], function () {
+		Route::group(['prefix' => 'oficina-privada'], function () {
+			Route::get('/{id}', 'SolicitudOficinaController@show');
+			Route::post('/', 'SolicitudOficinaController@store')->middleware('auth:api');
+			Route::delete('/{id}', 'SolicitudOficinaController@destroy')->middleware('auth:api');
+			Route::post('/{solicitudId}/upload-documento', 'DocumentosSolicitudController@uploadDocumento')->middleware('auth:api');
+			Route::post('/update-documento/{id}', 'DocumentosSolicitudController@updateUploadDocumento')->middleware('auth:api');
+			Route::get('/{solicitudId}/documento/download/{id}', 'DocumentosSolicitudController@downloadDocumento')->middleware();
+		});
+	});
+	//**********************/
 
 	//** CONFIG DE DATOS */
 	Route::group(['prefix' => 'config'], function () {
