@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\NotificationSolicitudCreated;
+use App\Oficina;
 use Illuminate\Http\Request;
 use App\Repositories\SolicitudOficinaRepository;
 use App\Repositories\FoliosRepository;
 use App\SolicitudOficina;
 use App\SolicitudReservacion;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -51,6 +54,16 @@ class SolicitudOficinaController extends Controller
 				'meses_renta' => $request->meses_renta,
 				'numero_integrantes' => 5 //$request->numero_integrantes,
 			]);
+
+			$oficina = Oficina::findOrFail($request->oficina_id);
+			$edificio = $oficina->edificio()->first();
+			$edificio->notify(new NotificationSolicitudCreated([
+				'sender_by' => $request->user()->id,
+				'recipient_by' => $edificio->id,
+				'email' => $request->user()->email,
+				'body' => "Se ha comenzado nueva solicitud de renta para la oficina - {$oficina->nombre}",
+				'created_at' => Carbon::now(),
+			]));
 
 			$solicitudOficina->save();
 

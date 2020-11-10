@@ -68,7 +68,7 @@ class FoliosRepository{
 			$ceros = $ceros."0";
 		}
 
-		return $typeFolio.$ceros;
+		return $typeFolio.$ceros.$rawFolio;
 	}
 
 }

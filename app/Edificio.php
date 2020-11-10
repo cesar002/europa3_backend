@@ -3,9 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Edificio extends Model
 {
+
+	use Notifiable;
+
 	protected $table = 'edificios';
 
 	protected $fillable = [

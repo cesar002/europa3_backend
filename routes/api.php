@@ -35,6 +35,7 @@ Route::group(['prefix' => 'v1'], function () {
 
 		Route::group(['prefix' => 'admin/me'], function () {
 			Route::get('/', 'UserAdminController@getDataCurrenUser');
+			Route::get('/notifications', 'UserAdminController@getNotifications');
 		});
 
 		Route::group(['prefix' => 'me', 'middleware' => 'auth:api'], function () {

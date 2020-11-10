@@ -8,4 +8,6 @@ interface IUserAdminDao{
 
 	public function getUserDataById($id);
 
+	public function getEdificioUser($id);
+
 }

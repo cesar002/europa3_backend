@@ -94,7 +94,7 @@ class UserRepository implements IUserDao{
 					'email' => $user->email,
 					'notification_token' => $user->getNotificationToken(),
 					'verify' => $user->email_verified,
-					'personal_data' => is_null($user->infoPersonal) ? [] : [
+					'personal_data' => is_null($user->infoPersonal) ? null : [
 						'nombre' => $user->infoPersonal->nombre,
 						'apellido_paterno' => $user->infoPersonal->ape_p,
 						'apellido_materno' => $user->infoPersonal->ape_m,
