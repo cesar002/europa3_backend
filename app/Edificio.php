@@ -49,4 +49,8 @@ class Edificio extends Model
 		return $this->hasMany(\App\SalaJuntas::class, 'edificio_id');
 	}
 
+	public function notificacionesSolicitud(){
+		return $this->hasMany(\App\NotificacionSolicitudEdificio::class, 'edificio_id');
+	}
+
 }

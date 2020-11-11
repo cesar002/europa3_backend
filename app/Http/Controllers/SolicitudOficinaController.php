@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SolicitudCreated;
+use App\NotificacionSolicitudEdificio;
 use App\Notifications\NotificationSolicitudCreated;
 use App\Oficina;
 use Illuminate\Http\Request;
@@ -52,22 +54,23 @@ class SolicitudOficinaController extends Controller
 				'oficina_id' => $request->oficina_id,
 				'fecha_reservacion' => $request->fecha_reservacion,
 				'meses_renta' => $request->meses_renta,
-				'numero_integrantes' => 5 //$request->numero_integrantes,
+				'numero_integrantes' => 5,
 			]);
 
-			$oficina = Oficina::findOrFail($request->oficina_id);
-			$edificio = $oficina->edificio()->first();
-			$edificio->notify(new NotificationSolicitudCreated([
-				'sender_by' => $request->user()->id,
-				'recipient_by' => $edificio->id,
-				'email' => $request->user()->email,
-				'body' => "Se ha comenzado nueva solicitud de renta para la oficina - {$oficina->nombre}",
-				'created_at' => Carbon::now(),
-			]));
+			$edificio = Oficina::with('edificio')->findOrFail($request->oficina_id);
+			$message = NotificacionSolicitudEdificio::create([
+				'user_id' => $request->user()->id,
+				'edificio_id' => $edificio->edificio->id,
+				'solicitud_id' => $solicitud->id,
+				'body' => 'Nueva solicitud para renta de oficina privada iniciada',
+				'type' => 1,
+			]);
 
 			$solicitudOficina->save();
 
 			$this->foliosRepository->generateNextFolio('EUOP');
+
+			event(new SolicitudCreated($message));
 
 			DB::commit();
 
