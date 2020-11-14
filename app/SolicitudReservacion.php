@@ -48,4 +48,9 @@ class SolicitudReservacion extends Model
 	public function solicitudSalaJunta(){
 		return $this->hasOne(\App\SolicitudSalaJunta::class, 'solicitud_id');
 	}
+
+	public function notificacionesSolicitud(){
+		return $this->hasMany(\App\NotificationSolicitudMessage::class, 'solicitud_id');
+	}
+
 }

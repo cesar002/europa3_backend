@@ -17,7 +17,7 @@ class CreateCatMetodosPagoTable extends Migration
 			$table->id();
 			$table->string('nombre');
 			$table->boolean('presencial');
-			$table->boolean('virtual');
+			$table->boolean('en_linea');
             $table->timestamps();
         });
     }

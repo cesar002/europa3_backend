@@ -15,7 +15,7 @@ class CreateSolicitudReservacionTable extends Migration
     {
         Schema::create('solicitud_reservacion', function (Blueprint $table) {
             $table->id();
-            $table->longText('folio')->unique();
+            $table->string('folio')->unique();
             $table->foreignId('user_id')->references('id')->on('users');
 			$table->foreignId('solicitud_id')->nullable()->references('id')->on('solicitud_reservacion');
 			$table->boolean('iniciado')->default(true);

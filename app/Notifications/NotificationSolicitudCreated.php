@@ -56,6 +56,6 @@ class NotificationSolicitudCreated extends Notification
      */
     public function toArray($notifiable)
     {
-        return $this->message;
+        return $this->message->toArray();
     }
 }
