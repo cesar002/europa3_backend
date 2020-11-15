@@ -101,14 +101,6 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/tiempos-renta', 'TipoTiempoController@index');
 	//*****************/
 
-	//** SOLICITUDES */
-
-	Route::get('/solicitudes-renta', 'SolicitudesRentaController@index');
-	Route::get('/solicitud-renta/{id}', 'SolicitudesRentaController@show');
-	Route::post('/solicitud-renta', 'SolicitudesRentaController@store');
-
-	//****************/
-
 	//** MOBILIARIO */
 
 	Route::get('/tipo-mobiliario',  'TiposMobiliarioController@index');
