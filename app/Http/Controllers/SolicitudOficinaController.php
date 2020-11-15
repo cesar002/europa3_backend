@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Events\SolicitudCreated;
-use App\NotificacionSolicitudEdificio;
-use App\Notifications\NotificationSolicitudCreated;
+use App\NotificationSolicitudMessage;
 use App\Oficina;
 use Illuminate\Http\Request;
 use App\Repositories\SolicitudOficinaRepository;
 use App\Repositories\FoliosRepository;
 use App\SolicitudOficina;
 use App\SolicitudReservacion;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -54,17 +52,21 @@ class SolicitudOficinaController extends Controller
 				'oficina_id' => $request->oficina_id,
 				'fecha_reservacion' => $request->fecha_reservacion,
 				'meses_renta' => $request->meses_renta,
-				'numero_integrantes' => 5,
+				'numero_integrantes' => 5, //$request->numero_integrantes,
+				'metodo_pago_id' => 1,
 			]);
 
-			$edificio = Oficina::with('edificio')->findOrFail($request->oficina_id);
-			$message = NotificacionSolicitudEdificio::create([
+			$oficina = Oficina::with('edificio')->findOrFail($request->oficina_id);
+			$message = NotificationSolicitudMessage::create([
 				'user_id' => $request->user()->id,
-				'edificio_id' => $edificio->edificio->id,
+				'edificio_id' => $oficina->edificio->id,
 				'solicitud_id' => $solicitud->id,
-				'body' => 'Nueva solicitud para renta de oficina privada iniciada',
 				'type' => 1,
+				'status_solicitud' => 1,
+				'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
 			]);
+
+			event(new \App\Events\SolicitudCreated($message));
 
 			$solicitudOficina->save();
 

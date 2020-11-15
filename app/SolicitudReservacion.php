@@ -50,6 +50,7 @@ class SolicitudReservacion extends Model
 	}
 
 	public function notificacionesSolicitud(){
-		return $this->hasMany(\App\NotificacionSolicitudEdificio::class, 'solicitud_id');
+		return $this->hasMany(\App\NotificationSolicitudMessage::class, 'solicitud_id');
 	}
+
 }

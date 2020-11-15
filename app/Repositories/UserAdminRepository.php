@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\IUserAdminDao;
 use App\UserAdmin;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UserAdminRepository implements IUserAdminDao{
@@ -62,6 +63,7 @@ class UserAdminRepository implements IUserAdminDao{
 				'permisos' => $permisos,
 			];
 		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
 			return [];
 		}
 	}

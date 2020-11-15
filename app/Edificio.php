@@ -50,7 +50,7 @@ class Edificio extends Model
 	}
 
 	public function notificacionesSolicitud(){
-		return $this->hasMany(\App\NotificacionSolicitudEdificio::class, 'edificio_id');
+		return $this->hasMany(\App\NotificationSolicitudMessage::class, 'edificio_id');
 	}
 
 }
