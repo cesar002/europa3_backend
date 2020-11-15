@@ -33,11 +33,20 @@ class UserAdminController extends Controller{
 
 	public function getNotifications(Request $request){
 		try {
-			$edificio = $this->userAdminRepository->getEdificioUser($request->user('api-admin')->id);
+			$edificioModel = Edificio::findOrFail(1);
 
-			$edificioModel = Edificio::findOrFail($edificio['id']);
+			$notificationsRaw = $edificioModel->notifications->all();
 
-			$notifications = $edificioModel->notifications->all();
+			$notifications = collect($notificationsRaw)->map(function($not){
+				return[
+					'id' => $not->id,
+					'type' => $not->type,
+					'created_at' => $not->created_at,
+					'updated_at' => $not->updated_at,
+					'read_at' => $not->read_at,
+					'data' => $not->data
+				];
+			});
 
 			return response($notifications);
 		} catch (\Throwable $th) {

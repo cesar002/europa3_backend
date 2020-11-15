@@ -56,23 +56,24 @@ class SolicitudOficinaController extends Controller
 				'metodo_pago_id' => 1,
 			]);
 
-			$oficina = Oficina::with('edificio')->findOrFail($request->oficina_id);
+			$edificio = (Oficina::with('edificio')->findOrFail($request->oficina_id))->edificio;
+
 			$message = NotificationSolicitudMessage::create([
 				'user_id' => $request->user()->id,
-				'edificio_id' => $oficina->edificio->id,
+				'edificio_id' => $edificio->id,
 				'solicitud_id' => $solicitud->id,
 				'type' => 1,
 				'status_solicitud' => 1,
 				'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
 			]);
 
-			event(new \App\Events\SolicitudCreated($message));
+			$edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
+
+			// event(new \App\Events\SolicitudCreated($message));
 
 			$solicitudOficina->save();
 
 			$this->foliosRepository->generateNextFolio('EUOP');
-
-			event(new SolicitudCreated($message));
 
 			DB::commit();
 
