@@ -31,30 +31,6 @@ class UserAdminController extends Controller{
 		}
 	}
 
-	public function getNotifications(Request $request){
-		try {
-			$edificioModel = Edificio::findOrFail(1);
-
-			$notificationsRaw = $edificioModel->notifications->all();
-
-			$notifications = collect($notificationsRaw)->map(function($not){
-				return[
-					'id' => $not->id,
-					'type' => $not->type,
-					'created_at' => $not->created_at,
-					'updated_at' => $not->updated_at,
-					'read_at' => $not->read_at,
-					'data' => $not->data
-				];
-			});
-
-			return response($notifications);
-		} catch (\Throwable $th) {
-			Log::error($th->getMessage());
-			return [];
-		}
-	}
-
 	public function index(){
 
 	}

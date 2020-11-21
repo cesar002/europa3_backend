@@ -33,9 +33,14 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::post('user/logout', 'AuthUserController@logout')->middleware('auth:api');
 		Route::post('admin/logout', 'AuthUserAdminController@logout')->middleware('auth:api-admin');
 
-		Route::group(['prefix' => 'admin/me'], function () {
+		Route::group(['prefix' => 'admin/me', 'middleware' => 'auth:api-admin'], function () {
 			Route::get('/', 'UserAdminController@getDataCurrenUser');
-			Route::get('/notifications', 'UserAdminController@getNotifications');
+
+			Route::group(['prefix' => 'notifications'], function () {
+				Route::get('/', 'NotificationsAdminController@getNotifications');
+				Route::delete('/', 'NotificationsAdminController@destroyAll');
+				Route::delete('/{id}', 'NotificationsAdminController@destroy');
+			});
 		});
 
 		Route::group(['prefix' => 'me', 'middleware' => 'auth:api'], function () {
@@ -64,6 +69,7 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/users', 'UserController@getAllUsuarios')->middleware('auth:api-admin');
 
 	//** SOLICITUDES*/
+	Route::get('solicitudes', 'SolicitudController@index')->middleware('auth:api-admin');
 	Route::group(['prefix' => 'solicitud'], function () {
 		Route::group(['prefix' => 'oficina-privada'], function () {
 			Route::get('/{id}', 'SolicitudOficinaController@show');
