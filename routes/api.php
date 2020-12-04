@@ -33,9 +33,14 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::post('user/logout', 'AuthUserController@logout')->middleware('auth:api');
 		Route::post('admin/logout', 'AuthUserAdminController@logout')->middleware('auth:api-admin');
 
-		Route::group(['prefix' => 'admin/me'], function () {
+		Route::group(['prefix' => 'admin/me', 'middleware' => 'auth:api-admin'], function () {
 			Route::get('/', 'UserAdminController@getDataCurrenUser');
-			Route::get('/notifications', 'UserAdminController@getNotifications');
+
+			Route::group(['prefix' => 'notifications'], function () {
+				Route::get('/', 'NotificationsAdminController@getNotifications');
+				Route::delete('/', 'NotificationsAdminController@destroyAll');
+				Route::delete('/{id}', 'NotificationsAdminController@destroy');
+			});
 		});
 
 		Route::group(['prefix' => 'me', 'middleware' => 'auth:api'], function () {
@@ -64,17 +69,27 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/users', 'UserController@getAllUsuarios')->middleware('auth:api-admin');
 
 	//** SOLICITUDES*/
-	Route::group(['prefix' => 'solicitud'], function () {
-		Route::group(['prefix' => 'oficina-privada'], function () {
-			Route::get('/{id}', 'SolicitudOficinaController@show');
-			Route::post('/', 'SolicitudOficinaController@store')->middleware('auth:api');
-			Route::delete('/{id}', 'SolicitudOficinaController@destroy')->middleware('auth:api');
-			Route::post('/{solicitudId}/upload-documento', 'DocumentosSolicitudController@uploadDocumento')->middleware('auth:api');
-			Route::post('/update-documento/{id}', 'DocumentosSolicitudController@updateUploadDocumento')->middleware('auth:api');
-			Route::get('/{solicitudId}/documento/download/{id}', 'DocumentosSolicitudController@downloadDocumento')->middleware();
-		});
+	Route::group(['middleware' => ['auth:api-admin']], function () {
+		Route::get('solicitudes', 'SolicitudController@index');
+		Route::patch('solicitud/document/{id}/validate', 'DocumentosSolicitudController@validateDocument');
+		Route::patch('solicitud/document/{id}/invalidate', 'DocumentosSolicitudController@invalidateDocument');
+		Route::get('solicitud/document/{id}/download', 'DocumentosSolicitudController@downloadDocument');
+		Route::patch('solicitud/document/{id}/allow-update', 'DocumentosSolicitudController@allowUpdateDocument');
+		Route::post('solicitud/{id}/authorize', 'SolicitudController@autorizar');
+		Route::post('solicitud/{id}/no-authorize', 'SolicitudController@noAutorizar');
 	});
-	//**********************/
+
+	Route::group(['middleware' => ['auth:api']], function () {
+		Route::get('solicitudes/me', 'SolicitudController@getToUser');
+		Route::get('solicitud/{id}/documents', 'SolicitudController@getDocuments');
+		Route::post('solicitud/{id}/cancel', 'SolicitudController@cancelar');
+		Route::post('solicitud/oficina-privada', 'SolicitudOficinaController@store');
+		Route::post('solicitud/{id}/upload-document', 'DocumentosSolicitudController@uploadDocument');
+		Route::post('solicitud/document/update', 'DocumentosSolicitudController@updateDocumento');
+	});
+
+	Route::get('solicitud/{id}', 'SolicitudController@show')->middleware('auth:api,api-admin');
+	//**********************
 
 	//** CONFIG DE DATOS */
 	Route::group(['prefix' => 'config'], function () {
@@ -132,6 +147,8 @@ Route::group(['prefix' => 'v1'], function () {
 	//*******************/
 
 	//** OFICINA Y CATALOGOS */
+	Route::get('/lista-documentos', 'DocumentosSolicitudController@getListDocuments');
+
 	Route::get('/oficina-size', 'OficinaSizeController@index');
 	Route::post('/oficina-size', 'OficinaSizeController@store');
 	Route::put('/oficina-size/{id}', 'OficinaSizeController@update');

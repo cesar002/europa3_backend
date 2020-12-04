@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DocumentoSolicitud;
+use App\Http\Requests\UploadDocumentoRequest;
+use App\ListaDocumento;
 use App\PathFile;
 use App\PathMaster;
 use App\SolicitudReservacion;
@@ -15,39 +17,138 @@ use Illuminate\Support\Str;
 class DocumentosSolicitudController extends Controller
 {
 
-	public function userDocumentsBySolicitudId(Request $request, $solicitudId){
-
-	}
-
-	public function showDocumentsBySolicitudId($solicitudId){
+	public function getListDocuments(){
 		try {
-			$solicitud = SolicitudReservacion::with('documentos', 'documentos.tipoDocumento')->findOrFail($solicitudId);
+			$lista = ListaDocumento::all();
 
-			return response($solicitudId);
+			return response($lista);
 		} catch (\Throwable $th) {
 			Log::error($th->getMessage());
-
-			return response(json_encode([], JSON_FORCE_OBJECT));
+			return response([]);
 		}
 	}
 
-	public function downloadDocumento($solicitudId, $id){
+	public function allowUpdateDocument($id){
 		try {
-			$solicitud = SolicitudReservacion::findOrFail($solicitudId);
-			$documento = $solicitud->documentos()->with('pathDocumento', 'pathDocumento.pathMaster')->findOrFail($id);
 
-			$path = "{$documento->pathDocumento->pathMaster->path}\\{$documento->pathDocumento->path}\\{$documento->nombre_archivo}";
+			$documento = DocumentoSolicitud::findOrFail($id);
+			$documento->actualizable = true;
+			$documento->save();
 
-			return Storage::disk('local')->download($path);
+			return response([
+				'message' => 'Cambios realizados correctamente'
+			]);
 		} catch (\Throwable $th) {
 			Log::error($th->getMessage());
+
 			return response([
-				'error' => 'Ocurrió un error en la descarga'
+				'error' => 'Ocurrió un error al permitir la actualización'
 			], 500);
 		}
 	}
 
-	public function updateUploadDocumento(\App\Http\Requests\UploadDocumentoRequest $request, $id){
+	public function validateDocument($id){
+		try {
+			$documento = DocumentoSolicitud::findOrFail($id);
+			$documento->estado_id = 2;
+			$documento->save();
+
+			return response([
+				'message' => 'El documento se validó con éxito'
+			]);
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+			return response([
+				'error' => 'Ocurrió un error en la validación del documento'
+			], 500);
+		}
+	}
+
+	public function invalidateDocument($id){
+		try {
+
+			$documento = DocumentoSolicitud::findOrFail($id);
+			$documento->estado_id = 3;
+			$documento->save();
+
+			return response([
+				'message' => 'El documento se invalidó con éxito'
+			]);
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+			return response([
+				'error' => 'Ocurrió un error al invalidar el documento'
+			], 500);
+		}
+	}
+
+	public function downloadDocument($id){
+		try {
+
+			$documento = DocumentoSolicitud::with('pathDocumento', 'pathDocumento.pathMaster')->findOrFail($id);
+			$path = "{$documento->pathDocumento->pathMaster->path}/{$documento->pathDocumento->path}/{$documento->nombre_archivo}";
+
+			return Storage::disk('local')->download($path);
+			// return $path;
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+			return response([
+				'error' => 'Ocurrió un error al gestionar la descarga'
+			], 500);
+		}
+	}
+
+	public function uploadDocument(UploadDocumentoRequest $request, $solicitudId){
+		try {
+			DB::beginTransaction();
+
+			$solicitud = SolicitudReservacion::findOrFail($solicitudId);
+			$document = $solicitud->documentos()->with('pathDocumento')->first();
+			$pathMaster = PathMaster::findOrFail(1);
+			$path = "";
+
+			if(is_null($document)){
+				$pathDocumentos = new PathFile([
+					'path_master_id' => $pathMaster->id,
+					'nombre' => "Documentos - {$request->user()->email}",
+					'path' => Str::random(rand(5, 25)),
+				]);
+
+				$pathDocumentos->save();
+
+				$path = "{$pathMaster->path}/{$pathDocumentos->path}";
+				Storage::disk('local')->makeDirectory($path);
+			}else{
+				$path = "{$pathMaster->path}/{$document->pathDocumento->path}";
+			}
+
+			$uploadedDocument = Storage::disk('local')->put($path, $request->documento);
+
+			$documentoModel = new DocumentoSolicitud([
+				'solicitud_id' => $solicitudId,
+				'tipo_documento_id' => $request->tipo_documento,
+				'path_id' => !empty($pathDocumentos) ? $pathDocumentos->id : $document->pathDocumento->id,
+				'nombre_archivo' => basename($uploadedDocument),
+				'tipo_archivo' =>  pathinfo($uploadedDocument, PATHINFO_EXTENSION)
+			]);
+
+			$documentoModel->save();
+
+			DB::commit();
+			return response([
+				'message' => 'Documento subido con éxito',
+			]);
+		} catch (\Throwable $th) {
+			DB::rollBack();
+
+			Log::error($th->getMessage());
+			return response([
+				'error' => 'Ocurrió un error al subir el documento'
+			], 500);
+		}
+	}
+
+	public function updateDocumento(UploadDocumentoRequest $request, $id){
 		try {
 			DB::beginTransaction();
 
@@ -73,59 +174,6 @@ class DocumentosSolicitudController extends Controller
 
 			return response([
 				'error' => 'Ocurrió un error al actualizar el documento',
-			], 500);
-		}
-	}
-
-	public function uploadDocumento(\App\Http\Requests\UploadDocumentoRequest $request, $solicitudId){
-		try {
-			DB::beginTransaction();
-
-			$solicitud = SolicitudReservacion::findOrFail($solicitudId);
-			$existDocument = $solicitud->documentos()->with('pathDocumento')->first();
-			$pathMaster = PathMaster::findOrFail(1);
-
-			$path = "";
-
-			if(is_null($existDocument)){
-				$pathDocumentos = new PathFile([
-					'path_master_id' => $pathMaster->id,
-					'nombre' => "Documentos - {$request->user()->email}",
-					'path' => Str::random(rand(5, 25)),
-				]);
-				$pathDocumentos->save();
-
-				$path = "{$pathMaster->path}/{$pathDocumentos->path}";
-				Storage::disk('local')->makeDirectory($path);
-			}else{
-				$path = "{$pathMaster->path}/{$existDocument->pathDocumento->path}";
-			}
-
-
-			$documento = Storage::disk('local')->put($path, $request->documento);
-
-			$documentoModel = new DocumentoSolicitud([
-				'solicitud_id' => $solicitudId,
-				'tipo_documento_id' => $request->tipo_documento,
-				'path_id' => !empty($pathDocumentos) ? $pathDocumentos->id : $existDocument->pathDocumento->id,
-				'nombre_archivo' => basename($documento),
-				'tipo_archivo' =>  pathinfo($documento, PATHINFO_EXTENSION)
-			]);
-
-			$solicitud->subida_documentos = 1;
-			$solicitud->save();
-
-			$documentoModel->save();
-
-			DB::commit();
-			return response([
-				'message' => 'Documento subido con éxito',
-			]);
-		} catch (\Throwable $th) {
-			DB::rollBack();
-			Log::error($th->getMessage());
-			return response([
-				'error' => 'No se pudo subir el documento'
 			], 500);
 		}
 	}

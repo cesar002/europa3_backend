@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'created_at', 'updated_at',
+        'password', 'created_at', 'updated_at', 'email_verified', 'push_notification_token',
     ];
 
     protected $casts = [
@@ -66,11 +66,11 @@ class User extends Authenticatable
 	}
 
 	public function chatSoporte(){
-		return $this->morphToMany(\App\ChatSoporte::class, 'usertable');
+		// return $this->morphToMany(\App\ChatSoporte::class, 'usertable');
 	}
 
 	public function notificacionesSolicitud(){
-		return $this->hasMany(\App\NotificationSolicitudMessage::class, 'user_id');
+		return $this->hasMany(\App\NotificacionSolicitudEdificio::class, 'user_id');
 	}
 
 }

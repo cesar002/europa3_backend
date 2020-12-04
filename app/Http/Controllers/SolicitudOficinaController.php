@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Notifications\NotificationSolicitudCreated;
+use App\Events\SolicitudCreated;
 use App\NotificationSolicitudMessage;
 use App\Oficina;
 use Illuminate\Http\Request;
@@ -10,7 +10,6 @@ use App\Repositories\SolicitudOficinaRepository;
 use App\Repositories\FoliosRepository;
 use App\SolicitudOficina;
 use App\SolicitudReservacion;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -25,8 +24,12 @@ class SolicitudOficinaController extends Controller
 		$this->foliosRepository = $foliosRepository;
 	}
 
-	public function index(){
+	public function index(Request $request){
+		$edificioId = 1;
 
+		$data = $this->solicitudOficinaRepository->getAllByEdificioId($edificioId);
+
+		return response($data);
 	}
 
 	public function show($id){
@@ -44,6 +47,7 @@ class SolicitudOficinaController extends Controller
 			$solicitud = new SolicitudReservacion([
 				'folio' => $folio,
 				'user_id' => $request->user()->id,
+				'estado_id' => 1,
 			]);
 
 			$solicitud->save();
@@ -54,20 +58,21 @@ class SolicitudOficinaController extends Controller
 				'fecha_reservacion' => $request->fecha_reservacion,
 				'meses_renta' => $request->meses_renta,
 				'numero_integrantes' => 5, //$request->numero_integrantes,
-				'metodo_pago_id' => 1,
+				'metodo_pago_id' => null,
 			]);
 
-			$oficina = Oficina::with('edificio')->findOrFail($request->oficina_id);
+			$edificio = (Oficina::with('edificio')->findOrFail($request->oficina_id))->edificio;
+
 			$message = NotificationSolicitudMessage::create([
 				'user_id' => $request->user()->id,
-				'edificio_id' => $oficina->edificio->id,
+				'edificio_id' => $edificio->id,
 				'solicitud_id' => $solicitud->id,
 				'type' => 1,
 				'status_solicitud' => 1,
 				'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
 			]);
 
-			event(new \App\Events\SolicitudCreated($message));
+			$edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
 
 			$solicitudOficina->save();
 

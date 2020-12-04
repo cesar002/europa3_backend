@@ -16,6 +16,7 @@ class UserAdmin extends Authenticatable
 
 	protected $fillable = [
 		'username', 'password',
+		'edificio_id',
 	];
 
 	protected $hidden = [
@@ -30,8 +31,9 @@ class UserAdmin extends Authenticatable
 		return $this->hasMany(\App\UserAdminPermiso::class, 'user_admin_id');
 	}
 
-	public function edificios(){
-		return $this->belongsToMany(\App\Edificio::class, 'users_admin_edificios', 'user_admin_id', 'edificio_id');
+	public function edificio(){
+		// return $this->belongsToMany(\App\Edificio::class, 'edificio', 'user_admin_id', 'edificio_id');
+		return $this->belongsTo(\App\Edificio::class, 'edificio_id');
 	}
 
 	public function insumos(){

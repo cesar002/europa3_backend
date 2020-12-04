@@ -31,21 +31,6 @@ class UserAdminController extends Controller{
 		}
 	}
 
-	public function getNotifications(Request $request){
-		try {
-			$edificio = $this->userAdminRepository->getEdificioUser($request->user('api-admin')->id);
-
-			$edificioModel = Edificio::findOrFail($edificio['id']);
-
-			$notifications = $edificioModel->notifications->all();
-
-			return response($notifications);
-		} catch (\Throwable $th) {
-			Log::error($th->getMessage());
-			return [];
-		}
-	}
-
 	public function index(){
 
 	}

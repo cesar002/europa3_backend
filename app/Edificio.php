@@ -38,7 +38,8 @@ class Edificio extends Model
 	}
 
 	public function usersAdmin(){
-		return $this->belongsToMany(\App\UserAdmin::class, 'users_admin_edificios', 'edificio_id', 'user_admin_id');
+		// return $this->belongsToMany(\App\UserAdmin::class, 'users_admin_edificios', 'edificio_id', 'user_admin_id');
+		return $this->hasMany(\App\UserAdmin::class, 'edificio_id');
 	}
 
 	public function idiomas(){

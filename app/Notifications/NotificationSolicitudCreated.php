@@ -6,8 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class NotificationSolicitudCreated extends Notification
+class NotificationSolicitudCreated extends Notification implements ShouldQueue
 {
 	use Queueable;
 
@@ -31,7 +32,7 @@ class NotificationSolicitudCreated extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -57,5 +58,14 @@ class NotificationSolicitudCreated extends Notification
     public function toArray($notifiable)
     {
         return $this->message->toArray();
-    }
+	}
+
+	public function broadcastOn(){
+		return new \Illuminate\Broadcasting\Channel("notificacion.edificio.{$this->message->edificio_id}");
+	}
+
+	public function toBroadcast($notifiable){
+		return new BroadcastMessage($this->toArray($notifiable));
+	}
+
 }

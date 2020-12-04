@@ -14,6 +14,10 @@ class UserDatosFiscales extends Model
 		'codigo_postal', 'colonia'
 	];
 
+	protected $hidden = [
+		'created_at', 'updated_at',
+	];
+
     public function user(){
         return $this->belongsTo(\App\User::class);
     }

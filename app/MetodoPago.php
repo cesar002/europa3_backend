@@ -10,7 +10,7 @@ class MetodoPago extends Model{
 
 	protected $casts = [
 		'presencial' => 'boolean',
-		'virtual' => 'boolean',
+		'en_linea' => 'boolean',
 	];
 
 	protected $hidden = [
@@ -18,7 +18,7 @@ class MetodoPago extends Model{
 	];
 
 	protected $fillable = [
-		'nombre', 'presencial', 'virtual'
+		'nombre', 'presencial', 'en_linea'
 	];
 
 	public function solicitudesOficina(){

@@ -25,7 +25,7 @@ class UploadDocumentoRequest extends FormRequest
     {
         return [
 			'tipo_documento' => 'required|exists:lista_documentos,id',
-			'documento' => 'required|file|max:3000',
+			'documento' => 'required|file|max:4000',
         ];
     }
 }

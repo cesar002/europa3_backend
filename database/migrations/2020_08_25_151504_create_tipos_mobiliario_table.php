@@ -15,7 +15,8 @@ class CreateTiposMobiliarioTable extends Migration
     {
         Schema::create('tipos_mobiliario', function (Blueprint $table) {
             $table->id();
-            $table->string('tipo');
+			$table->string('tipo');
+			$table->softDeletes();
             $table->timestamps();
         });
     }

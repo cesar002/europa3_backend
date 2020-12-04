@@ -18,8 +18,12 @@ class SolicitudSalaJunta extends Model
 	];
 
 
-	public function sollicitudReservacion(){
+	public function solicitudReservacion(){
 		return $this->belongsTo(\App\SolicitudReservacion::class, 'solicitud_id');
+	}
+
+	public function salaJuntas(){
+		return $this->belongsTo(\App\SalaJuntas::class, 'sala_id');
 	}
 
 }
