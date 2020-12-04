@@ -22,11 +22,11 @@ class SolicitudReservacion extends Model
 	];
 
 	protected $fillable = [
-		'folio', 'user_id', 'solicitud_id'
+		'folio', 'user_id', 'solicitud_id', 'estado_id',
 	];
 
 	protected $hidden = [
-		'created_at', 'updated_at', 'deleted_at',
+		'created_at', 'updated_at', 'deleted_at'
 	];
 
     public function user(){
@@ -47,6 +47,10 @@ class SolicitudReservacion extends Model
 
 	public function solicitudSalaJunta(){
 		return $this->hasOne(\App\SolicitudSalaJunta::class, 'solicitud_id');
+	}
+
+	public function estado(){
+		return $this->belongsTo(\App\CatEstadoSolicitud::class, 'estado_id');
 	}
 
 	public function notificacionesSolicitud(){

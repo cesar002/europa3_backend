@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersAdminTable extends Migration
+class CreateCatEstadoDocumentoSolicitudTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateUsersAdminTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_admin', function (Blueprint $table) {
-            $table->id();
-            $table->string('username')->unique();
-			$table->string('password');
-			$table->bigInteger('edificio_id');
-            $table->timestamps();
+        Schema::create('cat_estado_documento_solicitud', function (Blueprint $table) {
+			$table->id();
+			$table->string('estado');
         });
     }
 
@@ -29,6 +26,6 @@ class CreateUsersAdminTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users_admin');
+        Schema::dropIfExists('cat_estado_documento_solicitud');
     }
 }

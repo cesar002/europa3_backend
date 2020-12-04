@@ -31,7 +31,7 @@ class DatosPersonalesController extends Controller
 				'numero_identificacion' => trim($request->numero_identificacion),
 				'RFC' => strtoupper(trim($request->rfc)),
 				'CURP' => strtoupper(trim($request->curp)),
-				'fecha_nacimiento' => $request->fecha_nacimiento->toDateString(),
+				'fecha_nacimiento' => $request->fecha_nacimiento,
 				'telefono' => trim($request->telefono),
 				'celular' => trim($request->celular),
 				'domicilio' => trim($request->domicilio),

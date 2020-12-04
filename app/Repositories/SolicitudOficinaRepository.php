@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\ISolicitudOficinaDao;
 use App\SolicitudReservacion;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 
@@ -16,12 +17,87 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 		}
 	}
 
-	public function getById($id){
+	public function getByUserId($userId){
+		try {
+			$solicitudes = SolicitudReservacion::with(
+				'documentos', 'documentos.estado','documentos.tipoDocumento', 'estado', 'solicitudOficina', 'solicitudOficina.oficina', 'solicitudOficina.oficina.tipoOficina',
+				'solicitudOficina.oficina.edificio' ,'solicitudOficina.oficina.imagenes', 'solicitudOficina.oficina.pathImages',
+				'solicitudOficina.oficina.pathImages.pathMaster', 'solicitudOficina.oficina.tipoOficina',
+				'solicitudSalaJunta', 'solicitudSalaJunta.salaJuntas', 'solicitudSalaJunta.salaJuntas.tipoOficina',
+				)->where('user_id', $userId)->get();
+
+			$solicitudesJson = $solicitudes->map(function($solicitud){
+				$path = "{$solicitud->solicitudOficina->oficina->pathImages->pathMaster->path}/{$solicitud->solicitudOficina->oficina->pathImages->path}";
+				$image = $solicitud->solicitudOficina->oficina->imagenes[0];
+				$pathImage = "{$path}/{$image->image}";
+
+				return [
+					'id' => $solicitud->id,
+					'folio' => $solicitud->folio,
+					'solicitud_id' => $solicitud->solicitud_id,
+					'estado' => $solicitud->estado,
+					'documentos' => $solicitud->documentos,
+					'solicitudOficina' => [
+						'id' => $solicitud->solicitudOficina->id,
+						'metodo_pago' => null,
+						'fecha_reservacion' => $solicitud->solicitudOficina->fecha_reservacion,
+						'meses_renta' => $solicitud->solicitudOficina->meses_renta,
+						'numero_integrantes' => $solicitud->solicitudOficina->numero_integrantes,
+						'oficina' => [
+							'id' => $solicitud->solicitudOficina->oficina->id,
+							'nombre' => $solicitud->solicitudOficina->oficina->nombre,
+							'size_dimension' => $solicitud->solicitudOficina->oficina->size_dimension,
+							'capacidad_recomendada' => $solicitud->solicitudOficina->oficina->capacidad_recomendada,
+							'capacidad_maxima' => $solicitud->solicitudOficina->capacidad_maxima,
+							'precio' => $solicitud->solicitudOficina->oficina->precio,
+							'edificio' => $solicitud->solicitudOficina->oficina->edificio,
+							'tipoOficina' => $solicitud->solicitudOficina->oficina->tipoOficina,
+							'image' => asset(Storage::url($pathImage)),
+						],
+					],
+				];
+			});
+
+			return $solicitudesJson;
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+			return [];
+		}
+	}
+
+
+	public function getAllByEdificioId($edificioId){
+		try {
+
+			$data = SolicitudReservacion::with(
+				'estado', 'solicitudOficina', 'solicitudOficina.oficina', 'solicitudOficina.oficina.tipoOficina',
+				'solicitudSalaJunta', 'solicitudSalaJunta.salaJuntas', 'solicitudSalaJunta.salaJuntas.tipoOficina',
+				'user', 'user.infoPersonal'
+			)
+			->orWhereHas('solicitudOficina', function($query) use($edificioId){
+				$query->whereHas('oficina', function($query) use($edificioId){
+					$query->where('edificio_id', $edificioId);
+				});
+			})
+			->orWhereHas('solicitudSalaJunta', function($query) use($edificioId){
+				$query->whereHas('salaJuntas', function($query) use($edificioId){
+					$query->where('edificio_id', $edificioId);
+				});
+			})
+			->get();
+
+			return $data;
+		} catch (\Throwable $th) {
+			return [];
+		}
+	}
+
+	public function getToUserBySolicitudId($id){
 		try {
 			$solicitud = SolicitudReservacion::with('user', 'user.infoPersonal', 'user.infoPersonal.tipoIdentificacion','user.datosMorales', 'user.datosFiscales',
 													'solicitudOficina', 'solicitudOficina.oficina',
 													'solicitudOficina.oficina.edificio', 'solicitudOficina.oficina.tipoOficina',
-													'solicitudOficina.metodoPago','documentos', 'documentos.tipoDocumento')->findOrFail($id);
+													'solicitudOficina.metodoPago','documentos', 'documentos.estado', 'documentos.tipoDocumento')->findOrFail($id);
 			return [
 				'id' => $solicitud->id,
 				'folio' => $solicitud->folio,
@@ -42,16 +118,7 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 
 					],
 				],
-				'documentos' => $solicitud->documentos->map(function($documento){
-					return [
-						'id' => $documento->id,
-						'tipo' => [
-							'id' => $documento->tipoDocumento->id,
-							'nombre' => $documento->tipoDocumento->documento,
-							'validado' => $documento->validado,
-						],
-					];
-				}),
+				'documentos' => $solicitud->documentos,
 				'insumos' => [
 
 				],
@@ -72,18 +139,31 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 		}
 	}
 
-	public function getByUserId($userId){
+	public function getById($id){
 		try {
-			//code...
+
+			$solicitud = SolicitudReservacion::with(
+				'estado', 'solicitudOficina', 'solicitudOficina.oficina', 'solicitudOficina.oficina.edificio',
+				'solicitudOficina.metodoPago', 'documentos', 'documentos.estado', 'documentos.tipoDocumento', 'fechasPago', 'fechasPago.pago',
+				'solicitudSalaJunta', 'solicitudSalaJunta.salaJuntas',
+				'user', 'user.infoPersonal','user.infoPersonal.tipoIdentificacion' ,'user.infoPersonal.nacionalidad',
+				'user.datosMorales', 'user.datosFiscales', 'user.datosFiscales.estado', 'user.datosFiscales.municipio')
+			->findOrFail($id);
+
+			return $solicitud;
 		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
 			return [];
 		}
 	}
 
-	public function getByOficinaId($oficinaId){
+	public function getSolicitudRawById($id){
 		try {
-			//code...
+			$solicitud = SolicitudReservacion::findOrFail($id);
+
+			return $solicitud;
 		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
 			return [];
 		}
 	}

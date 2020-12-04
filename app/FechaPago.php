@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FechaPago extends Model
 {
-    protected $table = 'fechas_pago';
+    protected $table = 'fechas_pagos';
 
     public function solicitudReservacion(){
         return $this->belongsTo(\App\SolicitudReservacion::class, 'solicitud_id');

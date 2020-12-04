@@ -18,12 +18,7 @@ class CreateSolicitudReservacionTable extends Migration
             $table->string('folio')->unique();
             $table->foreignId('user_id')->references('id')->on('users');
 			$table->foreignId('solicitud_id')->nullable()->references('id')->on('solicitud_reservacion');
-			$table->boolean('iniciado')->default(true);
-			$table->boolean('subida_documentos')->default(false);
-			$table->boolean('en_revision')->default(false);
-			$table->boolean('autorizado')->default(false);
-			$table->boolean('finalizado')->default(false);
-			$table->boolean('revalidado')->default(false);
+			$table->foreignId('estado_id')->references('id')->on('cat_estados_solicitud');
 			$table->boolean('terminos_condiciones')->default(true);
 			$table->softDeletes();
             $table->timestamps();

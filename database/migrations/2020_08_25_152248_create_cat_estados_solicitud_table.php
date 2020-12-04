@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCatMetodosPagoTable extends Migration
+class CreateCatEstadosSolicitudTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateCatMetodosPagoTable extends Migration
      */
     public function up()
     {
-        Schema::create('cat_metodos_pago', function (Blueprint $table) {
+        Schema::create('cat_estados_solicitud', function (Blueprint $table) {
 			$table->id();
 			$table->string('nombre');
-			$table->boolean('presencial');
-			$table->boolean('en_linea');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateCatMetodosPagoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cat_metodos_pago');
+        Schema::dropIfExists('cat_estados_solicitud');
     }
 }

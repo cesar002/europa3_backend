@@ -20,7 +20,8 @@ class CreateDocumentacionSolicitudTable extends Migration
             $table->foreignId('path_id')->references('id')->on('path_files');
 			$table->string('nombre_archivo');
 			$table->string('tipo_archivo', 5);
-			$table->boolean('validado')->default(false);
+			$table->integer('estado_id')->default(1);
+			$table->boolean('actualizable')->default(false);
             $table->timestamps();
         });
     }

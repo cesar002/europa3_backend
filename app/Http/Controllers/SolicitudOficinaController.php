@@ -24,8 +24,12 @@ class SolicitudOficinaController extends Controller
 		$this->foliosRepository = $foliosRepository;
 	}
 
-	public function index(){
+	public function index(Request $request){
+		$edificioId = 1;
 
+		$data = $this->solicitudOficinaRepository->getAllByEdificioId($edificioId);
+
+		return response($data);
 	}
 
 	public function show($id){
@@ -43,6 +47,7 @@ class SolicitudOficinaController extends Controller
 			$solicitud = new SolicitudReservacion([
 				'folio' => $folio,
 				'user_id' => $request->user()->id,
+				'estado_id' => 1,
 			]);
 
 			$solicitud->save();
@@ -53,7 +58,7 @@ class SolicitudOficinaController extends Controller
 				'fecha_reservacion' => $request->fecha_reservacion,
 				'meses_renta' => $request->meses_renta,
 				'numero_integrantes' => 5, //$request->numero_integrantes,
-				'metodo_pago_id' => 1,
+				'metodo_pago_id' => null,
 			]);
 
 			$edificio = (Oficina::with('edificio')->findOrFail($request->oficina_id))->edificio;
@@ -68,8 +73,6 @@ class SolicitudOficinaController extends Controller
 			]);
 
 			$edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
-
-			// event(new \App\Events\SolicitudCreated($message));
 
 			$solicitudOficina->save();
 

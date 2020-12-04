@@ -26,7 +26,8 @@ class CreateOficinasTable extends Migration
             $table->smallInteger('capacidad_recomendada');
 			$table->smallInteger('capacidad_maxima');
 			$table->double('precio', 10, 4);
-            $table->boolean('en_uso')->default(false);
+			$table->boolean('en_uso')->default(false);
+			$table->softDeletes();
             $table->timestamps();
         });
     }

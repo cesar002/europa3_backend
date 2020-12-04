@@ -14,9 +14,13 @@ class UserDatoPersonal extends Model
 		'tipo_identificacion_otro', 'numero_identificacion',
 	];
 
-	protected $casts = [
-		// 'fecha_nacimiento' => 'date:Y-m-d',
+	protected $hidden = [
+		'created_at', 'updated_at',
 	];
+
+	// protected $casts = [
+	// 	// 'fecha_nacimiento' => 'date:Y-m-d',
+	// ];
 
     public function user(){
         return $this->belongsTo(\App\User::class);

@@ -15,7 +15,8 @@ class CreateCatIdiomasAtencionTable extends Migration
     {
         Schema::create('cat_idiomas_atencion', function (Blueprint $table) {
             $table->id();
-            $table->string('idioma');
+			$table->string('idioma');
+			$table->softDeletes();
             $table->timestamps();
         });
     }

@@ -6,10 +6,14 @@ interface ISolicitudOficinaDao{
 
 	public function getAll();
 
-	public function getById($id);
-
 	public function getByUserId($userId);
 
-	public function getByOficinaId($oficinaId);
+	public function getAllByEdificioId($edificioId);
+
+	public function getToUserBySolicitudId($id);
+
+	public function getById($id);
+
+	public function getSolicitudRawById($id);
 
 }

@@ -10,11 +10,11 @@ class DocumentoSolicitud extends Model
 
 	protected $fillable = [
 		'solicitud_id', 'tipo_documento_id', 'path_id',
-		'nombre_archivo','tipo_archivo'
+		'nombre_archivo','tipo_archivo', 'actualizable',
 	];
 
 	protected $casts = [
-		'validado' => 'boolean',
+		'actualizable' => 'boolean',
 	];
 
 	protected $hidden = [
@@ -31,5 +31,9 @@ class DocumentoSolicitud extends Model
 
     public function pathDocumento(){
         return $this->belongsTo(\App\PathFile::class, 'path_id');
-    }
+	}
+
+	public function estado(){
+		return $this->belongsTo(\App\CatEstadoDocumentoSolicitud::class, 'estado_id');
+	}
 }

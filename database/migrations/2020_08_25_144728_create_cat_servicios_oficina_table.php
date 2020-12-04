@@ -15,7 +15,8 @@ class CreateCatServiciosOficinaTable extends Migration
     {
         Schema::create('cat_servicios', function (Blueprint $table) {
             $table->id();
-            $table->string('servicio');
+			$table->string('servicio');
+			$table->softDeletes();
             $table->timestamps();
         });
     }

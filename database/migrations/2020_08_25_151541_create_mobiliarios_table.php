@@ -27,6 +27,7 @@ class CreateMobiliariosTable extends Migration
 			$table->mediumInteger('cantidad');
 			$table->boolean('activo')->default(true);
 			$table->string('image');
+			$table->softDeletes();
             $table->timestamps();
         });
     }

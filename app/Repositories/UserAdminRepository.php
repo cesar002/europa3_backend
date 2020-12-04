@@ -31,11 +31,12 @@ class UserAdminRepository implements IUserAdminDao{
 	public function getUserData(UserAdmin $user){
 		try {
 			$userData = $user->infoPersonal()->with('pathImage', 'pathImage.pathMaster')->first();
+			$edificio = $user->edificio()->first();
 
-			$edificio = DB::select('SELECT DISTINCT e.id, e.nombre FROM users_admin_edificios AS uae
-										INNER JOIN users_admin AS ua ON ua.id = uae.user_admin_id
-										INNER JOIN edificios AS e ON e.id = uae.edificio_id
-									WHERE ua.id = ?', [$user->id]);
+			// $edificio = DB::select('SELECT DISTINCT e.id, e.nombre FROM users_admin_edificios AS uae
+			// 							INNER JOIN users_admin AS ua ON ua.id = uae.user_admin_id
+			// 							INNER JOIN edificios AS e ON e.id = uae.edificio_id
+			// 						WHERE ua.id = ?', [$user->id]);
 
 			$permisos = ($user->permisos()->with('permiso')->get())->map(function($permiso){
 				return[
@@ -54,12 +55,7 @@ class UserAdminRepository implements IUserAdminDao{
 					'ape_mat' => $userData->ap_m,
 					'avatar' => asset(Storage::url("{$userData->pathImage->pathMaster->path}/{$userData->pathImage->path}/{$userData->avatar_image}"))
 				],
-				'edificio' => collect($edificio)->map(function($ed){
-					return [
-						'id' => $ed->id,
-						'nombre' => $ed->nombre,
-					];
-				}),
+				'edificio' => $edificio,
 				'permisos' => $permisos,
 			];
 		} catch (\Throwable $th) {

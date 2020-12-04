@@ -24,7 +24,8 @@ class CreateEdificiosTable extends Migration
             $table->double('lat', 10, 7);
             $table->double('lon', 10, 7);
             $table->time('hora_apertura');
-            $table->time('hora_cierre');
+			$table->time('hora_cierre');
+			$table->softDeletes();
             $table->timestamps();
         });
     }

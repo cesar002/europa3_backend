@@ -23,6 +23,7 @@ class AuthUserAdminController extends Controller
 			$user = new UserAdmin([
 				'username' => $request->username,
 				'password' => bcrypt($request->password),
+				'edificio_id' => $request->edificio_id,
 			]);
 
 			$user->save();
@@ -75,7 +76,7 @@ class AuthUserAdminController extends Controller
 
 			$SECRET_KEY = DB::select('SELECT id, secret FROM oauth_clients WHERE id = 3 LIMIT 1');
 
-			$url = env('APP_URL', 'http://europa3_backend.oo');
+			$url = env('APP_URL', 'http://europa3.test');
 			$http = new \GuzzleHttp\Client();
 			$response = $http->post("$url/oauth/token", [
 				'form_params' => [

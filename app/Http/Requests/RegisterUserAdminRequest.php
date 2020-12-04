@@ -26,6 +26,7 @@ class RegisterUserAdminRequest extends FormRequest
         return [
 			'username' => 'required|unique:users_admin,username',
 			'password' => 'required|confirmed|min:7',
+			'edificio_id' => 'required|numeric|min:1',
 			'nombre' => 'required',
 			'ape_pat' => 'required',
 			'ape_mat' => 'required',
