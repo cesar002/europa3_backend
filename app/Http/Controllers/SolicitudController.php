@@ -7,14 +7,24 @@ use App\Repositories\SolicitudOficinaRepository;
 use App\SolicitudReservacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Repositories\FoliosRepository;
+use Illuminate\Support\Facades\DB;
+use App\Edificio;
+use App\NotificationSolicitudMessage;
+use App\Oficina;
 // use Illuminate\Support\Facades\Storage;
 
 class SolicitudController extends Controller{
 
 	private $solicitudRepository;
+	private $foliosRepository;
 
-	public function __construct(SolicitudOficinaRepository $solicitudRepository){
+	public function __construct(
+		SolicitudOficinaRepository $solicitudRepository,
+		FoliosRepository $foliosRepository
+	){
 		$this->solicitudRepository = $solicitudRepository;
+		$this->foliosRepository = $foliosRepository;
 	}
 
 	public function getDocuments($id){
@@ -30,9 +40,8 @@ class SolicitudController extends Controller{
 
 	public function getToUser(Request $request){
 		try {
-			$userId = $request->user()->id;
 
-			$data = $this->solicitudRepository->getByUserId($userId);
+			$data = $this->solicitudRepository->getByUserId(1);
 
 			return response($data);
 
@@ -119,6 +128,72 @@ class SolicitudController extends Controller{
 			return response([
 				'error' => 'Ocurrió un error al cancelar la solicitud'
 			]);
+		}
+	}
+
+	public function destroy($id){
+		try {
+			$solicitud = SolicitudReservacion::findOrFail($id);
+
+			$solicitud->delete();
+
+			return response([
+				'message' => 'Solicitud borrada con éxito',
+			]);
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+
+			return response([
+				'error' => 'Ocurrió un error al eliminar la solicitud'
+			], 500);
+		}
+	}
+
+	public function storeSolicitudOficina(\App\Http\Requests\SolicitudOficinaRequest $request){
+		try {
+			DB::beginTransaction();
+
+			$folio = $this->foliosRepository->getCurrentFolio('EUOP');
+
+			$oficina = Oficina::findOrFail($request->oficina_id);
+			$solicitud = $oficina->solicitud()->create([
+				'user_id' => $request->user()->id,
+				'estado_id' => 1,
+				'folio' => $folio,
+				'tipo_oficina' => 1,
+				'fecha_reservacion' => $request->fecha_reservacion,
+				'meses_renta' => $request->meses_renta,
+				'numero_integrantes' => 5, //$request->numero_integrantes,
+				'metodo_pago_id' => null,
+			]);
+
+			$message = NotificationSolicitudMessage::create([
+				'user_id' => $request->user()->id,
+				'edificio_id' => $oficina->edificio_id,
+				'solicitud_id' => $solicitud->id,
+				'type' => 1,
+				'status_solicitud' => 1,
+				'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
+			]);
+
+			$edificio = Edificio::findOrFail($oficina->edificio_id);
+
+			$edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
+
+			$this->foliosRepository->generateNextFolio('EUOP');
+
+			DB::commit();
+
+			return response([
+				'message' => 'Solicitud generada con éxito',
+			]);
+		} catch (\Throwable $th) {
+			DB::rollBack();
+			Log::error($th->getMessage());
+
+			return response([
+				'error' => 'Ocurrió un error al registrar la solicitud'
+			], 500);
 		}
 	}
 

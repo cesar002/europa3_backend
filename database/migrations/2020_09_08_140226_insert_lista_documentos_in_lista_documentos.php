@@ -14,7 +14,7 @@ class InsertListaDocumentosInListaDocumentos extends Migration
 		DB::unprepared("
 			INSERT INTO lista_documentos(documento, tipo_documento, obligatorio, created_at, updated_at) VALUES
 			('INE/IFE (parte frontal)', 1, 1, NOW(), NOW()),
-			('INE/IFE (parte trasera)', 1, 1, NOW(), NOW());
+			('INE/IFE (parte trasera)', 1, 1, NOW(), NOW()),
 			('PASAPORTE', 1, 0, NOW(), NOW()),
 			('RFC', 2, 1, NOW(), NOW()),
 			('CURP',2, 1, NOW(), NOW()),

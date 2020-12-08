@@ -21,8 +21,8 @@ class MetodoPago extends Model{
 		'nombre', 'presencial', 'en_linea'
 	];
 
-	public function solicitudesOficina(){
-		return $this->hasMany(\App\SolicitudOficina::class, 'metodo_pago_id');
+	public function solicitudes(){
+		return $this->hasMany(\App\SolicitudReservacion::class, 'metodo_pago_id');
 	}
 
 	public function referenciasPago(){

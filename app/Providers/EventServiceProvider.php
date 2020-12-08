@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\SolicitudCreated' => [
 			'App\Listeners\SendNotificationToEdifice'
 		],
+		'App\Events\MessageChatSolicitudReceived' => [
+
+		],
     ];
 
     /**

@@ -26,10 +26,6 @@ class Oficina extends Model
         return $this->belongsTo(\App\Edificio::class, 'edificio_id');
     }
 
-    public function solicitudesOficina(){
-        return $this->hasMany(\App\SolicitudOficina::class, 'oficina_id');
-	}
-
 	public function imagenes(){
 		return $this->hasMany(\App\OficinaImage::class, 'oficina_id');
 	}
@@ -60,6 +56,10 @@ class Oficina extends Model
 
 	public function tipoTiempoRenta(){
 		return $this->belongsTo(\App\CatTiempoRenta::class, 'tipo_tiempo_id');
+	}
+
+	public function solicitud(){
+		return $this->morphOne(\App\SolicitudReservacion::class, 'solicitudable');
 	}
 
 }

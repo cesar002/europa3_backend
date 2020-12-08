@@ -19,4 +19,8 @@ class CatTipoOficina extends Model
 	public function salasJuntas(){
 		return $this->hasMany(\App\SalaJuntas::class, 'tipo_oficina_id');
 	}
+
+	public function solicitudes(){
+		return $this->hasMany(\App\SolicitudReservacion::class, 'tipo_oficina');
+	}
 }

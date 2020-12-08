@@ -8,12 +8,26 @@ class ChatRecepcion extends Model
 {
 	protected $table = 'chat_recepcion';
 
-	public function user(){
-		return $this->belongsTo(\App\User::class);
+	protected $fillable = [
+		'mensaje',
+		'edificio_id',
+		'solicitud_id',
+	];
+
+	protected $hidden = [
+		'updated_at',
+	];
+
+	public function chatable(){
+		return $this->morphTo();
 	}
 
 	public function edificio(){
 		return $this->belongsTo(\App\Edificio::class, 'edificio_id');
+	}
+
+	public function solicitud(){
+		return $this->belongsTo(\App\SolicitudReservacion::class, 'solicitud_id');
 	}
 
 }

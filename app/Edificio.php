@@ -17,6 +17,10 @@ class Edificio extends Model
 		'lat', 'lon', 'hora_apertura', 'hora_cierre',
 	];
 
+	protected $hidden = [
+		'created_at', 'updated_at', 'deleted_at',
+	];
+
     public function municipio(){
         return $this->belongsTo(\App\Municipio::class, 'municipio_id');
     }

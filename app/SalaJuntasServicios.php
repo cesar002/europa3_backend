@@ -15,4 +15,5 @@ class SalaJuntasServicios extends Model
 	protected $fillable = [
 		'sala_juntas_id', 'servicio_id',
 	];
+
 }

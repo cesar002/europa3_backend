@@ -15,9 +15,12 @@ class CreateChatRecepcionTable extends Migration
     {
         Schema::create('chat_recepcion', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
-            $table->text('mensaje')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+			// $table->foreignId('user_id');
+			$table->text('mensaje')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
+			$table->bigInteger('chatable_id');
+			$table->string('chatable_type');
+			$table->bigInteger('solicitud_id');
+            $table->foreignId('edificio_id');
             $table->timestamps();
         });
     }

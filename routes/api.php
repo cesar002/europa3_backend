@@ -67,7 +67,6 @@ Route::group(['prefix' => 'v1'], function () {
 	//********************/
 
 	Route::get('/users', 'UserController@getAllUsuarios')->middleware('auth:api-admin');
-
 	//** SOLICITUDES*/
 	Route::group(['middleware' => ['auth:api-admin']], function () {
 		Route::get('solicitudes', 'SolicitudController@index');
@@ -83,13 +82,19 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::get('solicitudes/me', 'SolicitudController@getToUser');
 		Route::get('solicitud/{id}/documents', 'SolicitudController@getDocuments');
 		Route::post('solicitud/{id}/cancel', 'SolicitudController@cancelar');
-		Route::post('solicitud/oficina-privada', 'SolicitudOficinaController@store');
+		Route::post('solicitud/oficina-privada', 'SolicitudController@storeSolicitudOficina');
 		Route::post('solicitud/{id}/upload-document', 'DocumentosSolicitudController@uploadDocument');
 		Route::post('solicitud/document/update', 'DocumentosSolicitudController@updateDocumento');
 	});
 
 	Route::get('solicitud/{id}', 'SolicitudController@show')->middleware('auth:api,api-admin');
 	//**********************
+
+	//** CHAT SOLICITUD */
+	Route::post('chat/recepcion', 'ChatRecepcionController@receiveUserMessageChat')->middleware('auth:api');
+	Route::post('chat/recepcion/edificio', 'ChatRecepcionController@receiveEdificioMessageChat')->middleware('auth:api-admin');
+	Route::get('chat/recepcion/solicitud/{id}', 'ChatRecepcionController@getChatMessageSolicitud')->middleware('auth:api,api-admin');
+	//***********************/
 
 	//** CONFIG DE DATOS */
 	Route::group(['prefix' => 'config'], function () {

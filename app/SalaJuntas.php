@@ -62,8 +62,8 @@ class SalaJuntas extends Model{
 		return $this->belongsTo(\App\CatTiempoRenta::class, 'tipo_tiempo_id');
 	}
 
-	public function solicitudSala(){
-		return $this->hasMany(\App\SolicitudSalaJunta::class, 'sala_id');
+	public function solicitud(){
+		return $this->morphOne(\App\SolicitudReservacion::class, 'solicitudable');
 	}
 
 }

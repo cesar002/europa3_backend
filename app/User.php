@@ -62,11 +62,7 @@ class User extends Authenticatable
 	}
 
 	public function chatRecepcion(){
-		return $this->hasMany(\App\ChatRecepcion::class);
-	}
-
-	public function chatSoporte(){
-		// return $this->morphToMany(\App\ChatSoporte::class, 'usertable');
+		return $this->morphMany(\App\ChatRecepcion::class, 'chatable');
 	}
 
 	public function notificacionesSolicitud(){

@@ -44,4 +44,8 @@ class UserAdmin extends Authenticatable
 		return $this->hasOne(\App\UserAdminPersonalData::class, 'user_admin_id');
 	}
 
+	public function chatRecepcion(){
+		return $this->morphMany(\App\ChatRecepcion::class, 'chatable');
+	}
+
 }

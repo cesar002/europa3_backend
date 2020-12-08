@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Interfaces\ISolicitudOficinaDao;
+use App\Oficina;
+use App\SalaJuntas;
 use App\SolicitudReservacion;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +13,7 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 
 	public function getAll(){
 		try {
-			//code...
+
 		} catch (\Throwable $th) {
 			return [];
 		}
@@ -20,15 +22,14 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 	public function getByUserId($userId){
 		try {
 			$solicitudes = SolicitudReservacion::with(
-				'documentos', 'documentos.estado','documentos.tipoDocumento', 'estado', 'solicitudOficina', 'solicitudOficina.oficina', 'solicitudOficina.oficina.tipoOficina',
-				'solicitudOficina.oficina.edificio' ,'solicitudOficina.oficina.imagenes', 'solicitudOficina.oficina.pathImages',
-				'solicitudOficina.oficina.pathImages.pathMaster', 'solicitudOficina.oficina.tipoOficina',
-				'solicitudSalaJunta', 'solicitudSalaJunta.salaJuntas', 'solicitudSalaJunta.salaJuntas.tipoOficina',
+				'documentos', 'documentos.estado','documentos.tipoDocumento', 'estado', 'solicitudable',
+				'metodoPago', 'tipoOficina', 'solicitudable.edificio' ,'solicitudable.imagenes', 'solicitudable.pathImages',
+				'solicitudable.pathImages.pathMaster',
 				)->where('user_id', $userId)->get();
 
 			$solicitudesJson = $solicitudes->map(function($solicitud){
-				$path = "{$solicitud->solicitudOficina->oficina->pathImages->pathMaster->path}/{$solicitud->solicitudOficina->oficina->pathImages->path}";
-				$image = $solicitud->solicitudOficina->oficina->imagenes[0];
+				$path = "{$solicitud->solicitudable->pathImages->pathMaster->path}/{$solicitud->solicitudable->pathImages->path}";
+				$image = $solicitud->solicitudable->imagenes[0];
 				$pathImage = "{$path}/{$image->image}";
 
 				return [
@@ -36,24 +37,23 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 					'folio' => $solicitud->folio,
 					'solicitud_id' => $solicitud->solicitud_id,
 					'estado' => $solicitud->estado,
+					'metodo_pago' => $solicitud->metodoPago,
+					'fecha_reservacion' => $solicitud->fecha_reservacion,
+					'meses_renta' => $solicitud->meses_renta,
+					'numero_integrantes' => $solicitud->numero_integrantes,
 					'documentos' => $solicitud->documentos,
-					'solicitudOficina' => [
-						'id' => $solicitud->solicitudOficina->id,
-						'metodo_pago' => null,
-						'fecha_reservacion' => $solicitud->solicitudOficina->fecha_reservacion,
-						'meses_renta' => $solicitud->solicitudOficina->meses_renta,
-						'numero_integrantes' => $solicitud->solicitudOficina->numero_integrantes,
-						'oficina' => [
-							'id' => $solicitud->solicitudOficina->oficina->id,
-							'nombre' => $solicitud->solicitudOficina->oficina->nombre,
-							'size_dimension' => $solicitud->solicitudOficina->oficina->size_dimension,
-							'capacidad_recomendada' => $solicitud->solicitudOficina->oficina->capacidad_recomendada,
-							'capacidad_maxima' => $solicitud->solicitudOficina->capacidad_maxima,
-							'precio' => $solicitud->solicitudOficina->oficina->precio,
-							'edificio' => $solicitud->solicitudOficina->oficina->edificio,
-							'tipoOficina' => $solicitud->solicitudOficina->oficina->tipoOficina,
-							'image' => asset(Storage::url($pathImage)),
-						],
+					'tipo_oficina' => $solicitud->tipoOficina,
+					'body' => [
+						'id' => $solicitud->solicitudable->id,
+						'nombre' => $solicitud->solicitudable->nombre,
+						'size_dimension' => $solicitud->solicitudable->size_dimension,
+						'capacidad_recomendada' => $solicitud->solicitudable->capacidad_recomendada,
+						'capacidad_maxima' => $solicitud->solicitudable->capacidad_maxima,
+						'precio' => $solicitud->solicitudable->precio,
+						'edificio' => $solicitud->solicitudable->edificio,
+						'tipoOficina' => $solicitud->solicitudable->tipoOficina,
+						'precio' => $solicitud->solicitudable->precio,
+						'image' => asset(Storage::url($pathImage)),
 					],
 				];
 			});
@@ -69,25 +69,33 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 	public function getAllByEdificioId($edificioId){
 		try {
 
+			// $data = SolicitudReservacion::with(
+			// 	'tipoOficina','estado', 'solicitudable',
+			// 	'user', 'user.infoPersonal'
+			// )
+			// ->whereHas('solicitudable', function($query) use($edificioId){
+				// $query->whereHas('oficina', function($query) use($edificioId){
+			// 		$query->where('edificio_id', $edificioId);
+				// });
+			// })
+			// ->orWhereHas('solicitudSalaJunta', function($query) use($edificioId){
+			// 	$query->whereHas('salaJuntas', function($query) use($edificioId){
+			// 		$query->where('edificio_id', $edificioId);
+			// 	});
+			// })
+			// ->get();
+
 			$data = SolicitudReservacion::with(
-				'estado', 'solicitudOficina', 'solicitudOficina.oficina', 'solicitudOficina.oficina.tipoOficina',
-				'solicitudSalaJunta', 'solicitudSalaJunta.salaJuntas', 'solicitudSalaJunta.salaJuntas.tipoOficina',
+				'tipoOficina','estado', 'solicitudable',
 				'user', 'user.infoPersonal'
-			)
-			->orWhereHas('solicitudOficina', function($query) use($edificioId){
-				$query->whereHas('oficina', function($query) use($edificioId){
-					$query->where('edificio_id', $edificioId);
-				});
-			})
-			->orWhereHas('solicitudSalaJunta', function($query) use($edificioId){
-				$query->whereHas('salaJuntas', function($query) use($edificioId){
-					$query->where('edificio_id', $edificioId);
-				});
+			)->whereHasMorph('solicitudable', [Oficina::class, SalaJuntas::class], function($query) use($edificioId){
+				$query->where('edificio_id', $edificioId);
 			})
 			->get();
 
 			return $data;
 		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
 			return [];
 		}
 	}
@@ -95,9 +103,10 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 	public function getToUserBySolicitudId($id){
 		try {
 			$solicitud = SolicitudReservacion::with('user', 'user.infoPersonal', 'user.infoPersonal.tipoIdentificacion','user.datosMorales', 'user.datosFiscales',
-													'solicitudOficina', 'solicitudOficina.oficina',
-													'solicitudOficina.oficina.edificio', 'solicitudOficina.oficina.tipoOficina',
-													'solicitudOficina.metodoPago','documentos', 'documentos.estado', 'documentos.tipoDocumento')->findOrFail($id);
+													'solicitudable', 'solicitudable.edificio', 'solicitudable.tipoOficina',
+													'tipoOficina','estado',
+													'metodoPago','documentos', 'documentos.estado', 'documentos.tipoDocumento')
+						->findOrFail($id);
 			return [
 				'id' => $solicitud->id,
 				'folio' => $solicitud->folio,
@@ -108,13 +117,13 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 					'datos_morales' => $solicitud->user->datosMorales ?? [],
 					'datos_fiscales' => $solicitud->user->datosFiscales ?? [],
 				],
-				'metodo_pago' => !is_null($solicitud->solicitudOficina->metodoPago) ? [] : null,
-				'oficina' => [
-					'id' => $solicitud->solicitudOficina->oficina->id,
-					'nombre' => $solicitud->solicitudOficina->oficina->nombre,
+				'metodo_pago' => $solicitud->metodoPago,
+				'body' => [
+					'id' => $solicitud->solicitudable->id,
+					'nombre' => $solicitud->solicitudable->nombre,
 					'edificio' => [
-						'id' => $solicitud->solicitudOficina->oficina->edificio->id,
-						'nombre' => $solicitud->solicitudOficina->oficina->edificio->nombre,
+						'id' => $solicitud->solicitudable->edificio->id,
+						'nombre' => $solicitud->solicitudable->edificio->nombre,
 
 					],
 				],
@@ -122,15 +131,9 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 				'insumos' => [
 
 				],
-				'meses_renta' => $solicitud->solicitudOficina->meses_renta,
-				'numero_integrantes' => $solicitud->solicitudOficina->numero_integrantes,
-				'fecha_a_reservar' => $solicitud->solicitudOficina->fecha_reservacion,
-				'status' => [
-					'iniciado' => $solicitud->iniciado,
-					'documentos_subidos' => $solicitud->subida_documentos,
-					'autorizado' => $solicitud->autorizado,
-					'finalizado' => $solicitud->finalizado,
-				],
+				'meses_renta' => $solicitud->solicitudable->meses_renta,
+				'numero_integrantes' => $solicitud->solicitudable->numero_integrantes,
+				'fecha_a_reservar' => $solicitud->solicitudable->fecha_reservacion,
 				'fecha_solicitud' => $solicitud->created_at->format('Y-m-d'),
 			];
 		} catch (\Throwable $th) {
@@ -143,9 +146,8 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 		try {
 
 			$solicitud = SolicitudReservacion::with(
-				'estado', 'solicitudOficina', 'solicitudOficina.oficina', 'solicitudOficina.oficina.edificio',
-				'solicitudOficina.metodoPago', 'documentos', 'documentos.estado', 'documentos.tipoDocumento', 'fechasPago', 'fechasPago.pago',
-				'solicitudSalaJunta', 'solicitudSalaJunta.salaJuntas',
+				'estado', 'solicitudable', 'solicitudable.edificio',
+				'metodoPago', 'documentos', 'documentos.estado', 'documentos.tipoDocumento', 'fechasPago', 'fechasPago.pago',
 				'user', 'user.infoPersonal','user.infoPersonal.tipoIdentificacion' ,'user.infoPersonal.nacionalidad',
 				'user.datosMorales', 'user.datosFiscales', 'user.datosFiscales.estado', 'user.datosFiscales.municipio')
 			->findOrFail($id);
