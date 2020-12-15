@@ -16,11 +16,36 @@ class ChatRecepcionController extends Controller
 		$this->chatRepositoy = $chatRepositoy;
 	}
 
+	public function getSolicitudesByUserId(Request $request){
+		try {
+			$userId = $request->user()->id;
+			$data = $this->chatRepositoy->getSolicitudesByUserId($userId);
+
+			return response($data);
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+			return [];
+		}
+	}
+
+	public function getSolicitudesChat(Request $request){
+		try {
+			$idEdificio = $request->user('api-admin')->edificio_id;
+			$data = $this->chatRepositoy->getSolicitudesChat($idEdificio);
+
+			return response($data);
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+			return response([]);
+		}
+	}
+
 	public function receiveUserMessageChat(Request $request){
 		try {
 			$user = $request->user();
 
 			$mensajeChat = $user->chatRecepcion()->create([
+				'sender_by' => 2,
 				'mensaje' => $request->mensaje,
 				'edificio_id' => $request->edificio_id,
 				'solicitud_id' => $request->solicitud_id,
@@ -47,6 +72,7 @@ class ChatRecepcionController extends Controller
 			$user = $request->user('api-admin');
 
 			$mensajeChat = $user->chatRecepcion()->create([
+				'sender_by' => 1,
 				'mensaje' => $request->mensaje,
 				'edificio_id' => $request->edificio_id,
 				'solicitud_id' => $request->solicitud_id,

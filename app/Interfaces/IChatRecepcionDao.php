@@ -8,4 +8,8 @@ interface IChatRecepcionDao{
 
 	public function getMessagesBySolicitudId($id);
 
+	public function getSolicitudesChat($edificioId);
+
+	public function getSolicitudesByUserId($userId);
+
 }

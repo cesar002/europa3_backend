@@ -20,7 +20,8 @@ class CreateChatRecepcionTable extends Migration
 			$table->bigInteger('chatable_id');
 			$table->string('chatable_type');
 			$table->bigInteger('solicitud_id');
-            $table->foreignId('edificio_id');
+			$table->bigInteger('edificio_id');
+			$table->tinyInteger('sender_by');
             $table->timestamps();
         });
     }

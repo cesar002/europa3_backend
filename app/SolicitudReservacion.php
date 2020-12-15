@@ -58,7 +58,7 @@ class SolicitudReservacion extends Model
 	}
 
 	public function chats(){
-		return $this->hasMany(\App\ChatSoporte::class, 'solicitud_id');
+		return $this->hasMany(\App\ChatRecepcion::class, 'solicitud_id');
 	}
 
 }

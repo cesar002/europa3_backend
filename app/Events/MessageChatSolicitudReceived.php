@@ -34,6 +34,11 @@ class MessageChatSolicitudReceived implements ShouldBroadcast
     public function broadcastOn()
     {
 		$model = $this->message['model'];
-        return new Channel("chat-recepcion-{$model->edificio_id}-{$model->solicitud_id}");
-    }
+        return new Channel("chat.recepcion.{$model->solicitud_id}");
+	}
+
+	public function broadcastAs()
+	{
+		return 'chat-message-sending';
+	}
 }

@@ -91,6 +91,8 @@ Route::group(['prefix' => 'v1'], function () {
 	//**********************
 
 	//** CHAT SOLICITUD */
+	Route::get('chat/chats/solicitudes/user', 'ChatRecepcionController@getSolicitudesByUserId')->middleware('auth:api');
+	Route::get('chat/chats/solicitudes', 'ChatRecepcionController@getSolicitudesChat')->middleware('auth:api-admin');
 	Route::post('chat/recepcion', 'ChatRecepcionController@receiveUserMessageChat')->middleware('auth:api');
 	Route::post('chat/recepcion/edificio', 'ChatRecepcionController@receiveEdificioMessageChat')->middleware('auth:api-admin');
 	Route::get('chat/recepcion/solicitud/{id}', 'ChatRecepcionController@getChatMessageSolicitud')->middleware('auth:api,api-admin');

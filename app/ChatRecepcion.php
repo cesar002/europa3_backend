@@ -9,6 +9,7 @@ class ChatRecepcion extends Model
 	protected $table = 'chat_recepcion';
 
 	protected $fillable = [
+		'sender_by',
 		'mensaje',
 		'edificio_id',
 		'solicitud_id',
