@@ -58,4 +58,8 @@ class Edificio extends Model
 		return $this->hasMany(\App\NotificationSolicitudMessage::class, 'edificio_id');
 	}
 
+	public function adicionales(){
+		return $this->hasMany(\App\Adicional::class, 'edificio_id');
+	}
+
 }

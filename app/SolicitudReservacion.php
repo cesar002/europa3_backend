@@ -61,4 +61,8 @@ class SolicitudReservacion extends Model
 		return $this->hasMany(\App\ChatRecepcion::class, 'solicitud_id');
 	}
 
+	public function adicionalesComprados(){
+		return $this->hasMany(\App\AdicionalCompraSolicitud::class, 'solicitud_id');
+	}
+
 }
