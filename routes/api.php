@@ -82,13 +82,29 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::get('solicitudes/me', 'SolicitudController@getToUser');
 		Route::get('solicitud/{id}/documents', 'SolicitudController@getDocuments');
 		Route::post('solicitud/{id}/cancel', 'SolicitudController@cancelar');
-		Route::post('solicitud/oficina-privada', 'SolicitudController@storeSolicitudOficina');
+		Route::post('solicitud', 'SolicitudController@storeSolicitudOficina');
 		Route::post('solicitud/{id}/upload-document', 'DocumentosSolicitudController@uploadDocument');
 		Route::post('solicitud/document/update', 'DocumentosSolicitudController@updateDocumento');
+		Route::get('solicitud/{id}/pagar', 'SolicitudController@paySolicitud');
 	});
 
 	Route::get('solicitud/{id}', 'SolicitudController@show')->middleware('auth:api,api-admin');
 	//**********************
+
+	//** ADICIONALES */
+	Route::get('adicionales', 'AdicionalesController@index');
+	Route::get('adicionales/edificio/{id}', 'AdicionalesController@getByEdificioId');
+	Route::get('adicional/{id}', 'AdicionalesController@show');
+	Route::post('adicional', 'AdicionalesController@store');
+	Route::put('adicional/{id}', 'AdicionalesController@update');
+	Route::delete('adicional/{id}', 'AdicionalesController@destroy');
+	Route::put('adicionales-comprados/usar', 'AdicionalesCompraController@updateUsado');
+	Route::post('adicionales/comprar', 'AdicionalesCompraController@store');
+	//******************/
+
+	//** ADICIONALES COMPRA */
+
+	//********************/
 
 	//** CHAT SOLICITUD */
 	Route::get('chat/chats/solicitudes/user', 'ChatRecepcionController@getSolicitudesByUserId')->middleware('auth:api');

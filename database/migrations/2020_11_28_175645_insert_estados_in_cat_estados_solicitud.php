@@ -26,6 +26,8 @@ class InsertEstadosInCatEstadosSolicitud extends Migration
 		['Finalizado']);
 		DB::insert('INSERT INTO cat_estados_solicitud(nombre, created_at, updated_at) VALUES(?, NOW(), NOW())',
 		['Revalidado']);
+		DB::insert('INSERT INTO cat_estados_solicitud(nombre, created_at, updated_at) VALUES(?, NOW(), NOW())',
+		['Autorizado pagado']);
     }
 
     /**

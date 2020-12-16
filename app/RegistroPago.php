@@ -8,6 +8,14 @@ class RegistroPago extends Model
 {
 	protected $table = 'registro_pagos';
 
+	protected $fillable = [
+		'user_id', 'fecha_id', 'referencia', 'fecha_pago', 'verificado'
+	];
+
+	protected $hidden = [
+		'created_at', 'updated_at',
+	];
+
 	protected $casts = [
 		'verificado' => 'boolean',
 	];

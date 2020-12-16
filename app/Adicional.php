@@ -13,8 +13,8 @@ class Adicional extends Model
 	];
 
 	protected $fillable = [
-		'unidad_id', 'nombre', 'descripcion',
-		'precio', 'disponible',
+		'edificio_id', 'unidad_id', 'nombre', 'descripcion',
+		'precio', 'disponible', 'unidad_base', 'cantidad_maxima',
 	];
 
 	protected $hidden = [
@@ -30,7 +30,7 @@ class Adicional extends Model
 	}
 
 	public function comprados(){
-		return $this->belongsTo(\App\AdicionalComprado::class, 'adicional_id');
+		return $this->hasMany(\App\AdicionalComprado::class, 'adicional_id');
 	}
 
 }

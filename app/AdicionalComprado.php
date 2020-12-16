@@ -17,7 +17,7 @@ class AdicionalComprado extends Model
 	];
 
 	public function adicionales(){
-		return $this->hasMany(\App\Adicional::class, 'adicional_id');
+		return $this->belongsTo(\App\Adicional::class, 'adicional_id');
 	}
 
 	public function adicionalSolicitud(){

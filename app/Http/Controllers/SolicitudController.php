@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\AdicionalComprado;
+use App\AdicionalCompraSolicitud;
 use App\DocumentoSolicitud;
 use App\Repositories\SolicitudOficinaRepository;
 use App\SolicitudReservacion;
@@ -10,8 +12,13 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\FoliosRepository;
 use Illuminate\Support\Facades\DB;
 use App\Edificio;
+use App\FechaPago;
 use App\NotificationSolicitudMessage;
 use App\Oficina;
+use App\RegistroPago;
+use Carbon\Carbon;
+use ParagonIE\Sodium\Core\Curve25519\Fe;
+
 // use Illuminate\Support\Facades\Storage;
 
 class SolicitudController extends Controller{
@@ -193,6 +200,65 @@ class SolicitudController extends Controller{
 
 			return response([
 				'error' => 'Ocurrió un error al registrar la solicitud'
+			], 500);
+		}
+	}
+
+	public function paySolicitud(Request $request, $id){
+		try {
+
+			$solicitud = SolicitudReservacion::with('solicitudable')->findOrFail($id);
+
+			DB::beginTransaction();
+
+			$first = true;
+			$currentDay = Carbon::now();
+			for ($i=0; $i < $solicitud->meses_renta; $i++) {
+				$aux = $currentDay;
+				FechaPago::create([
+					'solicitud_id' => $solicitud->id,
+					'fecha_pago' => $aux,
+					'monto_pago' => $first ? $request->total : $solicitud->solicitudable->precio,
+				]);
+
+				$currentDay = $aux->addMonthNoOverflow();
+				$first =  false;
+			}
+
+			if(!is_null($request->adicionales)){
+				$adicionalesComprados = AdicionalCompraSolicitud::create([
+					'solicitud_id' => $solicitud->id,
+					'folio_pago' => 'XXXXXXX',
+				]);
+
+				foreach($request->adicionales as $adicional){
+					AdicionalComprado::create([
+						'compra_id' => $adicionalesComprados->id,
+						'adicional_id' => $adicional->id,
+						'cantidad' => $adicional->cantidad,
+					]);
+				}
+			}
+
+			$fecha = FechaPago::where('solicitud_id', $solicitud->id)->first();
+			RegistroPago::create([
+				'user_id' => $request->user()->id,
+				'fecha_id' => $fecha->id,
+				'referencia' => 'XXXXXXXX',
+				'fecha_pago' => Carbon::now(),
+				'verificado' => true,
+			]);
+
+			DB::commit();
+			return response([
+				'message' => 'Pago registrado con éxito'
+			]);
+		} catch (\Throwable $th) {
+			DB::rollBack();
+
+			Log::error($th->getMessage());
+			return response([
+				'error' => 'Ocurrió un error al registrar el pago'
 			], 500);
 		}
 	}
