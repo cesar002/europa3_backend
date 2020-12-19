@@ -24,10 +24,13 @@ class SolicitudOficinaRequest extends FormRequest
     public function rules()
     {
         return [
-			'oficina_id' => 'required|exists:oficinas,id',
-			'fecha_reservacion' => 'required|date',
-			'meses_renta' => 'required|integer|min:6',
-			'numero_integrantes' => 'nullable|integer',
+			'tipo_oficina' => 'required',
+			'id' => 'required',
+			'fecha_reservacion' => 'required',
+			'meses_renta' => 'present',
+			'hora_inicio' => 'present',
+			'hora_fin' => 'present',
+
         ];
     }
 }

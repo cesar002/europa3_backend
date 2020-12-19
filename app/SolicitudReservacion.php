@@ -18,7 +18,7 @@ class SolicitudReservacion extends Model
 	protected $fillable = [
 		'folio', 'user_id', 'solicitud_id', 'estado_id',
 		'metodo_pago_id', 'tipo_oficina', 'fecha_reservacion',
-		'meses_renta', 'numero_integrantes',
+		'meses_renta', 'numero_integrantes', 'hora_inicio', 'hora_fin',
 	];
 
 	protected $hidden = [

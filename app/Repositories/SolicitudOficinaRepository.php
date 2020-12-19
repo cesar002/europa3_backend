@@ -145,9 +145,8 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 		}
 	}
 
-	public function getById($id){
+	public function getByIdAdmin($id){
 		try {
-
 			$solicitud = SolicitudReservacion::with(
 				'estado', 'solicitudable', 'solicitudable.edificio',
 				'metodoPago', 'documentos', 'documentos.estado', 'documentos.tipoDocumento', 'fechasPago', 'fechasPago.pago',
@@ -156,6 +155,59 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 			->findOrFail($id);
 
 			return $solicitud;
+		} catch (\Throwable $th) {
+			return [];
+		}
+	}
+
+	public function getById($id){
+		try {
+
+			// $solicitud = SolicitudReservacion::with(
+			// 	'estado', 'solicitudable', 'solicitudable.edificio',
+			// 	'metodoPago', 'documentos', 'documentos.estado', 'documentos.tipoDocumento', 'fechasPago', 'fechasPago.pago',
+			// 	'user', 'user.infoPersonal','user.infoPersonal.tipoIdentificacion' ,'user.infoPersonal.nacionalidad',
+			// 	'user.datosMorales', 'user.datosFiscales', 'user.datosFiscales.estado', 'user.datosFiscales.municipio')
+			// ->findOrFail($id);
+
+			// return $solicitud;
+			$solicitud = SolicitudReservacion::with(
+				'documentos', 'documentos.estado','documentos.tipoDocumento', 'estado', 'solicitudable',
+				'metodoPago', 'tipoOficina', 'solicitudable.edificio' ,'solicitudable.imagenes', 'solicitudable.pathImages',
+				'solicitudable.pathImages.pathMaster', 'fechasPago', 'fechasPago.pago',
+				)->findOrFail($id);
+
+			$path = "{$solicitud->solicitudable->pathImages->pathMaster->path}/{$solicitud->solicitudable->pathImages->path}";
+			$image = $solicitud->solicitudable->imagenes[0];
+			$pathImage = "{$path}/{$image->image}";
+
+			return [
+				'id' => $solicitud->id,
+				'folio' => $solicitud->folio,
+				'solicitud_id' => $solicitud->solicitud_id,
+				'estado' => $solicitud->estado,
+				'metodo_pago' => $solicitud->metodoPago,
+				'fecha_reservacion' => $solicitud->fecha_reservacion,
+				'meses_renta' => $solicitud->meses_renta,
+				'numero_integrantes' => $solicitud->numero_integrantes,
+				'documentos' => $solicitud->documentos,
+				'tipo_oficina' => $solicitud->tipoOficina,
+				'fechas_pago' => $solicitud->fechasPago,
+				'numero_integrantes' => $solicitud->numero_integrantes,
+				'hora_inicio' => $solicitud->hora_inicio,
+				'hora_fin' => $solicitud->hora_fin,
+				'body' => [
+					'id' => $solicitud->solicitudable->id,
+					'nombre' => $solicitud->solicitudable->nombre,
+					'size_dimension' => $solicitud->solicitudable->size_dimension,
+					'capacidad_recomendada' => $solicitud->solicitudable->capacidad_recomendada,
+					'capacidad_maxima' => $solicitud->solicitudable->capacidad_maxima,
+					'edificio' => $solicitud->solicitudable->edificio,
+					'tipoOficina' => $solicitud->solicitudable->tipoOficina,
+					'precio' => $solicitud->solicitudable->precio,
+					'image' => asset(Storage::url($pathImage)),
+				],
+			];
 		} catch (\Throwable $th) {
 			Log::error($th->getMessage());
 			return [];

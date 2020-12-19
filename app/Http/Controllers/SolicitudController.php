@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use App\Edificio;
 use App\NotificationSolicitudMessage;
 use App\Oficina;
+use App\SalaJuntas;
+use Carbon\Carbon;
 
 class SolicitudController extends Controller{
 
@@ -67,6 +69,18 @@ class SolicitudController extends Controller{
 		try {
 
 			$solicitud =  $this->solicitudRepository->getById($id);
+
+			return response($solicitud);
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+			return response(json_encode([], JSON_FORCE_OBJECT));
+		}
+	}
+
+	public function showAdmin($id){
+		try {
+
+			$solicitud =  $this->solicitudRepository->getByIdAdmin($id);
 
 			return response($solicitud);
 		} catch (\Throwable $th) {
@@ -151,35 +165,57 @@ class SolicitudController extends Controller{
 	public function storeSolicitudOficina(\App\Http\Requests\SolicitudOficinaRequest $request){
 		try {
 			DB::beginTransaction();
+			$tipoOficina = $request->tipo_oficina;
+			$folio = '';
 
-			$folio = $this->foliosRepository->getCurrentFolio('EUOP');
+			if($tipoOficina == 1){
+				$folio = $this->foliosRepository->getCurrentFolio('EUOP');
 
-			$oficina = Oficina::findOrFail($request->oficina_id);
-			$solicitud = $oficina->solicitud()->create([
-				'user_id' => $request->user()->id,
-				'estado_id' => 1,
-				'folio' => $folio,
-				'tipo_oficina' => 1,
-				'fecha_reservacion' => $request->fecha_reservacion,
-				'meses_renta' => $request->meses_renta,
-				'numero_integrantes' => 5, //$request->numero_integrantes,
-				'metodo_pago_id' => null,
-			]);
+				$oficina = Oficina::findOrFail($request->id);
+				$solicitud = $oficina->solicitud()->create([
+					'user_id' => $request->user()->id,
+					'estado_id' => 1,
+					'folio' => $folio,
+					'tipo_oficina' => $tipoOficina,
+					'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
+					'meses_renta' => $request->meses_renta,
+					'numero_integrantes' => 5, //$request->numero_integrantes,
+					'metodo_pago_id' => null,
+				]);
 
-			$message = NotificationSolicitudMessage::create([
-				'user_id' => $request->user()->id,
-				'edificio_id' => $oficina->edificio_id,
-				'solicitud_id' => $solicitud->id,
-				'type' => 1,
-				'status_solicitud' => 1,
-				'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
-			]);
+				$this->foliosRepository->generateNextFolio('EUOP');
+			}else{
+				$folio = $this->foliosRepository->getCurrentFolio('EUSJ');
 
-			$edificio = Edificio::findOrFail($oficina->edificio_id);
+				$sala = SalaJuntas::findOrFail($request->id);
+				$solicitud = $sala->solicitud()->create([
+					'user_id' => $request->user()->id,
+					'estado_id' => 1,
+					'folio' => $folio,
+					'tipo_oficina' => $tipoOficina,
+					'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
+					'meses_renta' => 1,
+					'hora_inicio' => Carbon::parse($request->hora_inicio), //$request->hora_inicio,
+					'hora_fin' => Carbon::parse($request->hora_fin),
+					'numero_integrantes' => 5, //$request->numero_integrantes,
+					'metodo_pago_id' => null,
+				]);
 
-			$edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
+				$this->foliosRepository->generateNextFolio('EUSJ');
+			}
 
-			$this->foliosRepository->generateNextFolio('EUOP');
+			// $message = NotificationSolicitudMessage::create([
+			// 	'user_id' => $request->user()->id,
+			// 	'edificio_id' => $oficina->edificio_id,
+			// 	'solicitud_id' => $solicitud->id,
+			// 	'type' => 1,
+			// 	'status_solicitud' => 1,
+			// 	'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
+			// ]);
+
+			// $edificio = Edificio::findOrFail($oficina->edificio_id);
+
+			// $edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
 
 			DB::commit();
 

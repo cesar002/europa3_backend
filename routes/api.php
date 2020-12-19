@@ -92,6 +92,7 @@ Route::group(['prefix' => 'v1'], function () {
 	});
 
 	Route::get('solicitud/{id}', 'SolicitudController@show')->middleware('auth:api,api-admin');
+	Route::get('solicitud/{id}/admin', 'SolicitudController@showAdmin')->middleware('auth:api,api-admin');
 	//**********************
 
 	//** ADICIONALES */
