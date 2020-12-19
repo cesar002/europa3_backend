@@ -67,6 +67,7 @@ Route::group(['prefix' => 'v1'], function () {
 	//********************/
 
 	Route::get('/users', 'UserController@getAllUsuarios')->middleware('auth:api-admin');
+
 	//** SOLICITUDES*/
 	Route::group(['middleware' => ['auth:api-admin']], function () {
 		Route::get('solicitudes', 'SolicitudController@index');
@@ -85,7 +86,9 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::post('solicitud', 'SolicitudController@storeSolicitudOficina');
 		Route::post('solicitud/{id}/upload-document', 'DocumentosSolicitudController@uploadDocument');
 		Route::post('solicitud/document/update', 'DocumentosSolicitudController@updateDocumento');
-		Route::get('solicitud/{id}/pagar', 'SolicitudController@paySolicitud');
+		Route::post('solicitud/{id}/confirmar', 'PagosController@payConfirmationSolicitud');
+		Route::post('solicitud/{id}/fecha/{idFecha}/pagar', 'PagosController@payMesSolicitud');
+		Route::post('solicitud/{id}/adicionales/pagar', 'PagosController@payAdicionales');
 	});
 
 	Route::get('solicitud/{id}', 'SolicitudController@show')->middleware('auth:api,api-admin');
