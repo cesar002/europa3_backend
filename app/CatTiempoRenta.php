@@ -24,4 +24,8 @@ class CatTiempoRenta extends Model
 		return $this->hasMany(\App\Oficina::class, 'tipo_tiempo_id');
 	}
 
+	public function oficinasVirtuales(){
+		return $this->hasMany(\App\OficinaVirtual::class, 'tipo_tiempo_id');
+	}
+
 }

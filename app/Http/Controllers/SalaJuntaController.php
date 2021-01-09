@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mobiliario;
 use App\MobiliarioSala;
+use App\MobiliarioSalaJuntas;
 use App\PathImage;
 use App\PathMaster;
 use Illuminate\Http\Request;
@@ -37,6 +39,7 @@ class SalaJuntaController extends Controller{
 
 	public function store(\App\Http\Requests\SalaJuntaStoreRequest $request){
 		try {
+
 			DB::beginTransaction();
 
 			$images = $request->images;
@@ -60,9 +63,38 @@ class SalaJuntaController extends Controller{
 				'capacidad_maxima' => $request->capacidad_maxima,
 				'precio' => $request->precio,
 				'path_image_id' => $pathImage->id,
-				'tipo_tiempo_id' => $request->tipo_tiempo_id,
+				'tipo_tiempo_id' => 2,
 			]);
 			$salaJuntas->save();
+
+			foreach($request->mobiliario as $index => $mobiliario){
+				$mobiliarioDecode = json_decode($mobiliario, true);
+
+				$mob = Mobiliario::findOrFail($mobiliarioDecode['mobiliario_id']);
+				$mobUsado = $mob->usado + $mobiliarioDecode['cantidad'];
+				if($mobUsado > $mob->cantidad){
+					throw new \Exception('La cantidad de mobiliario que se quiere asignar supera la cantidad que se tiene disponible');
+				}
+				$mob->usado = $mobUsado;
+				$mob->save();
+
+				$mobSala = new MobiliarioSalaJuntas([
+					'sala_juntas_id' => $salaJuntas->id,
+					'mobiliario_id' => $mobiliarioDecode['mobiliario_id'],
+					'cantidad' => $mobiliarioDecode['cantidad'],
+				]);
+
+				$mobSala->save();
+			}
+
+			foreach($request->servicios as $servicioId){
+				$serv = new SalaServicio([
+					'sala_juntas_id' => $salaJuntas->id,
+					'servicio_id' => $servicioId,
+				]);
+
+				$serv->save();
+			}
 
 			Storage::disk('public')->makeDirectory("{$pathMaster->path}/{$pathImage->path}");
 
@@ -77,24 +109,6 @@ class SalaJuntaController extends Controller{
 
 					$imageSala->save();
 				}
-			}
-
-			foreach($request->mobiliario as $mobiliarioId){
-				$mob = new MobiliarioSala([
-					'sala_juntas_id' => $salaJuntas->id,
-					'mobiliario_id' => $mobiliarioId,
-				]);
-
-				$mob->save();
-			}
-
-			foreach($request->servicios as $servicioId){
-				$serv = new SalaServicio([
-					'sala_juntas_id' => $salaJuntas->id,
-					'servicio_id' => $servicioId,
-				]);
-
-				$serv->save();
 			}
 
 			DB::commit();
@@ -120,6 +134,16 @@ class SalaJuntaController extends Controller{
 			$salaJuntas = SalaJuntas::findOrFail($id);
 
 			DB::delete('DELETE FROM sala_juntas_servicios WHERE sala_juntas_id = ?', [$id]);
+
+			$mobiliarioAsignado = MobiliarioSalaJuntas::with('mobiliario')->where('sala_juntas_id', $salaJuntas->id)->get();
+			$mobiliarioAsignado->each(function($mob){
+				$usado = $mob->mobiliario->usado - $mob->cantidad;
+				$resultUpdate = $mob->mobiliario->update(['usado' => $usado]);
+
+				if(!$resultUpdate)
+					throw new \Exception('No se logró actualizar la información del mobiliario usado');
+			});
+
 			DB::delete('DELETE FROM mobiliario_sala_juntas WHERE sala_juntas_id = ?', [$id]);
 
 
@@ -132,10 +156,20 @@ class SalaJuntaController extends Controller{
 				$serv->save();
 			}
 
-			foreach($request->mobiliario as $mobiliario){
+			foreach($request->mobiliario as $index => $mobiliario){
+
+				$mobi = Mobiliario::findOrFail($mobiliario['id']);
+				$mobUsado = $mobi->usado + $mobiliario['cantidad'];
+				if($mobUsado > $mobi->cantidad){
+					throw new \Exception('La cantidad de mobiliario que se quiere asignar supera la cantidad que se tiene disponible');
+				}
+				$mobi->usado = $mobUsado;
+				$mobi->save();
+
 				$mob = new MobiliarioSala([
 					'sala_juntas_id' => $salaJuntas->id,
-					'mobiliario_id' => $mobiliario,
+					'mobiliario_id' => $mobiliario['id'],
+					'cantidad' => $mobiliario['cantidad'],
 				]);
 
 				$mob->save();

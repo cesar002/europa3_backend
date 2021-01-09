@@ -16,6 +16,10 @@ class CatTipoOficina extends Model
         return $this->hasMany(\App\Oficina::class, 'tipo_oficina_id');
 	}
 
+	public function oficinasVirtuales(){
+		return $this->hasMany(\App\OficinaVirtual::class, 'tipo_oficina_id');
+	}
+
 	public function salasJuntas(){
 		return $this->hasMany(\App\SalaJuntas::class, 'tipo_oficina_id');
 	}

@@ -25,6 +25,7 @@ class CreateMobiliariosTable extends Migration
             $table->longText('descripcion_bien')->nullable();
 			$table->longText('observaciones')->nullable();
 			$table->mediumInteger('cantidad');
+			$table->mediumInteger('usado')->default(0);
 			$table->boolean('activo')->default(true);
 			$table->string('image');
 			$table->softDeletes();

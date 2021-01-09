@@ -58,6 +58,10 @@ class SalaJuntas extends Model{
 		return $this->belongsToMany(\App\Mobiliario::class, 'mobiliario_sala_juntas', 'sala_juntas_id', 'mobiliario_id');
 	}
 
+	public function mobiliarioAsignado(){
+		return $this->hasMany(\App\MobiliarioSalaJuntas::class, 'sala_juntas_id');
+	}
+
 	public function tipoTiempoRenta(){
 		return $this->belongsTo(\App\CatTiempoRenta::class, 'tipo_tiempo_id');
 	}

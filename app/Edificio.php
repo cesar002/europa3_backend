@@ -29,6 +29,10 @@ class Edificio extends Model
         return $this->hasMany(\App\Oficina::class, 'edificio_id');
 	}
 
+	public function oficinasVirtuales(){
+		return $this->hasMany(\App\OficinaVirtual::class, 'edificio_id');
+	}
+
 	public function mobiliario(){
 		return $this->hasMany(\App\Mobiliario::class, 'edificio_id');
 	}

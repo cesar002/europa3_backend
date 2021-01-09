@@ -83,6 +83,7 @@ class MobiliarioRepository implements IMobiliarioDao{
 					'descripcion' => $mobiliario->descripcion_bien,
 					'observaciones'  => $mobiliario->observaciones ?? '',
 					'cantidad' => $mobiliario->cantidad,
+					'usado' => $mobiliario->usado,
 					'activo' => boolval($mobiliario->activo),
 					'image' => asset(Storage::url($image)),
 					'edificio' => [

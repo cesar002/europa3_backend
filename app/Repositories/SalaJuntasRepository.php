@@ -10,12 +10,12 @@ class SalaJuntasRepository implements ISalaJuntasDao{
 
 	public function getAllSalaJuntas(){
 		$salas = SalaJuntas::with('edificio', 'edificio.municipio', 'edificio.municipio.estado', 'tipoOficina', 'size', 'pathImages', 'pathImages.pathMaster',
-								'servicios', 'imagenes', 'mobiliario', 'tipoTiempoRenta', 'size',
-								'mobiliario.tipo', 'mobiliario.pathImages',  'mobiliario.pathImages.pathMaster')->get();
+								'servicios', 'imagenes', 'mobiliarioAsignado', 'mobiliarioAsignado.mobiliario', 'tipoTiempoRenta', 'size',
+								'mobiliarioAsignado.mobiliario.tipo', 'mobiliarioAsignado.mobiliario.pathImages',  'mobiliarioAsignado.mobiliario.pathImages.pathMaster')->get();
 
 		return $salas->map(function($sala){
 			$path = "{$sala->pathImages->pathMaster->path}/{$sala->pathImages->path}";
-			$mobiliario = $sala->mobiliario;
+			$mobiliario = $sala->mobiliarioAsignado;
 
 			return [
 				'id' => $sala->id,
@@ -67,21 +67,20 @@ class SalaJuntasRepository implements ISalaJuntasDao{
 						'servicio' => $servicio->servicio,
 					];
 				}),
-				'mobiliario' => $mobiliario->map(function($mob) use($mobiliario){
-					$pathImage = "{$mob->pathImages->pathMaster->path}/{$mob->pathImages->path}/{$mob->image}";
+				'mobiliario' => $mobiliario->map(function($mob){
+					$pathImage = "{$mob->mobiliario->pathImages->pathMaster->path}/{$mob->mobiliario->pathImages->path}/{$mob->mobiliario->image}";
 					return[
-						'id' => $mob->id,
-						'nombre' => $mob->nombre,
-						'marca' => $mob->marca,
-						'modelo' => $mob->modelo,
-						'color' => $mob->color,
+						'id' => $mob->mobiliario->id,
+						'nombre' => $mob->mobiliario->nombre,
+						'marca' => $mob->mobiliario->marca,
+						'modelo' => $mob->mobiliario->modelo,
+						'color' => $mob->mobiliario->color,
 						'image' => asset(Storage::url($pathImage)),
 						'tipo' => [
-							'id' => $mob->tipo->id,
-							'nombre' => $mob->tipo->tipo,
+							'id' => $mob->mobiliario->tipo->id,
+							'nombre' => $mob->mobiliario->tipo->tipo,
 						],
-						'cantidad' => collect($mobiliario->filter(function($value, $key) use($mob){ return $value->id == $mob->id;})->all())
-										->countBy(function($m) use($mob){ return $m->id == $mob->id; })->values()->all()[0],
+						'cantidad' => $mob->cantidad,
 					];
 				})->unique('id')->values()->all(),
 				'images' => $sala->imagenes->map(function($img) use($path){

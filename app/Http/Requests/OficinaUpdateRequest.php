@@ -25,7 +25,6 @@ class OficinaUpdateRequest extends FormRequest
     {
         return [
 			'edificio_id' => 'required|exists:edificios,id',
-			'tipo_tiempo_id' => 'required|exists:cat_tiempo_renta,id',
 			'size_id' => 'required|exists:cat_size_oficinas,id',
 			'nombre' => 'required',
 			'descripcion' => 'required',
@@ -33,7 +32,6 @@ class OficinaUpdateRequest extends FormRequest
 			'capacidad_recomendada' => 'required|numeric|min:1',
 			'capacidad_maxima' => 'required|numeric|min:1|gte:capacidad_recomendada',
 			'mobiliario' => 'required|array',
-			'mobiliario.*' => 'required|exists:mobiliarios,id',
 			'servicios' => 'required|array',
 			'servicios.*' => 'required|exists:cat_servicios,id',
         ];

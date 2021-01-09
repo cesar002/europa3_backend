@@ -9,7 +9,7 @@ class MobiliarioSala extends Model{
 	protected $table = 'mobiliario_sala_juntas';
 
 	protected $fillable = [
-		'sala_juntas_id', 'mobiliario_id',
+		'sala_juntas_id', 'mobiliario_id', 'cantidad',
 	];
 
 	protected $hidden = [

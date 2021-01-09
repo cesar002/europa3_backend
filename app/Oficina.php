@@ -50,6 +50,10 @@ class Oficina extends Model
 		return $this->belongsToMany(\App\Mobiliario::class, 'mobiliario_oficina', 'oficina_id', 'mobiliario_id');
 	}
 
+	public function mobiliarioAsignado(){
+		return $this->hasMany(\App\MobiliarioOficina::class, 'oficina_id');
+	}
+
 	public function pathImages(){
 		return $this->belongsTo(\App\PathImage::class, 'path_image_id');
 	}

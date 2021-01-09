@@ -17,6 +17,10 @@ class CatServiciosOficina extends Model
         return $this->belongsToMany(\App\Oficina::class, 'oficina_servicios', 'servicio_id', 'oficina_id');
 	}
 
+	public function oficinasVirtuales(){
+		return $this->belongsToMany(\App\OficinaVirtual::class,'oficina_virtual_servicios', 'oficina_virtual_id', 'servicio_id');
+	}
+
 	public function salasJuntas(){
 		return $this->belongsToMany(\App\SalaJuntas::class, 'sala_juntas_servicios', 'servicio_id', 'sala_juntas_id');
 	}

@@ -24,6 +24,7 @@ class Mobiliario extends Model
 		'cantidad',
 		'path_id',
 		'image',
+		'usado',
 	];
 
 	public function getDescripcion(){
@@ -48,6 +49,14 @@ class Mobiliario extends Model
 
 	public function salasJuntas(){
 		return $this->belongsToMany(\App\SalaJuntas::class, 'mobiliario_sala_juntas', 'mobiliario_id', 'sala_juntas_id');
+	}
+
+	public function mobiliarioAsignadoSalaJuntas(){
+		return $this->belongsTo(\App\MobiliarioSalaJuntas::class, 'mobiliario_id');
+	}
+
+	public function mobiliarioAsignadoOficina(){
+		return $this->belongsTo(\App\MobiliarioOficina::class, 'mobiliario_id');
 	}
 
 }

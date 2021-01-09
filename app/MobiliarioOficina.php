@@ -13,7 +13,15 @@ class MobiliarioOficina extends Model
 	];
 
 	protected $fillable = [
-		'oficina_id', 'mobiliario_id'
+		'oficina_id', 'mobiliario_id', 'cantidad',
 	];
+
+	public function mobiliario(){
+		return $this->belongsTo(\App\Mobiliario::class, 'mobiliario_id');
+	}
+
+	public function oficina(){
+		return $this->belongsTo(\App\Oficina::class, 'oficina_id');
+	}
 
 }

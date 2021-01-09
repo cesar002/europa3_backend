@@ -13,6 +13,14 @@ class MobiliarioSalaJuntas extends Model
 	];
 
 	protected $fillable = [
-		'sala_juntas_id', 'mobiliario_id',
+		'sala_juntas_id', 'mobiliario_id', 'cantidad',
 	];
+
+	public function mobiliario(){
+		return $this->belongsTo(\App\Mobiliario::class, 'mobiliario_id');
+	}
+
+	public function salaJuntas(){
+		return $this->belongsTo(\App\SalaJuntas::class, 'sala_juntas_id');
+	}
 }

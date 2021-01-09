@@ -34,7 +34,8 @@ class SalaJuntaUpdateRequest extends FormRequest
 			'capacidad_maxima' => 'required|numeric|min:1|gte:capacidad_recomendada',
 			'precio' => 'required|numeric',
 			'mobiliario' => 'required|array',
-			'mobiliario.*' => 'required|exists:mobiliarios,id',
+			'mobiliario.*.id' => 'required|exists:mobiliarios,id',
+			'mobiliario.*.cantidad' => 'required|min:1',
 			'servicios' => 'required|array',
 			'servicios.*' => 'required|exists:cat_servicios,id',
         ];

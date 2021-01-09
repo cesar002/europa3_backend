@@ -17,6 +17,7 @@ class CreateMobiliarioSalaJuntasTable extends Migration
 			$table->id();
 			$table->foreignId('sala_juntas_id')->references('id')->on('sala_juntas')->onDelete('cascade');
 			$table->foreignId('mobiliario_id')->references('id')->on('mobiliarios');
+			$table->integer('cantidad');
             $table->timestamps();
         });
     }
