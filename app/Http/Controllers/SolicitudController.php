@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Edificio;
 use App\NotificationSolicitudMessage;
 use App\Oficina;
+use App\OficinaVirtual;
 use App\SalaJuntas;
 use Carbon\Carbon;
 
@@ -162,47 +163,102 @@ class SolicitudController extends Controller{
 		}
 	}
 
+	private function getFolioKeyToTypeOficina(int $tipoOficina){
+		switch ($tipoOficina) {
+			case 1:
+				return 'EUOP';
+			case 2:
+				return 'EUSJ';
+			case 3:
+				return 'EUOV';
+			default:
+				return null;
+		}
+	}
+
 	public function storeSolicitudOficina(\App\Http\Requests\SolicitudOficinaRequest $request){
 		try {
 			DB::beginTransaction();
 			$tipoOficina = $request->tipo_oficina;
-			$folio = '';
+			$tipoFolio = $this->getFolioKeyToTypeOficina($tipoOficina);
+			$folio = $this->foliosRepository->getCurrentFolio($tipoFolio);
 
-			if($tipoOficina == 1){
-				$folio = $this->foliosRepository->getCurrentFolio('EUOP');
+			$oficina =  Oficina::where('tipo_oficina_id', $tipoOficina)->where('id', $request->id)->first() ??
+						SalaJuntas::where('tipo_oficina_id', $tipoOficina)->where('id', $request->id)->first() ??
+						OficinaVirtual::where('tipo_oficina_id', $tipoOficina)->where('id', $request->id)->first();
 
-				$oficina = Oficina::findOrFail($request->id);
-				$solicitud = $oficina->solicitud()->create([
-					'user_id' => $request->user()->id,
-					'estado_id' => 1,
-					'folio' => $folio,
-					'tipo_oficina' => $tipoOficina,
-					'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
-					'meses_renta' => $request->meses_renta,
-					'numero_integrantes' => 5, //$request->numero_integrantes,
-					'metodo_pago_id' => null,
-				]);
+			if(is_null($oficina))
+				throw new \Exception('El ID y tipo de oficina no corresponden con ningúno registrado');
 
-				$this->foliosRepository->generateNextFolio('EUOP');
-			}else{
-				$folio = $this->foliosRepository->getCurrentFolio('EUSJ');
+			$solicitud = $oficina->solicitud()->create([
+				'user_id' => $request->user()->id,
+				'estado_id' => 1,
+				'folio' => $folio,
+				'tipo_oficina' => $tipoOficina,
+				'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
+				'meses_renta' => $tipoOficina == 3 ? 1 : $request->meses_renta,
+				'numero_integrantes' => $tipoOficina == 3 ? 1 : $request->numero_integrantes,
+				'hora_inicio' => $tipoOficina == 2 ? Carbon::parse($request->hora_inicio) : null,
+				'hora_fin' => $tipoOficina == 2 ? Carbon::parse($request->hora_fin) : null,
+				'metodo_pago_id' => null,
+			]);
 
-				$sala = SalaJuntas::findOrFail($request->id);
-				$solicitud = $sala->solicitud()->create([
-					'user_id' => $request->user()->id,
-					'estado_id' => 1,
-					'folio' => $folio,
-					'tipo_oficina' => $tipoOficina,
-					'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
-					'meses_renta' => 1,
-					'hora_inicio' => Carbon::parse($request->hora_inicio), //$request->hora_inicio,
-					'hora_fin' => Carbon::parse($request->hora_fin),
-					'numero_integrantes' => 5, //$request->numero_integrantes,
-					'metodo_pago_id' => null,
-				]);
+			$this->foliosRepository->generateNextFolio($tipoFolio);
 
-				$this->foliosRepository->generateNextFolio('EUSJ');
-			}
+
+			// $oficina = $tipoOficina == 1 ? Oficina::findOrFail($request->id) : $tipoOficina == 2 ? SalaJuntas::findOrFail($request->id) : OficinaVirtual::findOrFail($request->id);
+
+			// if($tipoOficina == 1){
+			// 	$folio = $this->foliosRepository->getCurrentFolio('EUOP');
+
+			// 	$oficina = Oficina::findOrFail($request->id);
+			// 	$solicitud = $oficina->solicitud()->create([
+			// 		'user_id' => $request->user()->id,
+			// 		'estado_id' => 1,
+			// 		'folio' => $folio,
+			// 		'tipo_oficina' => $tipoOficina,
+			// 		'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
+			// 		'meses_renta' => $request->meses_renta,
+			// 		'numero_integrantes' => 5, //$request->numero_integrantes,
+			// 		'metodo_pago_id' => null,
+			// 	]);
+
+			// 	$this->foliosRepository->generateNextFolio('EUOP');
+			// }else if($tipoOficina == 2){
+			// 	$folio = $this->foliosRepository->getCurrentFolio('EUSJ');
+
+			// 	$sala = SalaJuntas::findOrFail($request->id);
+			// 	$solicitud = $sala->solicitud()->create([
+			// 		'user_id' => $request->user()->id,
+			// 		'estado_id' => 1,
+			// 		'folio' => $folio,
+			// 		'tipo_oficina' => $tipoOficina,
+			// 		'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
+			// 		'meses_renta' => 1,
+			// 		'hora_inicio' => Carbon::parse($request->hora_inicio), //$request->hora_inicio,
+			// 		'hora_fin' => Carbon::parse($request->hora_fin),
+			// 		'numero_integrantes' => 5, //$request->numero_integrantes,
+			// 		'metodo_pago_id' => null,
+			// 	]);
+
+			// 	$this->foliosRepository->generateNextFolio('EUSJ');
+			// }else{
+			// 	$folio = $this->foliosRepository->getCurrentFolio('EUOV');
+			// 	$oficinaVirtual = OficinaVirtual::findOrFail($request->id);
+
+			// 	$solicitud = $oficinaVirtual->solicitud()->create([
+			// 		'user_id' => $request->user()->id,
+			// 		'estado_id' => 1,
+			// 		'folio' => $folio,
+			// 		'tipo_oficina' => $tipoOficina,
+			// 		'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
+			// 		'meses_renta' => $request->meses_renta,
+			// 		'numero_integrantes' => 1,
+			// 		'metodo_pago_id' => null,
+			// 	]);
+
+			// 	$this->foliosRepository->generateNextFolio('EUOV');
+			// }
 
 			// $message = NotificationSolicitudMessage::create([
 			// 	'user_id' => $request->user()->id,

@@ -205,6 +205,12 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::put('/oficina/{id}', 'OficinasController@update');
 	Route::delete('/oficina/{id}', 'OficinasController@destroy');
 
+	Route::get('/oficinas-virtuales', 'OficinaVirtualController@index');
+	Route::get('/oficina-virtual/{id}', 'OficinaVirtualController@show');
+	Route::post('/oficina-virtual', 'OficinaVirtualController@store')->middleware('auth:api-admin');
+	Route::put('/oficina-virtual/{id}', 'OficinaVirtualController@destroy')->middleware('auth:api-admin');
+	Route::delete('/oficina-virtual/{id}', 'OficinaVirtualController@destroy')->middleware('auth:api-admin');
+
 	//*************************/
 
 	//** EDIFICIOS Y CATALOGOS */

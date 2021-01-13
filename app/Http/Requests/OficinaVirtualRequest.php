@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SolicitudOficinaRequest extends FormRequest
+class OficinaVirtualRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,11 @@ class SolicitudOficinaRequest extends FormRequest
     public function rules()
     {
         return [
-			'tipo_oficina' => 'required|exists:cat_tipos_oficina,id',
-			'id' => 'required',
-			'fecha_reservacion' => 'required',
-			'meses_renta' => 'present',
-			'hora_inicio' => 'present',
-			'hora_fin' => 'present',
-
+			'edificio_id' => 'required|exists:edificios,id',
+			'nombre' => 'required',
+			'descripcion' => 'present',
+			'servicios' => 'present',
+			'precios' => 'required|numeric|min:1',
         ];
     }
 }
