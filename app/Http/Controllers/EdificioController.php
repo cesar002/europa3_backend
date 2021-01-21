@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Edificio;
+use App\EdificioIdiomasAtencion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -65,6 +66,9 @@ class EdificioController extends Controller
      */
     public function store(\App\Http\Requests\EdificioStoreRequest $request){
 		try {
+
+			DB::beginTransaction();
+
 			$edificio = new Edificio([
 				'municipio_id' => $request->municipio_id,
 				'nombre' => $request->nombre,
@@ -80,10 +84,21 @@ class EdificioController extends Controller
 
 			$edificio->save();
 
+			foreach($request->idiomas_atencion as $i => $value){
+				EdificioIdiomasAtencion::create([
+					'edificio_id' => $edificio->id,
+					'idioma_id' => $value['id'],
+				]);
+			}
+
+			DB::commit();
+
 			return response([
 				'message' => 'Edifcio registrado con éxito'
 			], 201);
 		} catch (\Throwable $th) {
+			DB::rollBack();
+
 			Log::error($th->getMessage());
 
 			return response([
@@ -116,6 +131,8 @@ class EdificioController extends Controller
 		try {
 			$edificio = Edificio::findOrFail($id);
 
+			DB::beginTransaction();
+
 			$edificio->nombre = $request->nombre;
 			$edificio->municipio_id = $request->municipio_id;
 			$edificio->direccion = $request->direccion;
@@ -129,10 +146,27 @@ class EdificioController extends Controller
 
 			$edificio->save();
 
+			if(!empty($request->idiomas_atencion)){
+
+				DB::delete('DELETE FROM edificio_idiomas_atencion WHERE edificio_id = ?', [$edificio->id]);
+
+				foreach($request->idiomas_atencion as $i => $value){
+					EdificioIdiomasAtencion::create([
+						'edificio_id' => $edificio->id,
+						'idioma_id' => $value['id'],
+					]);
+				}
+			}
+
+			DB::commit();
+
 			return response([
 				'message' => 'Edificio actualizado con éxito'
 			]);
 		} catch (\Throwable $th) {
+
+			DB::rollBack();
+
 			Log::error($th->getMessage());
 
 			return response([

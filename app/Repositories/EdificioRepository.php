@@ -45,7 +45,7 @@ class EdificioRepository implements IEdificioDao{
 
 
 	public function getAllEdificios(){
-		$edificiosM = Edificio::with('municipio', 'municipio.estado')->get();
+		$edificiosM = Edificio::with('municipio', 'municipio.estado', 'idiomas')->get();
 
 		$edificios = $edificiosM->map(function($edificio){
 			return [
@@ -72,7 +72,8 @@ class EdificioRepository implements IEdificioDao{
 				'horas_servicio' => [
 					'apertura' => $edificio->hora_apertura,
 					'cierre' => $edificio->hora_cierre,
-				]
+				],
+				'idiomas_atencion' => $edificio->idiomas
 			];
 		});
 

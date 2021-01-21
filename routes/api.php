@@ -96,12 +96,13 @@ Route::group(['prefix' => 'v1'], function () {
 	//**********************
 
 	//** ADICIONALES */
+	Route::get('cat-unidades', 'CatUnidadesController@index');
 	Route::get('adicionales', 'AdicionalesController@index');
 	Route::get('adicionales/edificio/{id}', 'AdicionalesController@getByEdificioId');
 	Route::get('adicional/{id}', 'AdicionalesController@show');
-	Route::post('adicional', 'AdicionalesController@store');
-	Route::put('adicional/{id}', 'AdicionalesController@update');
-	Route::delete('adicional/{id}', 'AdicionalesController@destroy');
+	Route::post('adicional', 'AdicionalesController@store')->middleware('auth:api-admin');
+	Route::put('adicional/{id}', 'AdicionalesController@update')->middleware('auth:api-admin');
+	Route::delete('adicional/{id}', 'AdicionalesController@destroy')->middleware('auth:api-admin');
 	Route::put('adicionales-comprados/usar', 'AdicionalesCompraController@updateUsado');
 	Route::post('adicionales/comprar', 'AdicionalesCompraController@store');
 	//******************/
@@ -208,7 +209,7 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/oficinas-virtuales', 'OficinaVirtualController@index');
 	Route::get('/oficina-virtual/{id}', 'OficinaVirtualController@show');
 	Route::post('/oficina-virtual', 'OficinaVirtualController@store')->middleware('auth:api-admin');
-	Route::put('/oficina-virtual/{id}', 'OficinaVirtualController@destroy')->middleware('auth:api-admin');
+	Route::put('/oficina-virtual/{id}', 'OficinaVirtualController@update')->middleware('auth:api-admin');
 	Route::delete('/oficina-virtual/{id}', 'OficinaVirtualController@destroy')->middleware('auth:api-admin');
 
 	//*************************/

@@ -28,9 +28,9 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 				)->where('user_id', $userId)->get();
 
 			$solicitudesJson = $solicitudes->map(function($solicitud){
-				$path = "{$solicitud->solicitudable->pathImages->pathMaster->path}/{$solicitud->solicitudable->pathImages->path}";
-				$image = $solicitud->solicitudable->imagenes[0];
-				$pathImage = "{$path}/{$image->image}";
+				$path = $solicitud->solicitudable->pathImages ? "{$solicitud->solicitudable->pathImages->pathMaster->path}/{$solicitud->solicitudable->pathImages->path}" : "";
+				$image = count($solicitud->solicitudable->imagenes) > 0 ? $solicitud->solicitudable->imagenes[0] : "";
+				$pathImage = !empty($image) ? "{$path}/{$image->image}" : "";
 
 				return [
 					'id' => $solicitud->id,
@@ -56,7 +56,7 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 						'edificio' => $solicitud->solicitudable->edificio,
 						'tipoOficina' => $solicitud->solicitudable->tipoOficina,
 						'precio' => $solicitud->solicitudable->precio,
-						'image' => asset(Storage::url($pathImage)),
+						'image' => !empty($pathImage) ? asset(Storage::url($pathImage)) : "",
 					],
 				];
 			});

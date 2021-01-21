@@ -30,7 +30,8 @@ class EdificioUpdateRequest extends FormRequest
 			'telefono' => 'required|numeric',
 			'telefono_recepcion' => 'required|numeric',
 			'hora_apertura' => 'required',
-			'hora_cierre' => 'required'
+			'hora_cierre' => 'required',
+			'idiomas_atencion' => 'required|array',
         ];
     }
 }

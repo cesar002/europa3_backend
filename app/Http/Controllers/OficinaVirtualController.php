@@ -5,25 +5,31 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OficinaVirtualRequest;
 use App\OficinaServicio;
 use App\OficinaVirtual;
+use App\Repositories\OficinaVirtualRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class OficinaVirtualController extends Controller
 {
-    public function index(){
-		try {
-			$oficinas = OficinaVirtual::with('')->all();
 
-			return response($oficinas);
-		} catch (\Throwable $th) {
-			return response([]);
-		}
+	private $oficinaVirtualRepository;
+
+	public function __construct(OficinaVirtualRepository $oficinaVirtualRepository){
+		$this->oficinaVirtualRepository = $oficinaVirtualRepository;
+	}
+
+    public function index(){
+		$oficinas = $this->oficinaVirtualRepository->getAll();
+
+		return response($oficinas);
 	}
 
 	public function show($id){
 		try {
-			$oficina = OficinaVirtual::with('')->findOrFail($id);
+			$oficina = OficinaVirtual::with(
+						'servicios', 'edificio', 'edificio.municipio' ,'tipoOficina'
+						)->findOrFail($id);
 
 			return response($oficina);
 		} catch (\Throwable $th) {
@@ -84,7 +90,6 @@ class OficinaVirtualController extends Controller
 			$oficina->nombre = $request->nombre;
 			$oficina->descripcion = $request->descripcion;
 			$oficina->precio = $request->precio;
-			$oficina->en_uso = $request->en_uso;
 
 			if($request->servicios){
 				DB::delete('DELETE * FROM oficina_virtual_servicios WHERE oficina_virtual_id = ?', [ $oficina->id ]);
@@ -98,6 +103,8 @@ class OficinaVirtualController extends Controller
 					$servicio->save();
 				}
 			}
+
+			$oficina->save();
 
 			DB::commit();
 

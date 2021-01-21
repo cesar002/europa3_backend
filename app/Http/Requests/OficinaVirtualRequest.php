@@ -28,7 +28,7 @@ class OficinaVirtualRequest extends FormRequest
 			'nombre' => 'required',
 			'descripcion' => 'present',
 			'servicios' => 'present',
-			'precios' => 'required|numeric|min:1',
+			'precio' => 'required|numeric|min:1',
         ];
     }
 }
