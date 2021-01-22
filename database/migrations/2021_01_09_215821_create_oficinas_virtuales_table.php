@@ -18,6 +18,8 @@ class CreateOficinasVirtualesTable extends Migration
 			$table->foreignId('edificio_id')->references('id')->on('edificios')->onDelete('cascade');
 			$table->foreignId('tipo_oficina_id')->references('id')->on('cat_tipos_oficina');
 			$table->foreignId('tipo_tiempo_id')->references('id')->on('cat_tiempo_renta');
+			$table->tinyInteger('size_id')->default(0);
+			$table->tinyInteger('path_image_id')->default(0);
 			$table->string('nombre');
 			$table->longText('descripcion')->nullable();
 			$table->double('precio', 10, 4);

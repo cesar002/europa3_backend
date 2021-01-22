@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\ISolicitudOficinaDao;
 use App\Oficina;
+use App\OficinaVirtual;
 use App\SalaJuntas;
 use App\SolicitudReservacion;
 use Illuminate\Support\Facades\Log;
@@ -91,7 +92,7 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 			$data = SolicitudReservacion::with(
 				'tipoOficina','estado', 'solicitudable',
 				'user', 'user.infoPersonal'
-			)->whereHasMorph('solicitudable', [Oficina::class, SalaJuntas::class], function($query) use($edificioId){
+			)->whereHasMorph('solicitudable', [Oficina::class, SalaJuntas::class, OficinaVirtual::class], function($query) use($edificioId){
 				$query->where('edificio_id', $edificioId);
 			})
 			->get();
@@ -163,14 +164,6 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 	public function getById($id){
 		try {
 
-			// $solicitud = SolicitudReservacion::with(
-			// 	'estado', 'solicitudable', 'solicitudable.edificio',
-			// 	'metodoPago', 'documentos', 'documentos.estado', 'documentos.tipoDocumento', 'fechasPago', 'fechasPago.pago',
-			// 	'user', 'user.infoPersonal','user.infoPersonal.tipoIdentificacion' ,'user.infoPersonal.nacionalidad',
-			// 	'user.datosMorales', 'user.datosFiscales', 'user.datosFiscales.estado', 'user.datosFiscales.municipio')
-			// ->findOrFail($id);
-
-			// return $solicitud;
 			$solicitud = SolicitudReservacion::with(
 				'documentos', 'documentos.estado','documentos.tipoDocumento', 'estado', 'solicitudable',
 				'metodoPago', 'tipoOficina', 'solicitudable.edificio' ,'solicitudable.imagenes', 'solicitudable.pathImages',
