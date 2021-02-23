@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Adicional;
 use App\AdicionalComprado;
 use App\AdicionalCompraSolicitud;
 use App\Http\Requests\AdicionalCompraRequest;
@@ -45,10 +46,13 @@ class AdicionalesCompraController extends Controller
 			$compraAdicionales->save();
 
 			foreach($request->adicionales as $adicional){
+
+				$adicionalM = Adicional::findOrFail($adicional->adicional_id);
+
 				AdicionalComprado::create([
 					'compra_id' => $compraAdicionales->id,
 					'adicional_id' => $adicional->adicional_id,
-					'cantidad' => $adicional->cantidad
+					'cantidad' => ($adicional->cantidad * $adicionalM->unidad_base),
 				]);
 			}
 

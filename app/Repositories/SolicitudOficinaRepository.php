@@ -25,7 +25,8 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 			$solicitudes = SolicitudReservacion::with(
 				'documentos', 'documentos.estado','documentos.tipoDocumento', 'estado', 'solicitudable',
 				'metodoPago', 'tipoOficina', 'solicitudable.edificio' ,'solicitudable.imagenes', 'solicitudable.pathImages',
-				'solicitudable.pathImages.pathMaster', 'fechasPago', 'fechasPago.pago',
+				'solicitudable.pathImages.pathMaster', 'fechasPago', 'fechasPago.pago', 'adicionalesComprados', 'adicionalesComprados.adicionalesComprados',
+				'adicionalesComprados.adicionalesComprados.adicionales'
 				)->where('user_id', $userId)->get();
 
 			$solicitudesJson = $solicitudes->map(function($solicitud){
@@ -48,6 +49,7 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 					'numero_integrantes' => $solicitud->numero_integrantes,
 					'hora_inicio' => $solicitud->hora_inicio,
 					'hora_fin' => $solicitud->hora_fin,
+					'adicionales_comprados' => $solicitud->adicionalesComprados,
 					'body' => [
 						'id' => $solicitud->solicitudable->id,
 						'nombre' => $solicitud->solicitudable->nombre,

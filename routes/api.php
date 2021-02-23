@@ -244,4 +244,13 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::get('/nacionalidades', 'NacionalidadesController@index');
 	});
 
+
+	//** AGENDA USUARIO */
+	Route::group(['prefix' => 'agenda', ['middleware' => 'auth:api']], function(){
+		Route::get('/', 'AgendaController@index');
+		Route::get('/{id}', 'AgendaController@show');
+		Route::post('/', 'AgendaController@store');
+		Route::put('/{id}', 'AgendaController@update');
+		Route::delete('/{id}', 'AgendaController@destroy');
+	});
 });

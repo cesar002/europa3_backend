@@ -69,4 +69,9 @@ class User extends Authenticatable
 		return $this->hasMany(\App\NotificacionSolicitudEdificio::class, 'user_id');
 	}
 
+	public function agendas()
+	{
+		return $this->hasMany(\App\AgendaUser::class);
+	}
+
 }
