@@ -2,13 +2,14 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'email', 'password',
     ];
 
     /**
@@ -25,15 +26,52 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'created_at', 'updated_at', 'email_verified', 'push_notification_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+		'email_verified' => 'boolean'
+	];
+
+	public function getNotificationToken(){
+		return is_null($this->push_notification_token) ? '' : $this->push_notification_token;
+	}
+
+    public function infoPersonal(){
+        return $this->hasOne(\App\UserDatoPersonal::class);
+    }
+
+    public function datosMorales(){
+        return $this->hasOne(\App\UserDatosMorales::class);
+    }
+
+    public function datosFiscales(){
+        return $this->hasOne(\App\UserDatosFiscales::class);
+    }
+
+    public function solicitudesReservacion(){
+        return $this->hasMany(\App\SolicitudReservacion::class);
+    }
+
+    public function pagos(){
+        return $this->hasMany(\App\RegistroPago::class);
+    }
+
+    public function insumosComprados(){
+        return $this->hasMany(\App\InsumoComprado::class);
+	}
+
+	public function chatRecepcion(){
+		return $this->morphMany(\App\ChatRecepcion::class, 'chatable');
+	}
+
+	public function notificacionesSolicitud(){
+		return $this->hasMany(\App\NotificacionSolicitudEdificio::class, 'user_id');
+	}
+
+	public function agendas()
+	{
+		return $this->hasMany(\App\AgendaUser::class);
+	}
+
 }
