@@ -74,24 +74,32 @@ class AuthUserAdminController extends Controller
 			if(!Auth::guard('admin')->attempt(['username' => $request->username, 'password' => $request->password]))
 				return response(['error' => 'Datos de sesión incorrectos'], 401);
 
-			$SECRET_KEY = DB::select('SELECT id, secret FROM oauth_clients WHERE id = 3 LIMIT 1');
+			// $SECRET_KEY = DB::select('SELECT id, secret FROM oauth_clients WHERE id = 3 LIMIT 1');
 
-		$url = env('APP_URL'/*, 'http://europa3.test'*/);
-			$http = new \GuzzleHttp\Client();
-			$response = $http->post("$url/oauth/token", [
-				'form_params' => [
-					'grant_type' => 'password',
-					'client_id' => $SECRET_KEY[0]->id,
-					'client_secret' => $SECRET_KEY[0]->secret,
-					'username' => $request->username,
-					'password' => $request->password,
-					'scopre' => '',
-				],
-				'verify' => false,
-			]);
+			// $url = env('APP_URL', 'http://europa3.test');
+			// $http = new \GuzzleHttp\Client();
+			// $response = $http->post("$url/oauth/token", [
+			// 	'form_params' => [
+			// 		'grant_type' => 'password',
+			// 		'client_id' => $SECRET_KEY[0]->id,
+			// 		'client_secret' => $SECRET_KEY[0]->secret,
+			// 		'username' => $request->username,
+			// 		'password' => $request->password,
+			// 		'scopre' => '',
+			// 	],
+			// ]);
+
+			$user = Auth::guard('admin')->user();
+
+			$token = $user->createToken('Europa3 Password Grant Client');
 
 			return response([
-				'access_token' => json_decode((string) $response->getBody(), true)
+				'access_token' => [
+					'access_token' => $token->accessToken,
+					'token_type' => 'Bearer',
+					'expires_in' => $token->token->expires_at
+				]
+				// 'access_token' => json_decode((string) $response->getBody(), true)
 			]);
 		} catch (\Throwable $th) {
 			Log::error($th->getMessage());
