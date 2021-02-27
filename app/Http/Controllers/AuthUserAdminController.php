@@ -86,7 +86,8 @@ class AuthUserAdminController extends Controller
 					'username' => $request->username,
 					'password' => $request->password,
 					'scopre' => '',
-				]
+				],
+				'verify' => false,
 			]);
 
 			return response([
