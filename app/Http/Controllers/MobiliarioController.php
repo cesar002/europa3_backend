@@ -33,7 +33,7 @@ class MobiliarioController extends Controller
 
 			$pathMobiliario = PathImage::with('pathMaster')->findOrFail(2);
 
-			$image_inserted = Storage::disk('public')->put("{$pathMobiliario->pathMaster->path}/{$pathMobiliario->path}", $request->image);
+			$image_inserted = Storage::put("{$pathMobiliario->pathMaster->path}/{$pathMobiliario->path}", $request->image);
 
 			$mobiliario = new Mobiliario([
 				'tipo_id' => $request->tipo_id,
@@ -71,7 +71,7 @@ class MobiliarioController extends Controller
 
 	public function update(\App\Http\Requests\MobiliarioUpdateRequest $request, $id){
 		try {
-			$mobiliario = Mobiliario::findOrFail($id);
+			$mobiliario = Mobiliario::with('pathImages', 'pathImages.pathMaster')->findOrFail($id);
 
 			$mobiliario->tipo_id = $request->tipo_id;
 			$mobiliario->edificio_id = $request->edificio_id;
@@ -82,6 +82,19 @@ class MobiliarioController extends Controller
 			$mobiliario->descripcion_bien = $request->descripcion_bien;
 			$mobiliario->observaciones = $request->observaciones;
 			$mobiliario->cantidad = $request->cantidad;
+			$mobiliario->activo = $request->activo;
+
+			if(!empty($request->image)){
+				$path = "{$mobiliario->pathImages->pathMaster->path}/{$mobiliario->pathImages->path}";
+				$oldImage = $mobiliario->image;
+
+				$newImage = Storage::put($path, $request->image);
+
+				$mobiliario->image = basename($newImage);
+
+				Storage::delete("{$path}/{$oldImage}");
+			}
+
 
 			$mobiliario->save();
 
@@ -92,7 +105,7 @@ class MobiliarioController extends Controller
 			Log::error($th->getMessage());
 
 			return response([
-
+				'error' => 'Ocurrió un error al actualizar la información'
 			], 500);
 		}
 	}

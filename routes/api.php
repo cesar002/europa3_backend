@@ -158,7 +158,7 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/mobiliario/{id}', 'MobiliarioController@show');
 
 	Route::post('/mobiliario', 'MobiliarioController@store');
-	Route::put('/mobiliario/{id}', 'MobiliarioController@update');
+	Route::post('/mobiliario/{id}', 'MobiliarioController@update');
 	Route::delete('/mobiliario/{id}', 'MobiliarioController@destroy');
 
 	//*****************/

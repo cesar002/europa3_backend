@@ -27,9 +27,9 @@ class MobiliarioUpdateRequest extends FormRequest
 			'tipo_id' => 'required|exists:tipos_mobiliario,id',
 			'edificio_id' => 'required|exists:edificios,id',
 			'nombre' => 'required',
-			'marca' => 'required',
-			'color' => 'required',
-			'cantidad' => 'required|integer|min:1'
+			'cantidad' => 'required|integer|min:1',
+			'activo' => 'required',
+			'image' => 'nullable|image|max:10300'
         ];
     }
 }

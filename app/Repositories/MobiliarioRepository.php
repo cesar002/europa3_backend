@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\IMobiliarioDao;
 use App\Mobiliario;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -111,41 +112,42 @@ class MobiliarioRepository implements IMobiliarioDao{
 
 	public function getById($id){
 		try {
-			$mobiliarioM = Mobiliario::with('tipo', 'edificio', 'edificio.municipio', 'edificio.municipio.estado')->findOrFail($id);
+			$mobiliarioM = Mobiliario::with('tipo', 'pathImages', 'pathImages.pathMaster', 'edificio', 'edificio.municipio', 'edificio.municipio.estado')->findOrFail($id);
 
-			$mobiliario = $mobiliarioM->map(function($mobiliario){
-				return [
-					'id' => $mobiliario->id,
-					'marca' => $mobiliario->marca,
-					'modelo' => $mobiliario->modelo,
-					'color' => $mobiliario->color,
+			$mobiliario = [
+					'id' => $mobiliarioM->id,
+					'nombre' => $mobiliarioM->nombre,
+					'marca' => $mobiliarioM->marca,
+					'modelo' => $mobiliarioM->modelo,
+					'color' => $mobiliarioM->color,
 					'tipo' => [
-						'id' => $mobiliario->tipo->id,
-						'nombre' => $mobiliario->tipo->tipo,
+						'id' => $mobiliarioM->tipo->id,
+						'nombre' => $mobiliarioM->tipo->tipo,
 					],
-					'descripcion' => $mobiliario->descripcion_bien,
-					'observaciones'  => $mobiliario->observaciones,
-					'activo' => $mobiliario->activo,
-					'images' => [],
+					'descripcion' => $mobiliarioM->descripcion_bien,
+					'observaciones'  => $mobiliarioM->observaciones,
+					'activo' => $mobiliarioM->activo,
+					'image' => Storage::url("{$mobiliarioM->pathImages->pathMaster->path}/{$mobiliarioM->pathImages->path}/{$mobiliarioM->image}"),
+					'cantidad' => $mobiliarioM->cantidad,
 					'edificio' => [
-						'id' => $mobiliario->edificio->id,
-						'nombre' => $mobiliario->edificio->nombre,
+						'id' => $mobiliarioM->edificio->id,
+						'nombre' => $mobiliarioM->edificio->nombre,
 						'ubicacion' => [
 							'estado' => [
-								'id' => $mobiliario->edificio->municipio->estado->id,
-								'nombre' => $mobiliario->edificio->municipio->estado->nombre,
+								'id' => $mobiliarioM->edificio->municipio->estado->id,
+								'nombre' => $mobiliarioM->edificio->municipio->estado->nombre,
 							],
 							'municipio' => [
-								'id' => $mobiliario->edificio->municipio->id,
-								'nombre' => $mobiliario->edificio->municipio->nombre,
+								'id' => $mobiliarioM->edificio->municipio->id,
+								'nombre' => $mobiliarioM->edificio->municipio->nombre,
 							],
 						],
 					],
 				];
-			});
 
 			return $mobiliario;
 		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
 			return [];
 		}
 	}

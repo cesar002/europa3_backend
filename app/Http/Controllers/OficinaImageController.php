@@ -49,7 +49,7 @@ class OficinaImageController extends Controller{
 
 			if(!is_null($newImages)){
 				foreach($newImages as $newImage){
-					$image = Storage::disk('public')->put("{$pathImg->pathMaster->path}/{$pathImg->path}", $newImage);
+					$image = Storage::put("{$pathImg->pathMaster->path}/{$pathImg->path}", $newImage);
 					$newImageM = new OficinaImage([
 						'oficina_id' => $id,
 						'image' => basename($image),
@@ -61,7 +61,7 @@ class OficinaImageController extends Controller{
 			DB::commit();
 
 			foreach($fileNames as $name){
-				Storage::disk('public')->delete("{$pathImg->pathMaster->path}/{$pathImg->path}/$name");
+				Storage::delete("{$pathImg->pathMaster->path}/{$pathImg->path}/$name");
 			}
 
 			return response([
