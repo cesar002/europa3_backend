@@ -205,73 +205,18 @@ class SolicitudController extends Controller{
 
 			$this->foliosRepository->generateNextFolio($tipoFolio);
 
+			$message = NotificationSolicitudMessage::create([
+				'user_id' => $request->user()->id,
+				'edificio_id' => $oficina->edificio_id,
+				'solicitud_id' => $solicitud->id,
+				'type' => 1,
+				'status_solicitud' => 1,
+				'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
+			]);
 
-			// $oficina = $tipoOficina == 1 ? Oficina::findOrFail($request->id) : $tipoOficina == 2 ? SalaJuntas::findOrFail($request->id) : OficinaVirtual::findOrFail($request->id);
+			$edificio = Edificio::findOrFail(1);
 
-			// if($tipoOficina == 1){
-			// 	$folio = $this->foliosRepository->getCurrentFolio('EUOP');
-
-			// 	$oficina = Oficina::findOrFail($request->id);
-			// 	$solicitud = $oficina->solicitud()->create([
-			// 		'user_id' => $request->user()->id,
-			// 		'estado_id' => 1,
-			// 		'folio' => $folio,
-			// 		'tipo_oficina' => $tipoOficina,
-			// 		'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
-			// 		'meses_renta' => $request->meses_renta,
-			// 		'numero_integrantes' => 5, //$request->numero_integrantes,
-			// 		'metodo_pago_id' => null,
-			// 	]);
-
-			// 	$this->foliosRepository->generateNextFolio('EUOP');
-			// }else if($tipoOficina == 2){
-			// 	$folio = $this->foliosRepository->getCurrentFolio('EUSJ');
-
-			// 	$sala = SalaJuntas::findOrFail($request->id);
-			// 	$solicitud = $sala->solicitud()->create([
-			// 		'user_id' => $request->user()->id,
-			// 		'estado_id' => 1,
-			// 		'folio' => $folio,
-			// 		'tipo_oficina' => $tipoOficina,
-			// 		'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
-			// 		'meses_renta' => 1,
-			// 		'hora_inicio' => Carbon::parse($request->hora_inicio), //$request->hora_inicio,
-			// 		'hora_fin' => Carbon::parse($request->hora_fin),
-			// 		'numero_integrantes' => 5, //$request->numero_integrantes,
-			// 		'metodo_pago_id' => null,
-			// 	]);
-
-			// 	$this->foliosRepository->generateNextFolio('EUSJ');
-			// }else{
-			// 	$folio = $this->foliosRepository->getCurrentFolio('EUOV');
-			// 	$oficinaVirtual = OficinaVirtual::findOrFail($request->id);
-
-			// 	$solicitud = $oficinaVirtual->solicitud()->create([
-			// 		'user_id' => $request->user()->id,
-			// 		'estado_id' => 1,
-			// 		'folio' => $folio,
-			// 		'tipo_oficina' => $tipoOficina,
-			// 		'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
-			// 		'meses_renta' => $request->meses_renta,
-			// 		'numero_integrantes' => 1,
-			// 		'metodo_pago_id' => null,
-			// 	]);
-
-			// 	$this->foliosRepository->generateNextFolio('EUOV');
-			// }
-
-			// $message = NotificationSolicitudMessage::create([
-			// 	'user_id' => $request->user()->id,
-			// 	'edificio_id' => $oficina->edificio_id,
-			// 	'solicitud_id' => $solicitud->id,
-			// 	'type' => 1,
-			// 	'status_solicitud' => 1,
-			// 	'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
-			// ]);
-
-			// $edificio = Edificio::findOrFail($oficina->edificio_id);
-
-			// $edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
+			$edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
 
 			DB::commit();
 

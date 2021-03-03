@@ -42,11 +42,12 @@ class ChatRecepcionController extends Controller
 
 	public function receiveUserMessageChat(Request $request){
 		try {
+
 			$user = $request->user();
 
 			$mensajeChat = $user->chatRecepcion()->create([
 				'sender_by' => 2,
-				'mensaje' => $request->mensaje,
+				'mensaje' => $request->mensaje['text'],
 				'edificio_id' => $request->edificio_id,
 				'solicitud_id' => $request->solicitud_id,
 			]);

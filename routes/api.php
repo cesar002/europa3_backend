@@ -22,7 +22,11 @@ Route::group(['prefix' => 'v1'], function () {
 
 	Route::group(['prefix' => 'register'], function () {
 		Route::post('user', 'AuthUserController@register');
-		Route::post('admin', 'AuthUserAdminController@register');
+		Route::post('admin', 'AuthUserAdminController@register')->middleware('auth:api-admin');
+	});
+
+	Route::group(['prefix' => 'gestion-usuarios', 'middleware' => 'auth:api-admin'], function(){
+		Route::get('/', 'GestionUsuariosSystemController@index');
 	});
 
 	//** USUARIO AUTENTICADO */
@@ -157,9 +161,9 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/mobiliario/edificio/{id}', 'MobiliarioController@getByEdificio');
 	Route::get('/mobiliario/{id}', 'MobiliarioController@show');
 
-	Route::post('/mobiliario', 'MobiliarioController@store');
-	Route::post('/mobiliario/{id}', 'MobiliarioController@update');
-	Route::delete('/mobiliario/{id}', 'MobiliarioController@destroy');
+	Route::post('/mobiliario', 'MobiliarioController@store')->middleware('auth:api-admin');
+	Route::post('/mobiliario/{id}', 'MobiliarioController@update')->middleware('auth:api-admin');
+	Route::delete('/mobiliario/{id}', 'MobiliarioController@destroy')->middleware('auth:api-admin');
 
 	//*****************/
 

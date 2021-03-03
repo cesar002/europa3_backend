@@ -45,12 +45,12 @@ class AuthUserAdminController extends Controller
 				$userData->save();
 			}
 
-			foreach($permisos as $permiso){
-				$userPermiso = new UserAdminPermiso();
-				$userPermiso->user_admin_id = $user->id;
-				$userPermiso->permiso_id = $permiso;
-				$userPermiso->save();
-			}
+			// foreach($permisos as $permiso){
+			// 	$userPermiso = new UserAdminPermiso();
+			// 	$userPermiso->user_admin_id = $user->id;
+			// 	$userPermiso->permiso_id = $permiso;
+			// 	$userPermiso->save();
+			// }
 
 			DB::commit();
 

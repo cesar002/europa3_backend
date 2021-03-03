@@ -113,7 +113,7 @@ class ChatRecepcionRepository implements IChatRecepcionDao{
 
 	public function getMessagesBySolicitudId($id){
 		try {
-			$messages = ChatRecepcion::with('chatable')->where('solicitud_id', $id)->get();
+			$messages = ChatRecepcion::with('chatable')->where('solicitud_id', $id)->orderBy('created_at', 'desc')->get();
 
 			return $messages->map(function($message){
 				return [
