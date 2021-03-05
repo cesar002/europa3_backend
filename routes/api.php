@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::get('/test', 'TestController@index');
 
 Route::group(['prefix' => 'v1'], function () {
 
@@ -49,6 +50,8 @@ Route::group(['prefix' => 'v1'], function () {
 
 		Route::group(['prefix' => 'me', 'middleware' => 'auth:api'], function () {
 			Route::get('/', 'UserController@getCurrentAuthUser');
+
+			Route::post('/push-token', 'PushTokensController@register');
 
 			Route::group(['prefix' => 'datos-personales'], function () {
 				Route::post('/', 'DatosPersonalesController@store');

@@ -14,6 +14,7 @@ use App\NotificationSolicitudMessage;
 use App\Oficina;
 use App\OficinaVirtual;
 use App\SalaJuntas;
+use App\PushNotificationSentToUser;
 use Carbon\Carbon;
 
 class SolicitudController extends Controller{
@@ -93,9 +94,27 @@ class SolicitudController extends Controller{
 	public function autorizar($id){
 		try {
 
-			$solicitud = SolicitudReservacion::findOrFail($id);
+			$solicitud = SolicitudReservacion::with('user')->findOrFail($id);
 			$solicitud->estado_id = 2;
 			$solicitud->save();
+
+			$notification = PushNotificationSentToUser::create([
+				'user_id' => $solicitud->user->id,
+				'title' => "Solicitud {$solicitud->folio} aprobada",
+				'body' => "la renta de su oficina fue aprobada 😄",
+				'data' => json_encode([
+					'solicitud_id' => $solicitud->id,
+					'type' => 'SOLICITUD_APROBADA'
+				]),
+			]);
+
+			$expo = \ExponentPhpSDK\Expo::normalSetup();
+			$expo->notify('', [
+				'to' => $solicitud->user->push_notification_token,
+				'title' => $notification->title,
+				'body' => $notification->body,
+				'data' => $notification->data ,
+			]);
 
 			return response([
 				'message' => 'Solicitud autorizada con éxito'

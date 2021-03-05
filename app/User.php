@@ -34,7 +34,7 @@ class User extends Authenticatable
 	];
 
 	public function getNotificationToken(){
-		return is_null($this->push_notification_token) ? '' : $this->push_notification_token;
+		return $this->push_notification_token ?? '';
 	}
 
     public function infoPersonal(){
@@ -72,6 +72,11 @@ class User extends Authenticatable
 	public function agendas()
 	{
 		return $this->hasMany(\App\AgendaUser::class);
+	}
+
+	public function pushNotificationSender()
+	{
+		return $this->hasMany(\App\PushNotificationSentToUser::class);
 	}
 
 }
