@@ -54,11 +54,18 @@ class SolicitudController extends Controller{
 		}
 	}
 
+	public function getUserHistory(Request $request)
+	{
+		$data = $this->solicitudRepository->getUserHistory($request->user()->id);
+
+		return response($data);
+	}
+
 	public function index(Request $request){
 		try {
-			$edificioId = 1;
+			// $edificioId = 1;
 
-			$data = $this->solicitudRepository->getAllByEdificioId($edificioId);
+			$data = $this->solicitudRepository->getAll(); //$this->solicitudRepository->getAllByEdificioId($edificioId);
 
 			return response($data);
 		} catch (\Throwable $th) {
@@ -91,17 +98,68 @@ class SolicitudController extends Controller{
 		}
 	}
 
+	public function finalizar($id)
+	{
+		try{
+
+			DB::beginTransaction();
+
+			$solicitud = SolicitudReservacion::with('user', 'solicitudable')->findOrFail($id);
+			$solicitud->estado_id = 5;
+			$solicitud->save();
+
+			$solicitud->solicitudable->en_uso = false;
+			$solicitud->solicitudable->save();
+
+			$notification = PushNotificationSentToUser::create([
+				'user_id' => $solicitud->user->id,
+				'title' => "Solicitud {$solicitud->folio} finalizada",
+				'body' => 'La renta de su oficina ha finalizado',
+				'data'=> json_encode([
+					'solicitud_id' => $solicitud->id,
+					'type' => 'SOLICITUD_FINALIZADA',
+				]),
+			]);
+
+			$expo = \ExponentPhpSDK\Expo::normalSetup();
+			$expo->notify('', [
+				'to' => $solicitud->user->push_notification_token,
+				'title' => $notification->title,
+				'body' => $notification->body,
+				'data' => $notification->data ,
+			]);
+
+			DB::commit();
+
+			return response([
+				'message' => 'Solicitud actualizada con éxito'
+			]);
+		}catch(\Throwable $th){
+			DB::rollBack();
+
+			Log::error($th->getMessage());
+
+			return response([
+				'error' => 'Ocurrió un error al finalizar la solicitud'
+			], 500);
+		}
+	}
+
 	public function autorizar($id){
 		try {
+			DB::beginTransaction();
 
-			$solicitud = SolicitudReservacion::with('user')->findOrFail($id);
+			$solicitud = SolicitudReservacion::with('user', 'solicitudable')->findOrFail($id);
 			$solicitud->estado_id = 2;
 			$solicitud->save();
+
+			$solicitud->solicitudable->en_uso = true;
+			$solicitud->solicitudable->save();
 
 			$notification = PushNotificationSentToUser::create([
 				'user_id' => $solicitud->user->id,
 				'title' => "Solicitud {$solicitud->folio} aprobada",
-				'body' => "la renta de su oficina fue aprobada 😄",
+				'body' => "La renta de su oficina fue aprobada 😄",
 				'data' => json_encode([
 					'solicitud_id' => $solicitud->id,
 					'type' => 'SOLICITUD_APROBADA'
@@ -116,10 +174,14 @@ class SolicitudController extends Controller{
 				'data' => $notification->data ,
 			]);
 
+			DB::commit();
+
 			return response([
 				'message' => 'Solicitud autorizada con éxito'
 			]);
 		} catch (\Throwable $th) {
+			DB::rollBack();
+
 			Log::error($th->getMessage());
 
 			return response([

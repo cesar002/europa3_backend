@@ -16,4 +16,6 @@ interface ISolicitudOficinaDao{
 
 	public function getSolicitudRawById($id);
 
+	public function getUserHistory($userId);
+
 }

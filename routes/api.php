@@ -84,10 +84,12 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::patch('solicitud/document/{id}/allow-update', 'DocumentosSolicitudController@allowUpdateDocument');
 		Route::post('solicitud/{id}/authorize', 'SolicitudController@autorizar');
 		Route::post('solicitud/{id}/no-authorize', 'SolicitudController@noAutorizar');
+		Route::put('solicitud/{id}/finalize', 'SolicitudController@finalizar');
 	});
 
 	Route::group(['middleware' => ['auth:api']], function () {
 		Route::get('solicitudes/me', 'SolicitudController@getToUser');
+		Route::get('solicitudes/historial', 'SolicitudController@getUserHistory');
 		Route::get('solicitud/{id}/documents', 'SolicitudController@getDocuments');
 		Route::post('solicitud/{id}/cancel', 'SolicitudController@cancelar');
 		Route::post('solicitud', 'SolicitudController@storeSolicitudOficina');
@@ -260,4 +262,10 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::put('/{id}', 'AgendaController@update');
 		Route::delete('/{id}', 'AgendaController@destroy');
 	});
+
+	Route::post('/solicitud-visita', 'SolicitudVisitaController@store');
+	Route::get('/solicitudes-visita', 'SolicitudVisitaController@index')->middleware('auth:api-admin');
+	Route::delete('/solicitud-visita/{id}', 'SolicitudVisitaController@destroy')->middleware('auth:api-admin');
+	Route::patch('/solicitud-visita/{id}', 'SolicitudVisitaController@update')->middleware('auth:api-admin');
+
 });

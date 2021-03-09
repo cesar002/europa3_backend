@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Openpay;
 use App\Adicional;
 use App\FechaPago;
 use Carbon\Carbon;
@@ -20,9 +21,27 @@ class PagosController extends Controller
 	public function payConfirmationSolicitud(SolicitudPayRequest $request, $id){
 		try {
 
-			$solicitud = SolicitudReservacion::with('solicitudable')->findOrFail($id);
+			$solicitud = SolicitudReservacion::with('solicitudable', 'user', 'user.infoPersonal')->findOrFail($id);
 
 			DB::beginTransaction();
+
+			$openpay = Openpay::getInstance(env('OPEN_PAY_ID', 'mkslfzl5ftk2wj0sgk2a'), env('OPEN_PAY_PRIVATE_KEY', 'sk_d41be02f33e14ee495d072efb1231ece'));
+			Openpay::setProductionMode(env('OPEN_PAY_PRODUCTION_MODE'));
+			$cargoRequest = [
+				'method' => 'card',
+				'source_id' => $request->token_data['id'],
+				'amount' => $request->montoTotal,
+				'currency' => 'MXN',
+				'description' => "Primer pago de la solicitud de oficina {$solicitud->folio}",
+				'device_session_id' => $request->deviceId,
+				'customer' => [
+					'name' => $solicitud->user->infoPersonal->nombre,
+					'last_name' => $solicitud->user->infoPersonal->ape_p,
+					'email' => $solicitud->user->email,
+				],
+			];
+
+			$cargo = $openpay->charges->create($cargoRequest);
 
 			$first = true;
 			$currentDay = Carbon::now();
@@ -41,7 +60,7 @@ class PagosController extends Controller
 			if(!empty($request->adicionales)){
 				$adicionalesComprados = AdicionalCompraSolicitud::create([
 					'solicitud_id' => $solicitud->id,
-					'folio_pago' => 'XXXXXXX',
+					'folio_pago' => $cargo->id,
 				]);
 
 
@@ -59,7 +78,7 @@ class PagosController extends Controller
 			RegistroPago::create([
 				'user_id' => $request->user()->id,
 				'fecha_id' => $fecha->id,
-				'referencia' => 'XXXXXXXX',
+				'referencia' =>  $cargo->id,
 				'fecha_pago' => Carbon::now(),
 				'verificado' => true,
 			]);
@@ -84,7 +103,26 @@ class PagosController extends Controller
 
 	public function payMesSolicitud(Request $request, $id, $idFecha){
 		try {
+			$solicitud = SolicitudReservacion::with('user', 'user.infoPersonal')->findOrFail($id);
+
 			$fecha = FechaPago::where('id', $idFecha)->where('solicitud_id', $id)->firstOrFail();
+
+			$openpay = Openpay::getInstance(env('OPEN_PAY_ID', 'mkslfzl5ftk2wj0sgk2a'), env('OPEN_PAY_PRIVATE_KEY', 'sk_d41be02f33e14ee495d072efb1231ece'));
+			Openpay::setProductionMode(env('OPEN_PAY_PRODUCTION_MODE'));
+			$cargoRequest = [
+				'method' => 'card',
+				'source_id' => $request->token_data['id'],
+				'amount' => $request->montoTotal,
+				'currency' => 'MXN',
+				'description' => "Oficina {$solicitud->folio}, pago del mes {$fecha->fecha_pago}",
+				'device_session_id' => $request->deviceId,
+				'customer' => [
+					'name' => $solicitud->user->infoPersonal->nombre,
+					'last_name' => $solicitud->user->infoPersonal->ape_p,
+					'email' => $solicitud->user->email,
+				],
+			];
+
 
 			RegistroPago::create([
 				'user_id' => $request->user()->id,

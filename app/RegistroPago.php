@@ -9,7 +9,7 @@ class RegistroPago extends Model
 	protected $table = 'registro_pagos';
 
 	protected $fillable = [
-		'user_id', 'fecha_id', 'referencia', 'fecha_pago', 'verificado'
+		'user_id', 'fecha_id', 'metodo_pago_id', 'referencia', 'fecha_pago', 'verificado'
 	];
 
 	protected $hidden = [
@@ -27,4 +27,9 @@ class RegistroPago extends Model
     public function user(){
         return $this->belongsTo(\App\User::class);
     }
+
+	public function metodoPago()
+	{
+		return $this->belongsTo(\App\MetodoPago::class, 'metodo_pago_id');
+	}
 }

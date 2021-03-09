@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SolicitudPayRequest extends FormRequest
+class SolicitudVisitaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,10 @@ class SolicitudPayRequest extends FormRequest
     public function rules()
     {
         return [
-			'montoTotal' => 'required|numeric',
-			'adicionales' => 'present|array',
-			'adicionales.*.adicional_id' => 'required|exists:adicionales,id',
-			'adicionales.*.cantidad' => 'required|numeric|min:1',
-			'deviceId' => 'required',
-			'token_data' => 'required',
+            'nombre' => 'required',
+			'email' => 'required|email',
+			'telefono' => 'required',
+			'comentario' => 'nullable',
         ];
     }
 }
