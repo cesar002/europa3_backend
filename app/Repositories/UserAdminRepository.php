@@ -40,8 +40,8 @@ class UserAdminRepository implements IUserAdminDao{
 					'infoPersonal' => [
 						'id' => !is_null($user->infoPersonal) ? $user->infoPersonal->id : '',
 						'nombre' => !is_null($user->infoPersonal) ? $user->infoPersonal->nombre : '',
-						'ape_pat' => !!is_null($user->infoPersonal) ? $user->infoPersonal->ap_p : '',
-						'ape_mat' => is_null($user->infoPersonal) ? $user->infoPersonal->ap_m : '',
+						'ape_pat' => !is_null($user->infoPersonal) ? $user->infoPersonal->ap_p : '',
+						'ape_mat' => !is_null($user->infoPersonal) ? $user->infoPersonal->ap_m : '',
 						'avatar' => !is_null($user->infoPersonal) ? ($user->infoPersonal->avatar_image ? Storage::url("{$user->infoPersonal->pathImage->pathMaster->path}/{$user->infoPersonal->pathImage->path}/{$user->infoPersonal->avatar_image}") : null) : '',
 					],
 				];
