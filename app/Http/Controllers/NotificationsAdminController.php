@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\NotificationAdmin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class NotificationsAdminController extends Controller
 {
 
-	public function destroyAll(Request $request){
+	public function destroyAll(){
 		try {
-			$edificioModel = \App\Edificio::findOrFail(1);
 
-			$edificioModel->unreadNotifications->markAsRead();
+			DB::table('notifications_admin')->delete();
 
 			return response([
 				'status' => 'Notificaciones marcadas como leídas'
@@ -25,11 +26,10 @@ class NotificationsAdminController extends Controller
 		}
 	}
 
-	public function destroy(Request $request, $id){
+	public function destroy($id){
 		try {
-			$edificioModel = \App\Edificio::findOrFail(1);
 
-			$edificioModel->unreadNotifications->where('id', $id)->markAsRead();
+			NotificationAdmin::findOrFail($id)->delete();
 
 			return response([
 				'status' => 'Notificacion eliminada con éxito'
@@ -44,20 +44,8 @@ class NotificationsAdminController extends Controller
 
 	public function getNotifications(Request $request){
 		try {
-			$edificioModel = \App\Edificio::findOrFail(1);
 
-			$notificationsRaw = $edificioModel->notifications->all();
-
-			$notifications = collect($notificationsRaw)->map(function($not){
-				return[
-					'id' => $not->id,
-					'type' => $not->type,
-					'created_at' => $not->created_at,
-					'updated_at' => $not->updated_at,
-					'read_at' => $not->read_at,
-					'data' => $not->data
-				];
-			});
+			$notifications = NotificationAdmin::orderBy('created_at', 'desc')->get();
 
 			return response($notifications);
 		} catch (\Throwable $th) {

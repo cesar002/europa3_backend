@@ -28,6 +28,30 @@ class UserAdminRepository implements IUserAdminDao{
 		}
 	}
 
+	public function getAllUsers()
+	{
+		try {
+			$users = UserAdmin::with('infoPersonal', 'infoPersonal.pathImage', 'infoPersonal.pathImage.pathMaster')->get();
+
+			return $users->map(function($user){
+				return [
+					'id' => $user->id,
+					'username' => $user->username,
+					'infoPersonal' => [
+						'id' => $user->infoPersonal->id,
+						'nombre' => $user->infoPersonal->nombre,
+						'ape_pat' => $user->infoPersonal->ap_p,
+						'ape_mat' => $user->infoPersonal->ap_m,
+						'avatar' => $user->infoPersonal->avatar_image ? Storage::url("{$user->infoPersonal->pathImage->pathMaster->path}/{$user->infoPersonal->pathImage->path}/{$user->infoPersonal->avatar_image}") : null,
+					],
+				];
+			});
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+			return [];
+		}
+	}
+
 	public function getUserData(UserAdmin $user){
 		try {
 			$userData = $user->infoPersonal()->with('pathImage', 'pathImage.pathMaster')->first();

@@ -22,6 +22,11 @@ class UserDatoPersonal extends Model
 	// 	// 'fecha_nacimiento' => 'date:Y-m-d',
 	// ];
 
+	public function getFullName()
+	{
+		return "{$this->nombre} {$this->ape_p} {$this->ape_m}";
+	}
+
     public function user(){
         return $this->belongsTo(\App\User::class);
     }

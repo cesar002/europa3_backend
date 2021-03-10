@@ -28,7 +28,8 @@ class SolicitudPayRequest extends FormRequest
 			'adicionales' => 'present|array',
 			'adicionales.*.adicional_id' => 'required|exists:adicionales,id',
 			'adicionales.*.cantidad' => 'required|numeric|min:1',
-
+			'deviceId' => 'required',
+			'token_data' => 'required',
         ];
     }
 }

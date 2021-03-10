@@ -25,13 +25,13 @@ class RegisterUserAdminRequest extends FormRequest
     {
         return [
 			'username' => 'required|unique:users_admin,username',
-			'password' => 'required|confirmed|min:7',
+			'password' => 'required|confirmed|min:5',
 			'edificio_id' => 'required|numeric|min:1',
 			'nombre' => 'required',
 			'ape_pat' => 'required',
 			'ape_mat' => 'required',
-			'permisos' => 'required|array',
-			'permisos.*' => 'nullable|numeric|exists:cat_permisos_modulos,id',
+			// 'permisos' => 'required|array',
+			// 'permisos.*' => 'nullable|numeric|exists:cat_permisos_modulos,id',
 			'avatar_image' => 'nullable|image|dimensions:min_width=100,min_height=100|max:1100'
         ];
     }

@@ -14,6 +14,7 @@ use App\NotificationSolicitudMessage;
 use App\Oficina;
 use App\OficinaVirtual;
 use App\SalaJuntas;
+use App\PushNotificationSentToUser;
 use Carbon\Carbon;
 
 class SolicitudController extends Controller{
@@ -53,11 +54,18 @@ class SolicitudController extends Controller{
 		}
 	}
 
+	public function getUserHistory(Request $request)
+	{
+		$data = $this->solicitudRepository->getUserHistory($request->user()->id);
+
+		return response($data);
+	}
+
 	public function index(Request $request){
 		try {
-			$edificioId = 1;
+			// $edificioId = 1;
 
-			$data = $this->solicitudRepository->getAllByEdificioId($edificioId);
+			$data = $this->solicitudRepository->getAll(); //$this->solicitudRepository->getAllByEdificioId($edificioId);
 
 			return response($data);
 		} catch (\Throwable $th) {
@@ -90,17 +98,90 @@ class SolicitudController extends Controller{
 		}
 	}
 
+	public function finalizar($id)
+	{
+		try{
+
+			DB::beginTransaction();
+
+			$solicitud = SolicitudReservacion::with('user', 'solicitudable')->findOrFail($id);
+			$solicitud->estado_id = 5;
+			$solicitud->save();
+
+			$solicitud->solicitudable->en_uso = false;
+			$solicitud->solicitudable->save();
+
+			$notification = PushNotificationSentToUser::create([
+				'user_id' => $solicitud->user->id,
+				'title' => "Solicitud {$solicitud->folio} finalizada",
+				'body' => 'La renta de su oficina ha finalizado',
+				'data'=> json_encode([
+					'solicitud_id' => $solicitud->id,
+					'type' => 'SOLICITUD_FINALIZADA',
+				]),
+			]);
+
+			$expo = \ExponentPhpSDK\Expo::normalSetup();
+			$expo->notify('', [
+				'to' => $solicitud->user->push_notification_token,
+				'title' => $notification->title,
+				'body' => $notification->body,
+				'data' => $notification->data ,
+			]);
+
+			DB::commit();
+
+			return response([
+				'message' => 'Solicitud actualizada con éxito'
+			]);
+		}catch(\Throwable $th){
+			DB::rollBack();
+
+			Log::error($th->getMessage());
+
+			return response([
+				'error' => 'Ocurrió un error al finalizar la solicitud'
+			], 500);
+		}
+	}
+
 	public function autorizar($id){
 		try {
+			DB::beginTransaction();
 
-			$solicitud = SolicitudReservacion::findOrFail($id);
+			$solicitud = SolicitudReservacion::with('user', 'solicitudable')->findOrFail($id);
 			$solicitud->estado_id = 2;
 			$solicitud->save();
+
+			$solicitud->solicitudable->en_uso = true;
+			$solicitud->solicitudable->save();
+
+			$notification = PushNotificationSentToUser::create([
+				'user_id' => $solicitud->user->id,
+				'title' => "Solicitud {$solicitud->folio} aprobada",
+				'body' => "La renta de su oficina fue aprobada 😄",
+				'data' => json_encode([
+					'solicitud_id' => $solicitud->id,
+					'type' => 'SOLICITUD_APROBADA'
+				]),
+			]);
+
+			$expo = \ExponentPhpSDK\Expo::normalSetup();
+			$expo->notify('', [
+				'to' => $solicitud->user->push_notification_token,
+				'title' => $notification->title,
+				'body' => $notification->body,
+				'data' => $notification->data ,
+			]);
+
+			DB::commit();
 
 			return response([
 				'message' => 'Solicitud autorizada con éxito'
 			]);
 		} catch (\Throwable $th) {
+			DB::rollBack();
+
 			Log::error($th->getMessage());
 
 			return response([
@@ -176,6 +257,19 @@ class SolicitudController extends Controller{
 		}
 	}
 
+	public function getAdicionalesSolicitud($id)
+	{
+		try{
+			$adicionales = SolicitudReservacion::with('adicionalesComprados', 'adicionalesComprados.adicionalesComprados', 'adicionalesComprados.adicionalesComprados.adicionales')->findOrFail($id);
+
+			return response($adicionales->adicionalesComprados);
+		}catch(\Throwable $th){
+			Log::error($th->getMessage());
+
+			return response([]);
+		}
+	}
+
 	public function storeSolicitudOficina(\App\Http\Requests\SolicitudOficinaRequest $request){
 		try {
 			DB::beginTransaction();
@@ -205,73 +299,18 @@ class SolicitudController extends Controller{
 
 			$this->foliosRepository->generateNextFolio($tipoFolio);
 
+			$message = NotificationSolicitudMessage::create([
+				'user_id' => $request->user()->id,
+				'edificio_id' => $oficina->edificio_id,
+				'solicitud_id' => $solicitud->id,
+				'type' => 1,
+				'status_solicitud' => 1,
+				'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
+			]);
 
-			// $oficina = $tipoOficina == 1 ? Oficina::findOrFail($request->id) : $tipoOficina == 2 ? SalaJuntas::findOrFail($request->id) : OficinaVirtual::findOrFail($request->id);
+			$edificio = Edificio::findOrFail(1);
 
-			// if($tipoOficina == 1){
-			// 	$folio = $this->foliosRepository->getCurrentFolio('EUOP');
-
-			// 	$oficina = Oficina::findOrFail($request->id);
-			// 	$solicitud = $oficina->solicitud()->create([
-			// 		'user_id' => $request->user()->id,
-			// 		'estado_id' => 1,
-			// 		'folio' => $folio,
-			// 		'tipo_oficina' => $tipoOficina,
-			// 		'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
-			// 		'meses_renta' => $request->meses_renta,
-			// 		'numero_integrantes' => 5, //$request->numero_integrantes,
-			// 		'metodo_pago_id' => null,
-			// 	]);
-
-			// 	$this->foliosRepository->generateNextFolio('EUOP');
-			// }else if($tipoOficina == 2){
-			// 	$folio = $this->foliosRepository->getCurrentFolio('EUSJ');
-
-			// 	$sala = SalaJuntas::findOrFail($request->id);
-			// 	$solicitud = $sala->solicitud()->create([
-			// 		'user_id' => $request->user()->id,
-			// 		'estado_id' => 1,
-			// 		'folio' => $folio,
-			// 		'tipo_oficina' => $tipoOficina,
-			// 		'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
-			// 		'meses_renta' => 1,
-			// 		'hora_inicio' => Carbon::parse($request->hora_inicio), //$request->hora_inicio,
-			// 		'hora_fin' => Carbon::parse($request->hora_fin),
-			// 		'numero_integrantes' => 5, //$request->numero_integrantes,
-			// 		'metodo_pago_id' => null,
-			// 	]);
-
-			// 	$this->foliosRepository->generateNextFolio('EUSJ');
-			// }else{
-			// 	$folio = $this->foliosRepository->getCurrentFolio('EUOV');
-			// 	$oficinaVirtual = OficinaVirtual::findOrFail($request->id);
-
-			// 	$solicitud = $oficinaVirtual->solicitud()->create([
-			// 		'user_id' => $request->user()->id,
-			// 		'estado_id' => 1,
-			// 		'folio' => $folio,
-			// 		'tipo_oficina' => $tipoOficina,
-			// 		'fecha_reservacion' => Carbon::parse($request->fecha_reservacion),
-			// 		'meses_renta' => $request->meses_renta,
-			// 		'numero_integrantes' => 1,
-			// 		'metodo_pago_id' => null,
-			// 	]);
-
-			// 	$this->foliosRepository->generateNextFolio('EUOV');
-			// }
-
-			// $message = NotificationSolicitudMessage::create([
-			// 	'user_id' => $request->user()->id,
-			// 	'edificio_id' => $oficina->edificio_id,
-			// 	'solicitud_id' => $solicitud->id,
-			// 	'type' => 1,
-			// 	'status_solicitud' => 1,
-			// 	'body' => 'Se creó una nueva solicitud de renta para una oficina fisica',
-			// ]);
-
-			// $edificio = Edificio::findOrFail($oficina->edificio_id);
-
-			// $edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
+			$edificio->notify(new \App\Notifications\NotificationSolicitudCreated($message));
 
 			DB::commit();
 

@@ -17,12 +17,17 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::get('/test', 'TestController@index');
 
 Route::group(['prefix' => 'v1'], function () {
 
 	Route::group(['prefix' => 'register'], function () {
 		Route::post('user', 'AuthUserController@register');
-		Route::post('admin', 'AuthUserAdminController@register');
+		Route::post('admin', 'AuthUserAdminController@register')->middleware('auth:api-admin');
+	});
+
+	Route::group(['prefix' => 'gestion-usuarios', 'middleware' => 'auth:api-admin'], function(){
+		Route::get('/', 'GestionUsuariosSystemController@index');
 	});
 
 	//** USUARIO AUTENTICADO */
@@ -45,6 +50,8 @@ Route::group(['prefix' => 'v1'], function () {
 
 		Route::group(['prefix' => 'me', 'middleware' => 'auth:api'], function () {
 			Route::get('/', 'UserController@getCurrentAuthUser');
+
+			Route::post('/push-token', 'PushTokensController@register');
 
 			Route::group(['prefix' => 'datos-personales'], function () {
 				Route::post('/', 'DatosPersonalesController@store');
@@ -77,10 +84,12 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::patch('solicitud/document/{id}/allow-update', 'DocumentosSolicitudController@allowUpdateDocument');
 		Route::post('solicitud/{id}/authorize', 'SolicitudController@autorizar');
 		Route::post('solicitud/{id}/no-authorize', 'SolicitudController@noAutorizar');
+		Route::put('solicitud/{id}/finalize', 'SolicitudController@finalizar');
 	});
 
 	Route::group(['middleware' => ['auth:api']], function () {
 		Route::get('solicitudes/me', 'SolicitudController@getToUser');
+		Route::get('solicitudes/historial', 'SolicitudController@getUserHistory');
 		Route::get('solicitud/{id}/documents', 'SolicitudController@getDocuments');
 		Route::post('solicitud/{id}/cancel', 'SolicitudController@cancelar');
 		Route::post('solicitud', 'SolicitudController@storeSolicitudOficina');
@@ -88,6 +97,7 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::post('solicitud/document/update', 'DocumentosSolicitudController@updateDocumento');
 		Route::post('solicitud/{id}/confirmar', 'PagosController@payConfirmationSolicitud');
 		Route::post('solicitud/{id}/fecha/{idFecha}/pagar', 'PagosController@payMesSolicitud');
+		Route::get('solicitud/{id}/adicionales', 'SolicitudController@getAdicionalesSolicitud');
 		Route::post('solicitud/{id}/adicionales/pagar', 'PagosController@payAdicionales');
 	});
 
@@ -157,9 +167,9 @@ Route::group(['prefix' => 'v1'], function () {
 	Route::get('/mobiliario/edificio/{id}', 'MobiliarioController@getByEdificio');
 	Route::get('/mobiliario/{id}', 'MobiliarioController@show');
 
-	Route::post('/mobiliario', 'MobiliarioController@store');
-	Route::put('/mobiliario/{id}', 'MobiliarioController@update');
-	Route::delete('/mobiliario/{id}', 'MobiliarioController@destroy');
+	Route::post('/mobiliario', 'MobiliarioController@store')->middleware('auth:api-admin');
+	Route::post('/mobiliario/{id}', 'MobiliarioController@update')->middleware('auth:api-admin');
+	Route::delete('/mobiliario/{id}', 'MobiliarioController@destroy')->middleware('auth:api-admin');
 
 	//*****************/
 
@@ -253,4 +263,10 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::put('/{id}', 'AgendaController@update');
 		Route::delete('/{id}', 'AgendaController@destroy');
 	});
+
+	Route::post('/solicitud-visita', 'SolicitudVisitaController@store');
+	Route::get('/solicitudes-visita', 'SolicitudVisitaController@index')->middleware('auth:api-admin');
+	Route::delete('/solicitud-visita/{id}', 'SolicitudVisitaController@destroy')->middleware('auth:api-admin');
+	Route::patch('/solicitud-visita/{id}', 'SolicitudVisitaController@update')->middleware('auth:api-admin');
+
 });

@@ -45,6 +45,10 @@ class OficinaVirtual extends Model
 		return $this->morphOne(\App\SolicitudReservacion::class, 'solicitudable');
 	}
 
+	public function solicitudVisita(){
+		return $this->morphOne(\App\SolicitudVisita::class, 'solicitudable');
+	}
+
 	public function imagenes(){
 		return $this->hasMany(\App\OficinaImage::class, 'oficina_id');
 	}

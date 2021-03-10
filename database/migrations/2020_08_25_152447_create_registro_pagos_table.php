@@ -17,6 +17,7 @@ class CreateRegistroPagosTable extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('fecha_id')->unique()->references('id')->on('fechas_pagos');
+			$table->foreignId('metodo_pago_id')->references('id')->on('cat_metodos_pago');
             $table->string('referencia');
 			$table->dateTime('fecha_pago');
 			$table->boolean('verificado')->default(false);

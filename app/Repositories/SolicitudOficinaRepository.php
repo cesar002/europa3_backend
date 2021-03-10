@@ -14,8 +14,70 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 
 	public function getAll(){
 		try {
+			$data = SolicitudReservacion::with(
+				'tipoOficina','estado', 'solicitudable',
+				'user', 'user.infoPersonal', 'fechasPago', 'fechasPago.pago', 'fechasPago.pago.metodoPago',
+				'adicionalesComprados', 'adicionalesComprados.adicionalesComprados', 'adicionalesComprados.adicionalesComprados.adicionales'
+			)->get();
 
+			return $data;
 		} catch (\Throwable $th) {
+			return [];
+		}
+	}
+
+	public function getUserHistory($userId)
+	{
+		try{
+			$solicitudes = SolicitudReservacion::with(
+				'documentos', 'documentos.estado','documentos.tipoDocumento', 'estado', 'solicitudable',
+				'metodoPago', 'tipoOficina', 'solicitudable.edificio' ,'solicitudable.imagenes', 'solicitudable.pathImages',
+				'solicitudable.pathImages.pathMaster', 'fechasPago', 'fechasPago.pago', 'adicionalesComprados', 'adicionalesComprados.adicionalesComprados',
+				'adicionalesComprados.adicionalesComprados.adicionales'
+				)->where('user_id', $userId)
+				->whereIn('estado_id', [3, 4, 5])
+				->get();
+
+				$solicitudesJson = $solicitudes->map(function($solicitud){
+					$path = $solicitud->solicitudable->pathImages ? "{$solicitud->solicitudable->pathImages->pathMaster->path}/{$solicitud->solicitudable->pathImages->path}" : "";
+					$image = count($solicitud->solicitudable->imagenes) > 0 ? $solicitud->solicitudable->imagenes[0] : "";
+					$pathImage = !empty($image) ? "{$path}/{$image->image}" : "";
+
+					return [
+						'id' => $solicitud->id,
+						'folio' => $solicitud->folio,
+						'solicitud_id' => $solicitud->solicitud_id,
+						'estado' => $solicitud->estado,
+						'metodo_pago' => $solicitud->metodoPago,
+						'fecha_reservacion' => $solicitud->fecha_reservacion,
+						'meses_renta' => $solicitud->meses_renta,
+						'numero_integrantes' => $solicitud->numero_integrantes,
+						'documentos' => $solicitud->documentos,
+						'tipo_oficina' => $solicitud->tipoOficina,
+						'fechas_pago' => $solicitud->fechasPago,
+						'numero_integrantes' => $solicitud->numero_integrantes,
+						'hora_inicio' => $solicitud->hora_inicio,
+						'hora_fin' => $solicitud->hora_fin,
+						'adicionales_comprados' => $solicitud->adicionalesComprados,
+						'fecha_creacion' => $solicitud->created_at,
+						'body' => [
+							'id' => $solicitud->solicitudable->id,
+							'nombre' => $solicitud->solicitudable->nombre,
+							'size_dimension' => $solicitud->solicitudable->size_dimension,
+							'capacidad_recomendada' => $solicitud->solicitudable->capacidad_recomendada,
+							'capacidad_maxima' => $solicitud->solicitudable->capacidad_maxima,
+							'edificio' => $solicitud->solicitudable->edificio,
+							'tipoOficina' => $solicitud->solicitudable->tipoOficina,
+							'precio' => $solicitud->solicitudable->precio,
+							'image' => !empty($pathImage) ? asset(Storage::url($pathImage)) : "",
+						],
+					];
+				});
+
+			return $solicitudesJson;
+		}catch(\Throwable $th){
+			Log::error($th->getMessage());
+
 			return [];
 		}
 	}
@@ -27,7 +89,9 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 				'metodoPago', 'tipoOficina', 'solicitudable.edificio' ,'solicitudable.imagenes', 'solicitudable.pathImages',
 				'solicitudable.pathImages.pathMaster', 'fechasPago', 'fechasPago.pago', 'adicionalesComprados', 'adicionalesComprados.adicionalesComprados',
 				'adicionalesComprados.adicionalesComprados.adicionales'
-				)->where('user_id', $userId)->get();
+				)->where('user_id', $userId)
+				->whereIn('estado_id', [1, 2, 7, 8, 6])
+				->get();
 
 			$solicitudesJson = $solicitudes->map(function($solicitud){
 				$path = $solicitud->solicitudable->pathImages ? "{$solicitud->solicitudable->pathImages->pathMaster->path}/{$solicitud->solicitudable->pathImages->path}" : "";
@@ -93,7 +157,7 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 
 			$data = SolicitudReservacion::with(
 				'tipoOficina','estado', 'solicitudable',
-				'user', 'user.infoPersonal'
+				'user', 'user.infoPersonal', 'fechasPago', 'fechasPago.pago', 'fechasPago.pago.metodoPago'
 			)->whereHasMorph('solicitudable', [Oficina::class, SalaJuntas::class, OficinaVirtual::class], function($query) use($edificioId){
 				$query->where('edificio_id', $edificioId);
 			})
@@ -152,7 +216,7 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 		try {
 			$solicitud = SolicitudReservacion::with(
 				'estado', 'solicitudable', 'solicitudable.edificio',
-				'metodoPago', 'documentos', 'documentos.estado', 'documentos.tipoDocumento', 'fechasPago', 'fechasPago.pago',
+				'metodoPago', 'documentos', 'documentos.estado', 'documentos.tipoDocumento', 'fechasPago', 'fechasPago.pago', 'fechasPago.pago.metodoPago',
 				'user', 'user.infoPersonal','user.infoPersonal.tipoIdentificacion' ,'user.infoPersonal.nacionalidad',
 				'user.datosMorales', 'user.datosFiscales', 'user.datosFiscales.estado', 'user.datosFiscales.municipio')
 			->findOrFail($id);

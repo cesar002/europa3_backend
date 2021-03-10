@@ -34,12 +34,12 @@ class InsertPathsMastersInPathsMasters extends Migration
 		DB::insert('INSERT INTO path_files(path_master_id, nombre, path, created_at, updated_at) VALUES(?, ?, ?,NOW(), NOW())',
 					[1, 'Documentos usuarios', $pathDocumentosUsuarios[0]->uuid]);
 
-		Storage::disk('local')->makeDirectory($pathDocumentos[0]->uuid);
-		Storage::disk('local')->makeDirectory("{$pathDocumentos[0]->uuid}/{$pathDocumentosUsuarios[0]->uuid}");
+		Storage::makeDirectory($pathDocumentos[0]->uuid);
+		Storage::makeDirectory("{$pathDocumentos[0]->uuid}/{$pathDocumentosUsuarios[0]->uuid}");
 
-		Storage::disk('public')->makeDirectory($pathImage[0]->uuid);
-		Storage::disk('public')->makeDirectory("{$pathImage[0]->uuid}/{$pathUserAvatar[0]->uuid}");
-		Storage::disk('public')->makeDirectory("{$pathImage[0]->uuid}/{$pathMobiliario[0]->uuid}");
+		Storage::makeDirectory($pathImage[0]->uuid);
+		Storage::makeDirectory("{$pathImage[0]->uuid}/{$pathUserAvatar[0]->uuid}");
+		Storage::makeDirectory("{$pathImage[0]->uuid}/{$pathMobiliario[0]->uuid}");
     }
 
     /**

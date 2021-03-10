@@ -40,17 +40,17 @@ class AuthUserAdminController extends Controller
 			$paths = $userData->pathImage()->with('pathMaster')->first();
 
 			if(!is_null($request->file('avatar_image'))){
-				$image_saved = Storage::disk('public')->put("{$paths->pathMaster->path}/{$paths->path}", $request->file('avatar_image'));  //$request->file('avatar_image')->store("{$paths->pathMaster->path}/{$paths->path}");
+				$image_saved = Storage::put("{$paths->pathMaster->path}/{$paths->path}", $request->file('avatar_image'));  //$request->file('avatar_image')->store("{$paths->pathMaster->path}/{$paths->path}");
 				$userData->avatar_image = basename($image_saved);
 				$userData->save();
 			}
 
-			foreach($permisos as $permiso){
-				$userPermiso = new UserAdminPermiso();
-				$userPermiso->user_admin_id = $user->id;
-				$userPermiso->permiso_id = $permiso;
-				$userPermiso->save();
-			}
+			// foreach($permisos as $permiso){
+			// 	$userPermiso = new UserAdminPermiso();
+			// 	$userPermiso->user_admin_id = $user->id;
+			// 	$userPermiso->permiso_id = $permiso;
+			// 	$userPermiso->save();
+			// }
 
 			DB::commit();
 
@@ -74,24 +74,9 @@ class AuthUserAdminController extends Controller
 			if(!Auth::guard('admin')->attempt(['username' => $request->username, 'password' => $request->password]))
 				return response(['error' => 'Datos de sesión incorrectos'], 401);
 
-			// $SECRET_KEY = DB::select('SELECT id, secret FROM oauth_clients WHERE id = 3 LIMIT 1');
-
-			// $url = env('APP_URL', 'http://europa3.test');
-			// $http = new \GuzzleHttp\Client();
-			// $response = $http->post("$url/oauth/token", [
-			// 	'form_params' => [
-			// 		'grant_type' => 'password',
-			// 		'client_id' => $SECRET_KEY[0]->id,
-			// 		'client_secret' => $SECRET_KEY[0]->secret,
-			// 		'username' => $request->username,
-			// 		'password' => $request->password,
-			// 		'scopre' => '',
-			// 	],
-			// ]);
-
 			$user = Auth::guard('admin')->user();
 
-			$token = $user->createToken('Europa3 Password Grant Client');
+			$token = $user->createToken('Europa3 Admin Password Grant Client');
 
 			return response([
 				'access_token' => [
@@ -99,7 +84,6 @@ class AuthUserAdminController extends Controller
 					'token_type' => 'Bearer',
 					'expires_in' => $token->token->expires_at
 				]
-				// 'access_token' => json_decode((string) $response->getBody(), true)
 			]);
 		} catch (\Throwable $th) {
 			Log::error($th->getMessage());

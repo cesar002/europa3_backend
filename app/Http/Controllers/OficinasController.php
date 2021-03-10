@@ -115,11 +115,11 @@ class OficinasController extends Controller
 				$serv->save();
 			}
 
-			Storage::disk('public')->makeDirectory("{$pathMaster->path}/{$pathImage->path}");
+			Storage::makeDirectory("{$pathMaster->path}/{$pathImage->path}");
 
 			if(!is_null($images)){
 				foreach($images as $image){
-					$nameImage = Storage::disk('public')->put("$pathMaster->path/$pathImage->path", $image);
+					$nameImage = Storage::put("$pathMaster->path/$pathImage->path", $image);
 
 					$imageOficina = new OficinaImage([
 						'oficina_id' => $oficina->id,

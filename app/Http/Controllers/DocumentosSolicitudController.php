@@ -88,7 +88,7 @@ class DocumentosSolicitudController extends Controller
 			$documento = DocumentoSolicitud::with('pathDocumento', 'pathDocumento.pathMaster')->findOrFail($id);
 			$path = "{$documento->pathDocumento->pathMaster->path}/{$documento->pathDocumento->path}/{$documento->nombre_archivo}";
 
-			return Storage::disk('local')->download($path);
+			return Storage::download($path);
 			// return $path;
 		} catch (\Throwable $th) {
 			Log::error($th->getMessage());
@@ -117,12 +117,12 @@ class DocumentosSolicitudController extends Controller
 				$pathDocumentos->save();
 
 				$path = "{$pathMaster->path}/{$pathDocumentos->path}";
-				Storage::disk('local')->makeDirectory($path);
+				Storage::makeDirectory($path);
 			}else{
 				$path = "{$pathMaster->path}/{$document->pathDocumento->path}";
 			}
 
-			$uploadedDocument = Storage::disk('local')->put($path, $request->documento);
+			$uploadedDocument = Storage::put($path, $request->documento);
 
 			$documentoModel = new DocumentoSolicitud([
 				'solicitud_id' => $solicitudId,
@@ -155,8 +155,8 @@ class DocumentosSolicitudController extends Controller
 			$documentoModel = DocumentoSolicitud::with('pathDocumento', 'pathDocumento.pathMaster')->findOrFail($id);
 			$path = "{$documentoModel->pathDocumento->pathMaster->path}\\{$documentoModel->pathDocumento->path}";
 
-			$documento = Storage::disk('local')->put($path, $request->documento);
-			Storage::disk('local')->delete("$path\\{$documentoModel->nombre_archivo}");
+			$documento = Storage::put($path, $request->documento);
+			Storage::delete("$path\\{$documentoModel->nombre_archivo}");
 
 			$documentoModel->tipo_documento_id = $request->tipo_documento;
 			$documentoModel->nombre_archivo = basename($documento);
