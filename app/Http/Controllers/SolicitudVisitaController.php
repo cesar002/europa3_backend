@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Oficina;
+use App\SalaJuntas;
+use App\OficinaVirtual;
 use App\SolicitudVisita;
 use App\NotificationAdmin;
 use Illuminate\Http\Request;
@@ -14,7 +17,7 @@ class SolicitudVisitaController extends Controller
 {
     public function index()
 	{
-		$solicitudes = SolicitudVisita::orderBy('created_at', 'desc')->get();
+		$solicitudes = SolicitudVisita::with('solicitudable')->orderBy('created_at', 'desc')->get();
 
 		return response($solicitudes);
 	}
@@ -23,7 +26,14 @@ class SolicitudVisitaController extends Controller
 	{
 		try {
 
-			$solicitud = SolicitudVisita::create($request->all());
+			$oficina =  Oficina::where('tipo_oficina_id', $request->tipo_oficina)->where('id', $request->id_oficina)->first() ??
+						SalaJuntas::where('tipo_oficina_id', $request->tipo_oficina)->where('id', $request->id_oficina)->first() ??
+						OficinaVirtual::where('tipo_oficina_id', $request->tipo_oficina)->where('id', $request->id_oficina)->first();
+
+			if(is_null($oficina))
+				throw new \Exception('El ID y tipo de oficina no corresponden con ningúno registrado');
+
+			$solicitud =  $oficina->solicitudVisita()->create( $request->only(['nombre', 'email', 'telefono', 'comentario']) );
 			if($solicitud == null)
 				throw new \Exception('Error al insertar la solicitud');
 

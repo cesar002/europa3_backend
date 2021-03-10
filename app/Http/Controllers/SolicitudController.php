@@ -257,6 +257,19 @@ class SolicitudController extends Controller{
 		}
 	}
 
+	public function getAdicionalesSolicitud($id)
+	{
+		try{
+			$adicionales = SolicitudReservacion::with('adicionalesComprados', 'adicionalesComprados.adicionalesComprados', 'adicionalesComprados.adicionalesComprados.adicionales')->findOrFail($id);
+
+			return response($adicionales->adicionalesComprados);
+		}catch(\Throwable $th){
+			Log::error($th->getMessage());
+
+			return response([]);
+		}
+	}
+
 	public function storeSolicitudOficina(\App\Http\Requests\SolicitudOficinaRequest $request){
 		try {
 			DB::beginTransaction();

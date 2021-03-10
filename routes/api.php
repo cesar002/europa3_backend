@@ -97,6 +97,7 @@ Route::group(['prefix' => 'v1'], function () {
 		Route::post('solicitud/document/update', 'DocumentosSolicitudController@updateDocumento');
 		Route::post('solicitud/{id}/confirmar', 'PagosController@payConfirmationSolicitud');
 		Route::post('solicitud/{id}/fecha/{idFecha}/pagar', 'PagosController@payMesSolicitud');
+		Route::get('solicitud/{id}/adicionales', 'SolicitudController@getAdicionalesSolicitud');
 		Route::post('solicitud/{id}/adicionales/pagar', 'PagosController@payAdicionales');
 	});
 

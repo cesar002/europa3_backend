@@ -20,7 +20,11 @@ class CreateSolicitudesVisitasTable extends Migration
 			$table->string('telefono');
 			$table->text('comentario')->nullable();
 			$table->boolean('activo')->default(true);
+			$table->bigInteger('solicitudable_id');
+			$table->string('solicitudable_type');
             $table->timestamps();
+
+			$table->index('solicitudable_id');
         });
     }
 

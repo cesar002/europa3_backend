@@ -27,10 +27,12 @@ class CreateSolicitudReservacionTable extends Migration
 			$table->time('hora_inicio')->nullable(true);
 			$table->time('hora_fin')->nullable(true);
 			$table->boolean('terminos_condiciones')->default(true);
-			$table->integer('solicitudable_id');
+			$table->bigInteger('solicitudable_id');
 			$table->string('solicitudable_type');
 			$table->softDeletes();
             $table->timestamps();
+
+			$table->index('solicitudable_id');
         });
     }
 

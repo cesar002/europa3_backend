@@ -14,4 +14,8 @@ class SolicitudVisita extends Model
 
 	protected $hidden = [ 'updated_at' ];
 
+	public function solicitudable(){
+		return $this->morphTo();
+	}
+
 }

@@ -70,4 +70,8 @@ class SalaJuntas extends Model{
 		return $this->morphOne(\App\SolicitudReservacion::class, 'solicitudable');
 	}
 
+	public function solicitudVisita(){
+		return $this->morphOne(\App\SolicitudVisita::class, 'solicitudable');
+	}
+
 }

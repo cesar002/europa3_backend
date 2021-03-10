@@ -16,7 +16,8 @@ class SolicitudOficinaRepository implements ISolicitudOficinaDao{
 		try {
 			$data = SolicitudReservacion::with(
 				'tipoOficina','estado', 'solicitudable',
-				'user', 'user.infoPersonal', 'fechasPago', 'fechasPago.pago', 'fechasPago.pago.metodoPago'
+				'user', 'user.infoPersonal', 'fechasPago', 'fechasPago.pago', 'fechasPago.pago.metodoPago',
+				'adicionalesComprados', 'adicionalesComprados.adicionalesComprados', 'adicionalesComprados.adicionalesComprados.adicionales'
 			)->get();
 
 			return $data;
