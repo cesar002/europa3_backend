@@ -121,13 +121,17 @@ class SolicitudController extends Controller{
 				]),
 			]);
 
-			$expo = \ExponentPhpSDK\Expo::normalSetup();
-			$expo->notify('', [
-				'to' => $solicitud->user->push_notification_token,
-				'title' => $notification->title,
-				'body' => $notification->body,
-				'data' => $notification->data ,
-			]);
+			try {
+				$expo = \ExponentPhpSDK\Expo::normalSetup();
+				$expo->notify('', [
+					'to' => $solicitud->user->push_notification_token,
+					'title' => $notification->title,
+					'body' => $notification->body,
+					'data' => $notification->data ,
+				]);
+			} catch (\Throwable $th) {
+				Log::error($th->getMessage());
+			}
 
 			DB::commit();
 
@@ -166,13 +170,17 @@ class SolicitudController extends Controller{
 				]),
 			]);
 
-			$expo = \ExponentPhpSDK\Expo::normalSetup();
-			$expo->notify('', [
-				'to' => $solicitud->user->push_notification_token,
-				'title' => $notification->title,
-				'body' => $notification->body,
-				'data' => $notification->data ,
-			]);
+			try{
+				$expo = \ExponentPhpSDK\Expo::normalSetup();
+				$expo->notify('', [
+					'to' => $solicitud->user->push_notification_token,
+					'title' => $notification->title,
+					'body' => $notification->body,
+					'data' => $notification->data ,
+				]);
+			}catch(\Throwable $th){
+				Log::error($th->getMessage());
+			}
 
 			DB::commit();
 

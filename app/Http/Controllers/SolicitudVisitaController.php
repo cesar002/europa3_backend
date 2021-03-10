@@ -43,8 +43,8 @@ class SolicitudVisitaController extends Controller
 				'data' => json_encode($solicitud->toArray()),
 			]);
 
-			event(new NotificationAdminSender($notification));
-			event(new SolicitudVisitaCreated($solicitud));
+			// event(new NotificationAdminSender($notification));
+			// event(new SolicitudVisitaCreated($solicitud));
 
 			return response([
 				'message' => 'Solicitud de visita registrada con éxito',
