@@ -54,10 +54,10 @@ class ChatRecepcionController extends Controller
 
 			$message = $this->chatRepositoy->getMessageById($mensajeChat->id);
 
-			event(new MessageChatSolicitudReceived([
-				'model' => $mensajeChat,
-				'message' => $message
-			]));
+			// event(new MessageChatSolicitudReceived([
+			// 	'model' => $mensajeChat,
+			// 	'message' => $message
+			// ]));
 
 			return response($message);
 		} catch (\Throwable $th) {
@@ -81,10 +81,10 @@ class ChatRecepcionController extends Controller
 
 			$message = $this->chatRepositoy->getMessageById($mensajeChat->id);
 
-			event(new MessageChatSolicitudReceived([
-				'model' => $mensajeChat,
-				'message' => $message
-			]));
+			// event(new MessageChatSolicitudReceived([
+			// 	'model' => $mensajeChat,
+			// 	'message' => $message
+			// ]));
 
 			return response($message);
 		} catch (\Throwable $th) {
