@@ -38,11 +38,11 @@ class UserAdminRepository implements IUserAdminDao{
 					'id' => $user->id,
 					'username' => $user->username,
 					'infoPersonal' => [
-						'id' => $user->infoPersonal->id,
-						'nombre' => $user->infoPersonal->nombre,
-						'ape_pat' => $user->infoPersonal->ap_p,
-						'ape_mat' => $user->infoPersonal->ap_m,
-						'avatar' => $user->infoPersonal->avatar_image ? Storage::url("{$user->infoPersonal->pathImage->pathMaster->path}/{$user->infoPersonal->pathImage->path}/{$user->infoPersonal->avatar_image}") : null,
+						'id' => !is_null($user->infoPersonal) ? $user->infoPersonal->id : '',
+						'nombre' => !is_null($user->infoPersonal) ? $user->infoPersonal->nombre : '',
+						'ape_pat' => !!is_null($user->infoPersonal) ? $user->infoPersonal->ap_p : '',
+						'ape_mat' => is_null($user->infoPersonal) ? $user->infoPersonal->ap_m : '',
+						'avatar' => !is_null($user->infoPersonal) ? ($user->infoPersonal->avatar_image ? Storage::url("{$user->infoPersonal->pathImage->pathMaster->path}/{$user->infoPersonal->pathImage->path}/{$user->infoPersonal->avatar_image}") : null) : '',
 					],
 				];
 			});
