@@ -15,6 +15,5 @@ use Illuminate\Support\Facades\Storage;
 */
 
 Route::get('/', function () {
-	Storage::makeDirectory('Europa3/pvta');
     return view('welcome');
 });
