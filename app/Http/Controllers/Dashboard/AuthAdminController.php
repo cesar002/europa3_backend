@@ -19,16 +19,17 @@ class AuthAdminController extends Controller
 	public function login(LoginUserAdminRequest $request)
 	{
 		try{
-			if(Auth::guard('admin')->attemp($request->only('username', 'password'), true)){
+			if(Auth::guard('admin')->attempt($request->only('username', 'password'), true)){
 				return redirect()->route('dashboard.inicio');
 			}
 
-			session()->flash('', '');
+			session()->flash('LOGIN_DATOS', 'Datos de inicio de sesión incorrectos');
 
 			return redirect()->back();
 		}catch(\Throwable $th){
 			Log::error($th->getMessage());
-			session()->flash('', '');
+
+			session()->flash('LOGIN_ERROR', 'Ocurrió un error al iniciar sesión');
 
 			return redirect()->back();
 		}

@@ -24,4 +24,9 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 
 	Route::get('/inicio', 'Dashboard\InicioController@index')->name('inicio');
 
+	Route::group(['prefix' => 'edificios', 'as' => 'edificios.'], function(){
+		Route::get('/', 'Dashboard\EdificiosController@index')->name('index');
+		Route::get('/{id}', 'Dashboard\EdificiosController@show')->name('show');
+	});
+
 });

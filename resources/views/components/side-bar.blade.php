@@ -7,7 +7,7 @@
 	</a>
 
 	<x-side-bar-divider />
-	<li class="nav-item active">
+	<li class="nav-item">
 		<a class="nav-link" href="index.html">
 			<i class="fas fa-users"></i>
 			<span>Inicio</span>
@@ -39,7 +39,7 @@
 	<x-side-bar-divider />
 	<x-side-bar-heading title="Oficinas" />
 	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
+		<a class="nav-link" href="{{ route('dashboard.edificios.index') }}">
 			<i class="fas fa-building"></i>
 			<span>Edificios</span>
 		</a>

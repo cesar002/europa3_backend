@@ -21,6 +21,8 @@
 					<div class="form-group">
 						<input type="text" class="form-control form-control-user {{ $errors->has('username') ? 'is-invalid' : '' }}"
 							id="username" aria-describedby="username" placeholder="Nombre de usuario"
+							name="username"
+							value="{{ old('username') }}"
 						>
 						@error('username')
 							<span class="invalid-feedback">{{ $message }}</span>
@@ -35,6 +37,16 @@
 							<span class="invalid-feedback">{{ $message }}</span>
 						@enderror
 					</div>
+					@if (session()->has('LOGIN_DATOS'))
+						<div class="my-3">
+							<span class="text-danger">{{ session('LOGIN_DATOS') }}</span>
+						</div>
+					@endif
+					@if (session()->has('LOGIN_ERROR'))
+						<div class="my-3">
+							<span class="text-danger">{{ session('LOGIN_ERROR') }}</span>
+						</div>
+					@endif
 					<button class="btn btn-primary btn-user btn-block">
 						<strong>Iniciar sesión</strong>
 					</button>
