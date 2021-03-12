@@ -27,6 +27,11 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 	Route::group(['prefix' => 'edificios', 'as' => 'edificios.'], function(){
 		Route::get('/', 'Dashboard\EdificiosController@index')->name('index');
 		Route::get('/{id}', 'Dashboard\EdificiosController@show')->name('show');
+
+	});
+
+	Route::group(['prefix' => 'idiomas-atencion', 'as' => 'idiomas-atencion.'], function(){
+		Route::get('/', 'Dashboard\IdiomasAtencionController@index')->name('index');
 	});
 
 });

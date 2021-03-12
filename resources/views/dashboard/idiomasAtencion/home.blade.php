@@ -1,14 +1,12 @@
 @extends('layouts.app-admin')
 
 @section('title')
-	<title>Edificios</title>
+	<title>Idiomas de atención</title>
 @endsection
 
 @section('body')
 
-@livewire('edificios', [
-	'edificios' => $edificios->toArray(),
-])
+@livewire('idiomas-atencion')
 
 @livewireScripts
 @endsection

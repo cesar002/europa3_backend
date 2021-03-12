@@ -35,6 +35,32 @@
 		</a>
 	</li>
 
+	<x-side-bar-divider />
+	<x-side-bar-heading title="Mobiliario y servicios" />
+	<li class="nav-item">
+		<a class="nav-link" href="charts.html">
+			<i class="fas fa-chair"></i>
+			<span>Mobiliario</span>
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="charts.html">
+			<i class="fas fa-vr-cardboard"></i>
+			<span>Adicionales</span>
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="charts.html">
+			<i class="fas fa-concierge-bell"></i>
+			<span>Servicios</span>
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="{{ route('dashboard.idiomas-atencion.index') }}">
+			<i class="fas fa-vr-cardboard"></i>
+			<span>Idiomas de atención</span>
+		</a>
+	</li>
 
 	<x-side-bar-divider />
 	<x-side-bar-heading title="Oficinas" />
@@ -77,33 +103,6 @@
 			<i class="fas fa-fw fa-table"></i>
 			<span>Tables</span></a>
 	</li> --}}
-
-	<x-side-bar-divider />
-	<x-side-bar-heading title="Mobiliario y servicios" />
-	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
-			<i class="fas fa-chair"></i>
-			<span>Mobiliario</span>
-		</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
-			<i class="fas fa-vr-cardboard"></i>
-			<span>Adicionales</span>
-		</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
-			<i class="fas fa-concierge-bell"></i>
-			<span>Servicios</span>
-		</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
-			<i class="fas fa-vr-cardboard"></i>
-			<span>Idiomas de atención</span>
-		</a>
-	</li>
 
 	<x-side-bar-divider />
 	<x-side-bar-heading title="Configuración" />
