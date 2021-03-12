@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
+	Route::get('/login', 'Dashboard\AuthAdminController@index')->name('login-view');
+	Route::post('/login', 'Dashboard\AuthAdminController@login')->name('login');
+
+	Route::get('/inicio', 'Dashboard\InicioController@index')->name('inicio');
+
+});
