@@ -38,7 +38,7 @@
 	<x-side-bar-divider />
 	<x-side-bar-heading title="Mobiliario y servicios" />
 	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
+		<a class="nav-link" href="{{ route('dashboard.mobiliario.index') }}">
 			<i class="fas fa-chair"></i>
 			<span>Mobiliario</span>
 		</a>

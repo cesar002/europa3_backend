@@ -27,6 +27,13 @@ class Mobiliario extends Model
 		'usado',
 	];
 
+	public function getImage()
+	{
+		$url = $this->pathImages == null ? $this->image : "{$this->pathImages->pathMaster->path}/{$this->pathImages->path}/{$this->image}";
+
+		return $url;
+	}
+
 	public function getDescripcion(){
 		return $this->observaciones ?? '';
 	}
