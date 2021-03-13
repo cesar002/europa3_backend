@@ -6,4 +6,9 @@
 
 @section('body')
 
+@livewire('edificios-update', [
+	'edificio' => $edificio->toArray(),
+])
+
+@livewireScripts
 @endsection

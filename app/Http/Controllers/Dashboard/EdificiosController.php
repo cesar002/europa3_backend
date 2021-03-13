@@ -21,7 +21,7 @@ class EdificiosController extends Controller
 	public function show($id)
 	{
 		try {
-			$edificio = Edificio::findOrFail($id);
+			$edificio = Edificio::with('municipio', 'municipio.estado', 'idiomas')->findOrFail($id);
 
 			return view('dashboard.edificios.show', [
 				'edificio' => $edificio,
