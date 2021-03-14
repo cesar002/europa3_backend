@@ -37,6 +37,10 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 			Route::post('/{id}', 'Dashboard\MobiliarioController@update')->name('update');
 		});
 
+		Route::group(['prefix' => 'servicios', 'as' => 'servicios.'], function(){
+			Route::get('/', 'Dashboard\ServiciosController@index')->name('index');
+		});
+
 		Route::group(['prefix' => 'idiomas-atencion', 'as' => 'idiomas-atencion.'], function(){
 			Route::get('/', 'Dashboard\IdiomasAtencionController@index')->name('index');
 		});

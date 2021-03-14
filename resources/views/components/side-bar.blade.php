@@ -50,7 +50,7 @@
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
+		<a class="nav-link" href="{{ route('dashboard.servicios.index') }}">
 			<i class="fas fa-concierge-bell"></i>
 			<span>Servicios</span>
 		</a>
