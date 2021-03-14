@@ -7,7 +7,7 @@
 @section('body')
 
 	@if ($errors->any())
-		<x-alert-warning-message message='Verifique los para registrar el mobiliario' />
+		<x-alert-warning-message message='Verifique los datos para registrar el mobiliario' />
 	@endif
 
 	<x-call-back-message />

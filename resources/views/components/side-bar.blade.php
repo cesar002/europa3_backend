@@ -44,8 +44,8 @@
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
-			<i class="fas fa-vr-cardboard"></i>
+		<a class="nav-link" href="{{ route('dashboard.adicionales.index') }}">
+			<i class="fas fa-mug-hot"></i>
 			<span>Adicionales</span>
 		</a>
 	</li>
@@ -57,7 +57,7 @@
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" href="{{ route('dashboard.idiomas-atencion.index') }}">
-			<i class="fas fa-vr-cardboard"></i>
+			<i class="fa fa-comment"></i>
 			<span>Idiomas de atención</span>
 		</a>
 	</li>
@@ -84,7 +84,7 @@
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" href="charts.html">
-			<i class="fas fa-vr-cardboard"></i>
+			<i class="fas fa-laptop"></i>
 			<span>Oficinas virtuales</span>
 		</a>
 	</li>

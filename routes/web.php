@@ -41,6 +41,11 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 			Route::get('/', 'Dashboard\ServiciosController@index')->name('index');
 		});
 
+		Route::group(['prefix' => 'adicionales', 'as' => 'adicionales.'], function(){
+			Route::get('/', 'Dashboard\AdicionalesController@index')->name('index');
+			Route::post('/', 'Dashboard\AdicionalesController@store')->name('store');
+		});
+
 		Route::group(['prefix' => 'idiomas-atencion', 'as' => 'idiomas-atencion.'], function(){
 			Route::get('/', 'Dashboard\IdiomasAtencionController@index')->name('index');
 		});
