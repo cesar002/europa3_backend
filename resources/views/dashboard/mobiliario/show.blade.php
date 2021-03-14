@@ -20,6 +20,18 @@
 
 	<div class="row my-5">
 		<div class="col-12 px-5">
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a class="nav-link active" href="{{ route('dashboard.mobiliario.show', ['id' => $mobiliario->id]) }}">
+						Detalles/Edición
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ route('dashboard.mobiliario.distribucion', ['id' => $mobiliario->id]) }}">
+						Distribucción
+					</a>
+				</li>
+			</ul>
 			<div class="card">
 				<form id="formUpdate" action="{{ route('dashboard.mobiliario.update', ['id' => $mobiliario->id]) }}" method="POST">
 					@csrf

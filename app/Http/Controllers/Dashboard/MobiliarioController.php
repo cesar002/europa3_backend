@@ -45,6 +45,26 @@ class MobiliarioController extends Controller
 		}
 	}
 
+	public function showDistribucion($id)
+	{
+		try {
+			//tipoOficina
+			$mobiliario = Mobiliario::with(
+							'mobiliarioAsignadoOficina', 'mobiliarioAsignadoOficina.oficina', 'mobiliarioAsignadoOficina.oficina.tipoOficina',
+							'mobiliarioAsignadoSalaJuntas', 'mobiliarioAsignadoSalaJuntas.salaJuntas', 'mobiliarioAsignadoSalaJuntas.salaJuntas.tipoOficina'
+						)->findOrFail($id);
+
+			$enUso = $mobiliario->mobiliarioAsignadoOficina->reduce(function($carry, $item){ return $carry + $item->cantidad; }) + $mobiliario->mobiliarioAsignadoSalaJuntas->reduce(function($carry, $item){ return $carry + $item->cantidad; });
+
+			return view('dashboard.mobiliario.distribucion', [
+				'mobiliario' => $mobiliario,
+				'enUso' => $enUso,
+			]);
+		} catch (\Throwable $th) {
+			return abort(404);
+		}
+	}
+
 	public function store(MobiliarioStoreRequest $request)
 	{
 		try {

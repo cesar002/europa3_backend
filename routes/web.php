@@ -33,6 +33,7 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 		Route::group(['prefix' => 'mobiliario', 'as' => 'mobiliario.'], function(){
 			Route::get('/', 'Dashboard\MobiliarioController@index')->name('index');
 			Route::get('/{id}', 'Dashboard\MobiliarioController@show')->name('show');
+			Route::get('/{id}/distribucion', 'Dashboard\MobiliarioController@showDistribucion')->name('distribucion');
 			Route::post('/', 'Dashboard\MobiliarioController@store')->name('store');
 			Route::post('/{id}', 'Dashboard\MobiliarioController@update')->name('update');
 		});

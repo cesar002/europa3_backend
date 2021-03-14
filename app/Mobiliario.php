@@ -59,11 +59,11 @@ class Mobiliario extends Model
 	}
 
 	public function mobiliarioAsignadoSalaJuntas(){
-		return $this->belongsTo(\App\MobiliarioSalaJuntas::class, 'mobiliario_id');
+		return $this->hasMany(\App\MobiliarioSalaJuntas::class, 'mobiliario_id');
 	}
 
 	public function mobiliarioAsignadoOficina(){
-		return $this->belongsTo(\App\MobiliarioOficina::class, 'mobiliario_id');
+		return $this->hasMany(\App\MobiliarioOficina::class, 'mobiliario_id');
 	}
 
 }
