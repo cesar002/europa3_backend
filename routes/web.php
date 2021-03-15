@@ -30,6 +30,12 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 			Route::get('/{id}', 'Dashboard\EdificiosController@show')->name('show');
 		});
 
+		Route::group(['prefix' => 'oficinas', 'as' => 'oficinas.'], function(){
+			Route::get('/', 'Dashboard\OficinasController@index')->name('index');
+			Route::get('/{id}', 'Dashboard\OficinasController@show')->name('show');
+			Route::get('/{id}/imagenes', 'Dashboard\OficinasController@showImagenesUpdate')->name('updateImage');
+		});
+
 		Route::group(['prefix' => 'mobiliario', 'as' => 'mobiliario.'], function(){
 			Route::get('/', 'Dashboard\MobiliarioController@index')->name('index');
 			Route::get('/{id}', 'Dashboard\MobiliarioController@show')->name('show');
