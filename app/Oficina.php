@@ -22,6 +22,12 @@ class Oficina extends Model
 		'created_at', 'updated_at', 'deleted_at',
 	];
 
+	public function getImagesPath()
+	{
+		if($this->pathImages == null){ return ''; }
+
+		return  "{$this->pathImages->pathMaster->path}/{$this->pathImages->path}";
+	}
 
 	public function getFirstImage()
 	{

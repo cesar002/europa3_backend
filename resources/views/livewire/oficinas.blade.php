@@ -27,8 +27,8 @@
 								@foreach ($oficinas as $oficina)
 									<tr>
 										<td>
-											<img src="{{ $oficina->getFirstImage() }}" alt="{{ $oficina->nombre }}"
-												class="img-fluid" style="max-height: 200px"
+											<img src="{{ Storage::url($oficina->getImagesPath().'/'.$oficina->imagenes[0]->image) }}" alt="{{ $oficina->nombre }}"
+												class="img-fluid" style="max-height: 100px; max-width: 200px;"
 											>
 										</td>
 										<td>{{ $oficina->nombre }}</td>
@@ -43,7 +43,9 @@
 											>
 												<i class="fa fa-pencil-alt"></i>
 											</a>
-											<button class="btn btn-danger btn-sm">
+											<button class="btn btn-danger btn-sm"
+												wire:click="$emit('delete-confirmation', {{ $oficina->id }})"
+											>
 												<i class="fa fa-trash"></i>
 											</button>
 										</td>
@@ -296,6 +298,25 @@
 </div>
 
 @push('js')
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	<script>
+		Livewire.on('delete-confirmation', id => {
+			Swal.fire({
+				title: 'Confirmación',
+				html: "<strong>¿Está seguro de eliminar esta oficina?</strong> <br>  <p>eliminar el registro de esta oficina podría afectar a algún usuario que la tenga contratada, le recomendamos verificar la disponibilidad antes de realizar la eliminación</p>",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Si',
+				cancelButtonText: 'Cancelar'
+				}).then((result) => {
+					if (result.isConfirmed){
+						@this.call('delete', id)
+					}
+				})
+		})
+	</script>
 	<script>
 		Livewire.on('register-success', e => {
 			$('#newOficina').modal('toggle');

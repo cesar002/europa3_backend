@@ -189,6 +189,27 @@ class Oficinas extends Component
 
 	}
 
+	public function delete($idOficina)
+	{
+		try {
+			Oficina::findOrFail($idOficina)->delete();
+
+			$this->oficinas = Oficina::all();
+
+			session()->flash('CALL_BACK_MESSAGE', [
+				'status' => 'SUCCESS',
+				'message' => 'Oficina eliminada con éxito'
+			]);
+		} catch (\Throwable $th) {
+			Log::error($th->getMessage());
+
+			session()->flash('CALL_BACK_MESSAGE', [
+				'status' => 'ERROR',
+				'message' => 'Ocurrió un error al eliminar la oficina'
+			]);
+		}
+	}
+
     public function render()
     {
         return view('livewire.oficinas');

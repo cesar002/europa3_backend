@@ -14,7 +14,7 @@ class OficinasController extends Controller
 {
     public function index()
 	{
-		$oficinas =  Oficina::with('edificio', 'imagenes', 'imagenes.path', 'imagenes.path.pathMaster')->get();
+		$oficinas =  Oficina::with('edificio', 'imagenes', 'pathImages', 'pathImages.pathMaster')->get();
 		$edificios = Edificio::all();
 		$sizes = CatSizeOficina::all();
 		$servicios = CatServiciosOficina::all();
@@ -51,7 +51,12 @@ class OficinasController extends Controller
 	public function showImagenesUpdate($id)
 	{
 		try {
-			return view('dashboard.oficinas.imagenesUpdate');
+
+			$oficina = Oficina::with('imagenes', 'pathImages', 'pathImages.pathMaster')->findOrFail($id);
+
+			return view('dashboard.oficinas.imagenesUpdate', [
+				'oficina' => $oficina,
+			]);
 		} catch (\Throwable $th) {
 			return abort(404);
 		}
