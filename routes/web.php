@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard.inicio');
 });
 
 Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
@@ -44,6 +44,7 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 		Route::group(['prefix' => 'sala-juntas', 'as' => 'sala-juntas.'], function(){
 			Route::get('/', 'Dashboard\SalaJuntasController@index')->name('index');
 			Route::get('/{id}', 'Dashboard\SalaJuntasController@show')->name('show');
+			Route::get('/{id}/imagenes', 'Dashboard\SalaJuntasController@showUpdateImage')->name('updateImages');
 		});
 
 		Route::group(['prefix' => 'mobiliario', 'as' => 'mobiliario.'], function(){

@@ -6,7 +6,7 @@
 		<div class="form-group">
 			<label for="images">Subir imagenes</label>
 			<input type="file" class="form-control-file {{ $errors->has('images') ? 'is-invalid' : '' }}" id="images"
-				accept="images/*"
+				accept="image/*"
 				wire:model='images'
 				multiple
 			>

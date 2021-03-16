@@ -1,7 +1,7 @@
 @extends('layouts.app-admin')
 
 @section('title')
-	<title>Sala de juntas - {{ $sala->nombre }}</title>
+	<title>Sala de juntas - {{ $sala->nombre }} - imagenes</title>
 @endsection
 
 @section('body')
@@ -17,21 +17,18 @@
 		<div class="col-12">
 			<ul class="nav nav-tabs">
 				<li class="nav-item">
-					<a class="nav-link active" href="{{ route('dashboard.sala-juntas.show', ['id' => $sala->id]) }}">
+					<a class="nav-link" href="{{ route('dashboard.sala-juntas.show', ['id' => $sala->id]) }}">
 						Detalles / Edición
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{{ route('dashboard.sala-juntas.updateImages', ['id' => $sala->id]) }}">Imagenes</a>
+					<a class="nav-link active" href="{{ route('dashboard.sala-juntas.updateImages', ['id' => $sala->id]) }}">Imagenes</a>
 				</li>
 			</ul>
 			<div class="card">
 				<div class="card-body">
-					@livewire('sala-juntas-update', [
-						'sala' => $sala->toArray(),
-						'edificios' => $edificios,
-						'sizes' => $sizes,
-						'servicios' => $servicios,
+					@livewire('sala-juntas-image-update', [
+						'sala' => $sala
 					])
 				</div>
 			</div>

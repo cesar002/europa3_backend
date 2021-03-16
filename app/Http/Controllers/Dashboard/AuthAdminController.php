@@ -13,6 +13,10 @@ class AuthAdminController extends Controller
     public function index()
 	{
 
+		if(Auth::guard('admin')->check()){
+			return redirect()->route('dashboard.inicio');
+		}
+
 		return view('dashboard.login');
 	}
 

@@ -57,7 +57,6 @@ class UpdateOficina extends Component
 			]);
 
 			DB::table('oficina_servicios')->where('oficina_id', $oficina->id)->delete();
-			// DB::table('mobiliario_oficina')->where('oficina_id', $oficina->id)->delete();
 
 			foreach($this->oficina['servicios'] as $servicio)
 			{
