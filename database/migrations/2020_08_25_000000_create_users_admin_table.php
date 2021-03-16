@@ -17,7 +17,8 @@ class CreateUsersAdminTable extends Migration
             $table->id();
             $table->string('username')->unique();
 			$table->string('password');
-			$table->bigInteger('edificio_id');
+			$table->bigInteger('edificio_id')->nullable();
+			$table->string('remember_token')->nullable();
             $table->timestamps();
         });
     }

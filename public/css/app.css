@@ -10819,21 +10819,27 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("https://source.unsplash.com/K4mSJ7kc0As/600x800");
+  background: url("https://picsum.photos/600/800");
   background-position: center;
   background-size: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .bg-register-image {
-  background: url("https://source.unsplash.com/Mv9hjnEUHR4/600x800");
+  background: url("https://picsum.photos/600/800");
   background-position: center;
   background-size: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .bg-password-image {
-  background: url("https://source.unsplash.com/oWTW-jNGl9I/600x800");
+  background: url("https://picsum.photos/600/800");
   background-position: center;
   background-size: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 form.user .custom-checkbox.small label {

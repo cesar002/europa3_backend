@@ -11,16 +11,16 @@
 		<a class="nav-link"
 			href="{{ route('dashboard.inicio') }}"
 		>
-			<i class="fas fa-users"></i>
+			<i class="fas fa-fw fa-chart-area"></i>
 			<span>Inicio</span>
 		</a>
 	</li>
 
-	<x-side-bar-divider />
+	{{-- <x-side-bar-divider />
 	<x-side-bar-heading title="Solicitudes" />
 	<li class="nav-item">
 		<a class="nav-link" href="charts.html">
-			<i class="fas fa-fw fa-chart-area"></i>
+			<i class="fas fa-users"></i>
 			<span>Usuarios</span>
 		</a>
 	</li>
@@ -35,7 +35,7 @@
 			<i class="fas fa-walking"></i>
 			<span>Solicitudes de visita</span>
 		</a>
-	</li>
+	</li> --}}
 
 	<x-side-bar-divider />
 	<x-side-bar-heading title="Mobiliario y servicios" />
@@ -125,7 +125,9 @@
 	<x-side-bar-divider />
 	<x-side-bar-heading title="Configuración" />
 	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
+		<a class="nav-link"
+			href="{{ route('dashboard.gestion-usuario.index') }}"
+		>
 			<i class="fas fa-user-shield"></i>
 			<span>Gestión de usuarios</span>
 		</a>

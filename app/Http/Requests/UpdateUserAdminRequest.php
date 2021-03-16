@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterUserAdminRequest extends FormRequest
+class UpdateUserAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,11 @@ class RegisterUserAdminRequest extends FormRequest
      */
     public function rules()
     {
+
+		$id = $this->request->get('user_id');
+
         return [
-			'username' => 'required|unique:users_admin,username',
-			'password' => 'required|confirmed|min:5',
+			// 'username' => 'required|unique:users_admin,username,$id',
 			'nombre' => 'required',
 			'ap_p' => 'required',
 			'ap_m' => 'required',

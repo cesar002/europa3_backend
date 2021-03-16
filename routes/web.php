@@ -21,6 +21,7 @@ Route::get('/', function () {
 Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 	Route::get('/login', 'Dashboard\AuthAdminController@index')->name('login-view');
 	Route::post('/login', 'Dashboard\AuthAdminController@login')->name('login');
+	Route::get('/logout', 'Dashboard\AuthAdminController@logout')->name('logout')->middleware('auth-admin');
 
 	Route::middleware(['auth-admin'])->group(function () {
 		Route::get('/inicio', 'Dashboard\InicioController@index')->name('inicio');
@@ -66,6 +67,13 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 
 		Route::group(['prefix' => 'idiomas-atencion', 'as' => 'idiomas-atencion.'], function(){
 			Route::get('/', 'Dashboard\IdiomasAtencionController@index')->name('index');
+		});
+
+		Route::group(['prefix' => 'gestion-usuarios', 'as' => 'gestion-usuario.'], function(){
+			Route::get('/', 'Dashboard\GestionUsuarioController@index')->name('index');
+			Route::post('/', 'Dashboard\GestionUsuarioController@store')->name('store');
+			Route::get('/{id}', 'Dashboard\GestionUsuarioController@show')->name('show');
+			Route::post('/{id}', 'Dashboard\GestionUsuarioController@update')->name('update');
 		});
 	});
 

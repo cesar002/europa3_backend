@@ -21,7 +21,7 @@ class CreateSalaDeJuntasTable extends Migration
 			$table->foreignId('path_image_id')->references('id')->on('path_images');
 			$table->foreignId('tipo_tiempo_id')->references('id')->on('cat_tiempo_renta');
 			$table->string('nombre');
-            $table->longText('descripcion');
+            $table->text('descripcion')->nullable();
             $table->string('size_dimension');
             $table->smallInteger('capacidad_recomendada');
 			$table->smallInteger('capacidad_maxima');

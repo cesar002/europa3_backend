@@ -20,6 +20,19 @@ class AuthAdminController extends Controller
 		return view('dashboard.login');
 	}
 
+	public function logout(Request $request)
+	{
+		try{
+			Auth::guard('admin')->logout();
+
+			return redirect()->route('dashboard.login-view');
+		}catch(\Throwable $th){
+			Log::error($th->getMessage());
+
+			return redirect()->back();
+		}
+	}
+
 	public function login(LoginUserAdminRequest $request)
 	{
 		try{
