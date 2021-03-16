@@ -38,25 +38,33 @@
 	<x-side-bar-divider />
 	<x-side-bar-heading title="Mobiliario y servicios" />
 	<li class="nav-item">
-		<a class="nav-link" href="{{ route('dashboard.mobiliario.index') }}">
+		<a class="nav-link"
+			href="{{ route('dashboard.mobiliario.index') }}"
+		>
 			<i class="fas fa-chair"></i>
 			<span>Mobiliario</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="{{ route('dashboard.adicionales.index') }}">
+		<a class="nav-link"
+			href="{{ route('dashboard.adicionales.index') }}"
+		>
 			<i class="fas fa-mug-hot"></i>
 			<span>Adicionales</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="{{ route('dashboard.servicios.index') }}">
+		<a class="nav-link"
+			href="{{ route('dashboard.servicios.index') }}"
+		>
 			<i class="fas fa-concierge-bell"></i>
 			<span>Servicios</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="{{ route('dashboard.idiomas-atencion.index') }}">
+		<a class="nav-link"
+			href="{{ route('dashboard.idiomas-atencion.index') }}"
+		>
 			<i class="fa fa-comment"></i>
 			<span>Idiomas de atención</span>
 		</a>
@@ -65,25 +73,33 @@
 	<x-side-bar-divider />
 	<x-side-bar-heading title="Oficinas" />
 	<li class="nav-item">
-		<a class="nav-link" href="{{ route('dashboard.edificios.index') }}">
+		<a class="nav-link"
+			href="{{ route('dashboard.edificios.index') }}"
+		>
 			<i class="fas fa-building"></i>
 			<span>Edificios</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="{{ route('dashboard.oficinas.index') }}">
+		<a class="nav-link"
+			href="{{ route('dashboard.oficinas.index') }}"
+		>
 			<i class="fas fa-briefcase"></i>
 			<span>Oficinas fisicas</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
+		<a class="nav-link"
+			href="{{ route('dashboard.sala-juntas.index') }}"
+		>
 			<i class="fas fa-couch"></i>
 			<span>Sala de juntas</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="{{ route('dashboard.oficinas-virtuales.index') }}">
+		<a class="nav-link"
+			href="{{ route('dashboard.oficinas-virtuales.index') }}"
+		>
 			<i class="fas fa-laptop"></i>
 			<span>Oficinas virtuales</span>
 		</a>

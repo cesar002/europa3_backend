@@ -30,6 +30,14 @@ class SalaJuntas extends Model{
 	];
 
 
+	public function getImagesPath()
+	{
+		if($this->pathImages == null){ return ''; }
+
+		return "{$this->pathImages->pathMaster->path}/{$this->pathImages->path}";
+	}
+
+
 	public function edificio(){
 		return $this->belongsTo(\App\Edificio::class, 'edificio_id');
 	}
