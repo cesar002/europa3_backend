@@ -11,4 +11,9 @@ class InicioController extends Controller
 	{
 		return view('dashboard.inicio');
 	}
+
+	public function temp()
+	{
+		return redirect()->route('dashboard.inicio');
+	}
 }
