@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('dashboard.inicio');
-});
+Route::get('/', 'Dashboard\InicioController@index');
 
 Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 	Route::get('/login', 'Dashboard\AuthAdminController@index')->name('login-view');
