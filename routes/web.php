@@ -36,6 +36,11 @@ Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
 			Route::get('/{id}/imagenes', 'Dashboard\OficinasController@showImagenesUpdate')->name('updateImage');
 		});
 
+		Route::group(['prefix' => 'oficinas-virtuales', 'as' => 'oficinas-virtuales.'], function(){
+			Route::get('/', 'Dashboard\OficinasVirtualesController@index')->name('index');
+			Route::post('/', 'Dashboard\OficinasVirtualesController@store')->name('store');
+		});
+
 		Route::group(['prefix' => 'mobiliario', 'as' => 'mobiliario.'], function(){
 			Route::get('/', 'Dashboard\MobiliarioController@index')->name('index');
 			Route::get('/{id}', 'Dashboard\MobiliarioController@show')->name('show');

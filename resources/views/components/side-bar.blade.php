@@ -83,7 +83,7 @@
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="charts.html">
+		<a class="nav-link" href="{{ route('dashboard.oficinas-virtuales.index') }}">
 			<i class="fas fa-laptop"></i>
 			<span>Oficinas virtuales</span>
 		</a>

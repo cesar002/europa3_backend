@@ -314,7 +314,7 @@
 					if (result.isConfirmed){
 						@this.call('delete', id)
 					}
-				})
+			})
 		})
 	</script>
 	<script>

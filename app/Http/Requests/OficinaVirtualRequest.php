@@ -26,8 +26,7 @@ class OficinaVirtualRequest extends FormRequest
         return [
 			'edificio_id' => 'required|exists:edificios,id',
 			'nombre' => 'required',
-			'descripcion' => 'present',
-			'servicios' => 'present',
+			'descripcion' => 'nullable',
 			'precio' => 'required|numeric|min:1',
         ];
     }
