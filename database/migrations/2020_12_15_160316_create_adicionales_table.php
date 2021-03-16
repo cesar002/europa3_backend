@@ -15,13 +15,13 @@ class CreateAdicionalesTable extends Migration
     {
         Schema::create('adicionales', function (Blueprint $table) {
 			$table->id();
-			$table->bigInteger('edificio_id')->nullable(false);
-			$table->bigInteger('unidad_id')->nullable(false);
-			$table->string('nombre')->nullable(false);
+			$table->bigInteger('edificio_id');
+			$table->bigInteger('unidad_id');
+			$table->string('nombre');
 			$table->text('descripcion')->nullable();
-			$table->integer('unidad_base')->nullable(false);
-			$table->integer('cantidad_maxima')->nullable(false);
-			$table->double('precio', 10, 4)->nullable(false);
+			$table->integer('unidad_base')->default(1);
+			$table->integer('cantidad_maxima');
+			$table->double('precio', 10, 4);
 			$table->boolean('disponible')->default(true);
 			$table->softDeletes();
             $table->timestamps();

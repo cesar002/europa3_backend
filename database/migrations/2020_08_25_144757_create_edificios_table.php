@@ -21,8 +21,8 @@ class CreateEdificiosTable extends Migration
             $table->string('telefono_1');
             $table->string('telefono_2')->nullable();
             $table->string('telefono_recepcion');
-            $table->double('lat', 10, 7);
-            $table->double('lon', 10, 7);
+            $table->double('lat', 10, 7)->nullable();
+            $table->double('lon', 10, 7)->nullable();
             $table->time('hora_apertura');
 			$table->time('hora_cierre');
 			$table->softDeletes();

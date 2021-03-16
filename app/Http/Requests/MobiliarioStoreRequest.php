@@ -24,11 +24,20 @@ class MobiliarioStoreRequest extends FormRequest
     public function rules()
     {
         return [
-			'tipo_id' => 'required|exists:tipos_mobiliario,id',
+			'tipo_mueble_id' => 'required|exists:tipos_mobiliario,id',
 			'edificio_id' => 'required|exists:edificios,id',
 			'nombre' => 'required|string',
 			'cantidad' => 'required|integer|min:1',
-			'image' => 'required',
+			'image' => 'required|image|max:10300',
         ];
     }
+
+	public function attributes()
+	{
+		return [
+			'tipo_mueble_id' => 'tipo de mueble',
+			'edificio_id' => 'edificio',
+			'image' => 'imagen'
+		];
+	}
 }

@@ -28,8 +28,15 @@ class AdicionalesRequest extends FormRequest
 			'unidad_id' => 'required|exists:cat_unidad_adicional,id',
 			'nombre' => 'required|string',
 			'precio' => 'required|numeric|min:0',
-			'unidad_base' => 'required|integer|min:1',
 			'cantidad_maxima' => 'required|integer|min:1',
         ];
     }
+
+	public function attributes()
+	{
+		return [
+			'edificio_id' => 'edificio',
+			'unidad_id' => 'unidad',
+		];
+	}
 }
