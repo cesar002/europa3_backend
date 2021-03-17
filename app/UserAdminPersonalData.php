@@ -13,7 +13,7 @@ class UserAdminPersonalData extends Model
 	];
 
 	protected $fillable = [
-		'user_admin_id', 'nombre', 'ape_pat', 'ape_mat', 'path_id', 'avatar_image'
+		'user_admin_id', 'nombre', 'ap_m', 'ap_p', 'path_id', 'avatar_image'
 	];
 
 

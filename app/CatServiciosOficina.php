@@ -3,14 +3,22 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CatServiciosOficina extends Model
 {
+
+	use SoftDeletes;
+
 	protected $table = 'cat_servicios';
 
 	protected $hidden = [
 		'created_at',
 		'updated_at',
+	];
+
+	protected $fillable = [
+		'servicio',
 	];
 
     public function oficinas(){

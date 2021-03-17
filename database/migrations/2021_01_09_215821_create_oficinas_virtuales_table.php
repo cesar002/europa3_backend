@@ -21,7 +21,7 @@ class CreateOficinasVirtualesTable extends Migration
 			$table->tinyInteger('size_id')->default(0);
 			$table->tinyInteger('path_image_id')->default(0);
 			$table->string('nombre');
-			$table->longText('descripcion')->nullable();
+			$table->text('descripcion')->nullable();
 			$table->double('precio', 10, 4);
 			$table->boolean('en_uso')->default(false);
 			$table->softDeletes();

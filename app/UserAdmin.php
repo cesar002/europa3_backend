@@ -24,6 +24,25 @@ class UserAdmin extends Authenticatable
 		'password', 'created_at', 'updated_at',
 	];
 
+	public function getFullName()
+	{
+		$info = $this->infoPersonal()->first();
+
+		return "{$info->nombre} {$info->ap_p} {$info->ap_m}";
+	}
+
+	public function getAvatar()
+	{
+		$info = $this->infoPersonal()->with('pathImage', 'pathImage.pathMaster')->first();
+		$path = "{$info->pathImage->pathMaster->path}/{$info->pathImage->path}";
+
+		if ($info->avatar_image == null){
+			return null;
+		}
+
+		return \Illuminate\Support\Facades\Storage::url("{$path}/{$info->avatar_image}");
+	}
+
 	public function findForPassport($username) {
         return $this->where('username', $username)->first();
 	}

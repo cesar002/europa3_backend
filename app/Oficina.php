@@ -22,6 +22,23 @@ class Oficina extends Model
 		'created_at', 'updated_at', 'deleted_at',
 	];
 
+	public function getImagesPath()
+	{
+		if($this->pathImages == null){ return ''; }
+
+		return  "{$this->pathImages->pathMaster->path}/{$this->pathImages->path}";
+	}
+
+	public function getFirstImage()
+	{
+		$image = $this->imagenes[0];
+		return '';
+		// if($this->imagenes == null || count($this->imagenes) <= 0){ return ''; }
+
+
+		// return "{$image->path->pathMaster->path}/{$image->path->path}/{$image->image}";
+	}
+
     public function edificio(){
         return $this->belongsTo(\App\Edificio::class, 'edificio_id');
     }

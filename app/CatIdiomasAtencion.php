@@ -8,6 +8,10 @@ class CatIdiomasAtencion extends Model
 {
 	protected $table = 'cat_idiomas_atencion';
 
+	protected $fillable = [
+		'idioma',
+	];
+
 	protected $hidden = [
 		'created_at','updated_at'
 	];

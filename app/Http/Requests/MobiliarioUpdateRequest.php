@@ -28,8 +28,16 @@ class MobiliarioUpdateRequest extends FormRequest
 			'edificio_id' => 'required|exists:edificios,id',
 			'nombre' => 'required',
 			'cantidad' => 'required|integer|min:1',
-			'activo' => 'required',
 			'image' => 'nullable|image|max:10300'
         ];
     }
+
+	public function attributes()
+	{
+		return [
+			'tipo_id' => 'tipo de mobiliario',
+			'edificio_id' => 'edificio',
+			'image' => 'imagen'
+		];
+	}
 }
